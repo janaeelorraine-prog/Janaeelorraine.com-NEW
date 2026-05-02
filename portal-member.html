@@ -502,6 +502,184 @@ nav ul li a.login-nav-link {
   .channel-inner { padding: 24px 20px 22px; }
 }
 
+/* === GUIDANCE BOT CARD === */
+.bot-card {
+  position: relative;
+  border: 1px solid var(--gold-dim);
+  background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, rgba(6,8,13,0.6) 100%);
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+.bot-card::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 15% 85%, rgba(201,168,76,0.08), transparent 55%);
+}
+.bot-inner { position: relative; padding: 28px 32px 22px; }
+.bot-eyebrow { font-family:'Cinzel',serif; font-size:10px; letter-spacing:4px; color:var(--gold); text-transform:uppercase; opacity:0.75; margin-bottom:6px; }
+.bot-title { font-family:'Cinzel Decorative',serif; font-size:clamp(20px,3vw,26px); color:var(--white); letter-spacing:1px; margin-bottom:6px; }
+.bot-meta { font-size:11px; letter-spacing:1px; color:var(--muted); margin-bottom:14px; font-style: italic; }
+.bot-thread {
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.35);
+  padding: 18px 18px 6px;
+  margin-bottom: 14px;
+  max-height: 320px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.bot-msg { margin-bottom: 14px; line-height: 1.7; font-size: 15px; }
+.bot-msg-user { color: var(--white); padding-left: 16px; border-left: 1px solid rgba(240,238,232,0.18); }
+.bot-msg-assistant { color: rgba(240,238,232,0.92); padding-left: 16px; border-left: 2px solid var(--gold); font-style: italic; font-family: 'Cormorant Garamond', serif; }
+.bot-msg-assistant::before {
+  content: '✦  '; color: var(--gold); font-style: normal; font-size: 12px; opacity: 0.75; letter-spacing: 1px;
+}
+.bot-msg p { margin-bottom: 10px; }
+.bot-msg p:last-child { margin-bottom: 0; }
+.bot-msg-loading { color: var(--muted); font-style: italic; }
+.bot-msg-error { color: #ff9090; font-style: italic; }
+.bot-controls { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+.bot-controls select {
+  flex: 1; min-width: 200px;
+  padding: 8px 12px;
+  background: rgba(240,238,232,0.03);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  outline: none;
+  -webkit-appearance: none; appearance: none;
+}
+.bot-controls select option { background: #0a0c12; color: var(--white); }
+.bot-newchat {
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; text-transform:uppercase;
+  background: transparent; color: var(--gold); border: 1px solid var(--gold-dim);
+  padding: 8px 14px; cursor: pointer; transition: all 0.3s;
+}
+.bot-newchat:hover { background: rgba(201,168,76,0.08); }
+.bot-input-row { display: flex; gap: 10px; align-items: stretch; }
+.bot-input {
+  flex: 1;
+  background: rgba(240,238,232,0.03);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  outline: none;
+  resize: vertical;
+  min-height: 48px; max-height: 200px;
+  transition: border-color 0.3s;
+}
+.bot-input:focus { border-color: rgba(201,168,76,0.5); background: rgba(201,168,76,0.03); }
+.bot-input:disabled { opacity: 0.4; cursor: not-allowed; }
+.bot-send {
+  font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  background: transparent; color: var(--gold); border: 1px solid var(--gold);
+  padding: 0 22px; cursor: pointer; transition: all 0.3s; white-space: nowrap;
+}
+.bot-send:hover { background: rgba(201,168,76,0.1); }
+.bot-send:disabled { opacity: 0.4; cursor: not-allowed; }
+.bot-usage {
+  margin-top: 12px; font-size: 11px; letter-spacing: 1px; color: var(--muted);
+}
+.bot-usage a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
+@media (max-width:720px) {
+  .bot-inner { padding: 22px 20px 18px; }
+  .bot-thread { padding: 14px; max-height: 260px; }
+  .bot-input-row { flex-direction: column; }
+  .bot-send { padding: 12px 22px; }
+}
+
+/* === WEEKLY JOURNAL CARD === */
+.journal-card {
+  position: relative;
+  border: 1px solid var(--gold-dim);
+  background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, rgba(6,8,13,0.6) 100%);
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+.journal-card::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 90% 20%, rgba(140,90,180,0.07), transparent 50%);
+}
+.journal-inner { position: relative; padding: 28px 32px 24px; }
+.journal-eyebrow { font-family:'Cinzel',serif; font-size:10px; letter-spacing:4px; color:var(--gold); text-transform:uppercase; opacity:0.75; margin-bottom:6px; }
+.journal-title { font-family:'Cinzel Decorative',serif; font-size:clamp(20px,3vw,26px); color:var(--white); letter-spacing:1px; margin-bottom:6px; }
+.journal-week { font-size:13px; letter-spacing:1px; color:var(--muted); margin-bottom:24px; font-style: italic; }
+.journal-section { margin-bottom: 22px; }
+.journal-label { font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; opacity:0.85; margin-bottom:10px; }
+
+.mood-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.mood-pill {
+  font-family:'Cormorant Garamond',serif; font-size:14px;
+  padding: 8px 18px;
+  border: 1px solid var(--gold-dim); background: rgba(0,0,0,0.3);
+  color: var(--white); cursor: pointer; transition: all 0.3s;
+  letter-spacing: 1px;
+}
+.mood-pill:hover { border-color: var(--gold); }
+.mood-pill.selected { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
+
+.practice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+.practice-check { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: rgba(240,238,232,0.85); }
+.practice-check input { accent-color: var(--gold); width: 16px; height: 16px; cursor: pointer; }
+.practice-check:hover { color: var(--white); }
+
+.journal-input-other {
+  margin-top: 12px; width: 100%;
+  background: rgba(240,238,232,0.03); border: 1px solid var(--border);
+  color: var(--white); padding: 10px 12px; font-size: 14px;
+  font-family: 'Cormorant Garamond', serif; outline: none;
+}
+.journal-input-other:focus { border-color: rgba(201,168,76,0.5); }
+
+.journal-textarea {
+  width: 100%; min-height: 100px;
+  background: rgba(240,238,232,0.03); border: 1px solid var(--border);
+  color: var(--white); padding: 12px 14px;
+  font-family: 'Cormorant Garamond', serif; font-size: 15px; line-height: 1.7;
+  outline: none; resize: vertical; transition: border-color 0.3s;
+}
+.journal-textarea:focus { border-color: rgba(201,168,76,0.5); background: rgba(201,168,76,0.03); }
+.journal-textarea.tall { min-height: 140px; }
+
+.journal-save-row { display: flex; align-items: center; gap: 14px; margin-top: 18px; flex-wrap: wrap; }
+.journal-save {
+  font-family:'Cinzel',serif; font-size:11px; letter-spacing:4px; text-transform:uppercase;
+  background: transparent; color: var(--gold); border: 1px solid var(--gold);
+  padding: 12px 28px; cursor: pointer; transition: all 0.3s;
+}
+.journal-save:hover { background: rgba(201,168,76,0.1); }
+.journal-save:disabled { opacity: 0.5; cursor: not-allowed; }
+.journal-save-status { font-size: 11px; color: var(--muted); font-style: italic; letter-spacing: 1px; }
+
+.journal-past { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); }
+.journal-past-title { font-family:'Cinzel',serif; font-size:10px; letter-spacing:4px; color:var(--gold); text-transform:uppercase; opacity:0.75; margin-bottom:12px; }
+.journal-past-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 4px; border-bottom: 1px solid rgba(201,168,76,0.08);
+  cursor: pointer; transition: background 0.3s;
+  font-size: 13px;
+}
+.journal-past-row:hover { background: rgba(201,168,76,0.04); }
+.journal-past-row .journal-past-week { color: var(--white); letter-spacing: 1px; }
+.journal-past-row .journal-past-mood { color: var(--gold); font-style: italic; opacity: 0.85; }
+.journal-past-empty { font-size: 13px; color: var(--muted); font-style: italic; }
+.journal-past-detail {
+  margin-top: 8px; padding: 16px 18px;
+  background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+  font-size: 14px; line-height: 1.7; color: rgba(240,238,232,0.82);
+}
+.journal-past-detail .journal-past-field { margin-bottom: 12px; }
+.journal-past-detail .journal-past-field:last-child { margin-bottom: 0; }
+.journal-past-detail .journal-past-field-label { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; opacity:0.7; margin-bottom:4px; }
+
+@media (max-width:720px) {
+  .journal-inner { padding: 22px 20px 18px; }
+  .practice-grid { grid-template-columns: 1fr; }
+}
+
 /* === RESPONSIVE === */
 @media (max-width:640px) {
   nav { padding:14px 20px; }
@@ -601,6 +779,86 @@ nav ul li a.login-nav-link {
         <div class="channel-lock-title">Root + Elder Members</div>
         <div class="channel-lock-sub">A 400-500 word reading anchored to this week's moon arc and your full chart. Refreshes through the week.</div>
         <a href="portal.html" class="channel-lock-cta">Upgrade to Unlock</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE GUIDANCE BOT — Astro-Odu chat (Seed: 3/mo, Root + Elder unlimited) -->
+  <div class="bot-card" id="bot-card">
+    <div class="bot-inner">
+      <div class="bot-eyebrow">The Guidance Bot</div>
+      <div class="bot-title">Astro-Odu · Channeled Conversation</div>
+      <div class="bot-meta">Speaks only from your Astro-Odu trinity. For deep personal divination, book Janaee.</div>
+
+      <div class="bot-thread" id="bot-thread"></div>
+
+      <div class="bot-controls">
+        <select id="bot-convo-select" aria-label="Past conversations">
+          <option value="">— Past threads —</option>
+        </select>
+        <button class="bot-newchat" id="bot-newchat" type="button">+ New Conversation</button>
+      </div>
+
+      <div class="bot-input-row">
+        <textarea class="bot-input" id="bot-input" rows="2" placeholder="Ask about your chart, your Talking Odu, your design…"></textarea>
+        <button class="bot-send" id="bot-send" type="button">Send</button>
+      </div>
+
+      <div class="bot-usage" id="bot-usage">—</div>
+    </div>
+  </div>
+
+  <!-- WEEKLY REFLECTION — journal (all tiers, current week editable) -->
+  <div class="journal-card" id="journal-card">
+    <div class="journal-inner">
+      <div class="journal-eyebrow">Weekly Reflection</div>
+      <div class="journal-title">Your Spiritual Journal</div>
+      <div class="journal-week" id="journal-week">Loading this week…</div>
+
+      <div class="journal-section">
+        <div class="journal-label">Mood This Week</div>
+        <div class="mood-row" id="journal-mood">
+          <button class="mood-pill" type="button" data-mood="heavy">Heavy</button>
+          <button class="mood-pill" type="button" data-mood="tender">Tender</button>
+          <button class="mood-pill" type="button" data-mood="steady">Steady</button>
+          <button class="mood-pill" type="button" data-mood="lit">Lit</button>
+          <button class="mood-pill" type="button" data-mood="untethered">Untethered</button>
+        </div>
+      </div>
+
+      <div class="journal-section">
+        <div class="journal-label">Spiritual Practices</div>
+        <div class="practice-grid">
+          <label class="practice-check"><input type="checkbox" value="meditation"> Meditation</label>
+          <label class="practice-check"><input type="checkbox" value="divination"> Divination</label>
+          <label class="practice-check"><input type="checkbox" value="ancestor_offerings"> Ancestor offerings</label>
+          <label class="practice-check"><input type="checkbox" value="ritual_bath"> Ritual bath</label>
+          <label class="practice-check"><input type="checkbox" value="candle_work"> Candle work</label>
+          <label class="practice-check"><input type="checkbox" value="journaling"> Journaling</label>
+          <label class="practice-check"><input type="checkbox" value="movement_dance"> Movement / dance</label>
+          <label class="practice-check"><input type="checkbox" value="fasting"> Fasting</label>
+        </div>
+        <input type="text" class="journal-input-other" id="journal-other" placeholder="Other practices this week…" />
+      </div>
+
+      <div class="journal-section">
+        <div class="journal-label">Dreams</div>
+        <textarea class="journal-textarea" id="journal-dreams" placeholder="Dream notes from the week…"></textarea>
+      </div>
+
+      <div class="journal-section">
+        <div class="journal-label">Reflection</div>
+        <textarea class="journal-textarea tall" id="journal-reflection" placeholder="What moved through you this week. What's calling. What needs to be said."></textarea>
+      </div>
+
+      <div class="journal-save-row">
+        <button class="journal-save" id="journal-save" type="button">Save This Week's Entry</button>
+        <span class="journal-save-status" id="journal-status"></span>
+      </div>
+
+      <div class="journal-past">
+        <div class="journal-past-title">Past Entries</div>
+        <div id="journal-past-list"><div class="journal-past-empty">No past entries yet — your reflections will gather here.</div></div>
       </div>
     </div>
   </div>
@@ -895,6 +1153,8 @@ async function initPortal() {
   loadIdentity();
   loadDailySnippet();
   loadWeeklyDeepDive();
+  loadGuidanceBot();
+  loadWeeklyJournal();
 }
 
 // ─── CORE IDENTITY CARD ──────────────────────────────────
@@ -1334,6 +1594,350 @@ function doLogout() {
   localStorage.removeItem('ntas98_user');
   window.location.href = 'login.html';
 }
+
+// ─── GUIDANCE BOT ────────────────────────────────────────
+let botActiveConvoId = null;
+let botSending = false;
+
+function botEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function botRenderMsg(role, content) {
+  const cls = role === 'assistant' ? 'bot-msg-assistant' : 'bot-msg-user';
+  const html = botEscape(content)
+    .split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+  return `<div class="bot-msg ${cls}">${html}</div>`;
+}
+
+function botRenderThread(messages) {
+  const t = document.getElementById('bot-thread');
+  if (!messages || messages.length === 0) {
+    t.innerHTML = '<div class="bot-msg bot-msg-assistant"><p>Welcome. Ask about your chart, your Talking Odu, anything you have read so far. I will speak from the Astro-Odu frame.</p></div>';
+  } else {
+    t.innerHTML = messages.map(m => botRenderMsg(m.role, m.content)).join('');
+  }
+  t.scrollTop = t.scrollHeight;
+}
+
+function botSetUsage(usage) {
+  const el = document.getElementById('bot-usage');
+  if (!usage || usage.tier === undefined) { el.textContent = ''; return; }
+  if (usage.tier === 'seed') {
+    if (usage.capped || (usage.limit != null && usage.used != null && usage.used >= usage.limit)) {
+      el.innerHTML = `Seed tier · ${usage.used || 0} of ${usage.limit || 3} messages used this month — <a href="portal.html">Upgrade to Root</a> for unlimited guidance.`;
+    } else {
+      const used = usage.used || 0;
+      const limit = usage.limit || 3;
+      el.innerHTML = `Seed tier · ${used} of ${limit} messages used this month`;
+    }
+  } else if (usage.tier === 'root') {
+    el.textContent = 'Root tier · unlimited guidance';
+  } else if (usage.tier === 'elder') {
+    el.textContent = 'Elder Council · unlimited guidance';
+  }
+}
+
+function botSetCapped(capped, used, limit) {
+  document.getElementById('bot-input').disabled = !!capped;
+  document.getElementById('bot-send').disabled = !!capped;
+  if (capped) botSetUsage({ tier: 'seed', capped: true, used, limit });
+}
+
+async function loadGuidanceBot() {
+  // Render the welcome bubble and pull both the usage and the past list.
+  botRenderThread([]);
+  try {
+    const [usageRes, listRes] = await Promise.all([
+      fetch('/.netlify/functions/bot-conversations', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userEmail, action: 'usage' })
+      }).then(r => r.json()).catch(() => null),
+      fetch('/.netlify/functions/bot-conversations', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userEmail, action: 'list' })
+      }).then(r => r.json()).catch(() => null)
+    ]);
+
+    if (usageRes && usageRes.success) {
+      botSetUsage(usageRes);
+      if (usageRes.capped) botSetCapped(true, usageRes.used, usageRes.limit);
+    }
+
+    const select = document.getElementById('bot-convo-select');
+    if (listRes && listRes.success && Array.isArray(listRes.conversations)) {
+      const opts = ['<option value="">— Past threads —</option>']
+        .concat(listRes.conversations.map(c => {
+          const t = (c.title || 'Untitled').replace(/[<>"]/g, '');
+          const d = new Date(c.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+          return `<option value="${c.id}">${d} · ${t}</option>`;
+        }));
+      select.innerHTML = opts.join('');
+    }
+  } catch (e) {
+    console.warn('[bot] init failed', e);
+  }
+}
+
+document.getElementById('bot-newchat').addEventListener('click', () => {
+  botActiveConvoId = null;
+  document.getElementById('bot-convo-select').value = '';
+  botRenderThread([]);
+  document.getElementById('bot-input').focus();
+});
+
+document.getElementById('bot-convo-select').addEventListener('change', async (e) => {
+  const id = e.target.value;
+  if (!id) { botActiveConvoId = null; botRenderThread([]); return; }
+  try {
+    const res = await fetch('/.netlify/functions/bot-conversations', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userEmail, action: 'get', conversationId: id })
+    });
+    const data = await res.json();
+    if (data.success) {
+      botActiveConvoId = id;
+      botRenderThread(data.messages || []);
+    }
+  } catch (err) { console.warn('[bot] convo load failed', err); }
+});
+
+async function botSendCurrent() {
+  if (botSending) return;
+  const inputEl = document.getElementById('bot-input');
+  const sendBtn = document.getElementById('bot-send');
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  botSending = true;
+  inputEl.disabled = true; sendBtn.disabled = true;
+
+  // Optimistic render: append the user message and a loading bubble
+  const t = document.getElementById('bot-thread');
+  const userHtml = botRenderMsg('user', text);
+  const loadingHtml = '<div class="bot-msg bot-msg-assistant bot-msg-loading"><p>Channeling…</p></div>';
+  // If we're on the welcome state, clear it before appending
+  if (t.querySelectorAll('.bot-msg').length === 1 && t.querySelector('.bot-msg-assistant') && !botActiveConvoId) {
+    t.innerHTML = '';
+  }
+  t.insertAdjacentHTML('beforeend', userHtml + loadingHtml);
+  t.scrollTop = t.scrollHeight;
+  inputEl.value = '';
+
+  try {
+    const res = await fetch('/.netlify/functions/guidance-bot', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userEmail, conversationId: botActiveConvoId, message: text })
+    });
+    const data = await res.json();
+    // Remove loading bubble (last child)
+    const last = t.lastElementChild;
+    if (last && last.classList.contains('bot-msg-loading')) last.remove();
+
+    if (!res.ok || !data.success) {
+      const errText = data.error || 'The channel is quiet right now.';
+      t.insertAdjacentHTML('beforeend', `<div class="bot-msg bot-msg-error">${botEscape(errText)}</div>`);
+      // 402 = monthly cap reached
+      if (res.status === 402) botSetCapped(true);
+    } else {
+      botActiveConvoId = data.conversationId;
+      t.insertAdjacentHTML('beforeend', botRenderMsg('assistant', data.reply));
+      botSetUsage(data.usage);
+      // Refresh the dropdown if this was the first message of a new thread
+      if (data.isNewConversation) loadGuidanceBot();
+    }
+    t.scrollTop = t.scrollHeight;
+  } catch (err) {
+    const last = t.lastElementChild;
+    if (last && last.classList.contains('bot-msg-loading')) last.remove();
+    t.insertAdjacentHTML('beforeend', `<div class="bot-msg bot-msg-error">Network error. Try again.</div>`);
+    console.warn('[bot] send failed', err);
+  } finally {
+    botSending = false;
+    // Don't re-enable if the cap was hit (botSetCapped already disabled them)
+    if (!document.getElementById('bot-input').disabled) {
+      inputEl.disabled = false; sendBtn.disabled = false;
+    }
+    inputEl.focus();
+  }
+}
+document.getElementById('bot-send').addEventListener('click', botSendCurrent);
+document.getElementById('bot-input').addEventListener('keydown', (e) => {
+  // Enter sends, Shift+Enter inserts a newline
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); botSendCurrent(); }
+});
+
+// ─── WEEKLY JOURNAL ──────────────────────────────────────
+let journalSelectedMood = null;
+let journalCurrentWeek = null;
+let journalSaveTimer = null;
+
+const MOOD_LABELS = { heavy: 'Heavy', tender: 'Tender', steady: 'Steady', lit: 'Lit', untethered: 'Untethered' };
+const PRACTICE_LABELS = {
+  meditation: 'Meditation', divination: 'Divination', ancestor_offerings: 'Ancestor offerings',
+  ritual_bath: 'Ritual bath', candle_work: 'Candle work', journaling: 'Journaling',
+  movement_dance: 'Movement / dance', fasting: 'Fasting'
+};
+
+function fmtWeekRange(monday) {
+  const start = new Date(monday + 'T00:00:00Z');
+  const end = new Date(start); end.setUTCDate(end.getUTCDate() + 6);
+  const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `Week of ${m[start.getUTCMonth()]} ${start.getUTCDate()} – ${m[end.getUTCMonth()]} ${end.getUTCDate()}, ${end.getUTCFullYear()}`;
+}
+
+function journalSetMood(mood) {
+  journalSelectedMood = mood;
+  document.querySelectorAll('#journal-mood .mood-pill').forEach(p => {
+    p.classList.toggle('selected', p.dataset.mood === mood);
+  });
+}
+
+function journalCollectPractices() {
+  return Array.from(document.querySelectorAll('.practice-check input:checked')).map(i => i.value);
+}
+
+function journalApplyEntry(entry) {
+  if (entry?.mood) journalSetMood(entry.mood);
+  document.querySelectorAll('.practice-check input').forEach(i => {
+    i.checked = Array.isArray(entry?.practices) && entry.practices.includes(i.value);
+  });
+  document.getElementById('journal-other').value = entry?.other_practice || '';
+  document.getElementById('journal-dreams').value = entry?.dreams || '';
+  document.getElementById('journal-reflection').value = entry?.reflection || '';
+}
+
+async function loadWeeklyJournal() {
+  // Fetch the current week's entry + past list in parallel.
+  try {
+    const [curRes, listRes] = await Promise.all([
+      fetch('/.netlify/functions/weekly-journal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userEmail, action: 'current' })
+      }).then(r => r.json()).catch(() => null),
+      fetch('/.netlify/functions/weekly-journal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userEmail, action: 'list' })
+      }).then(r => r.json()).catch(() => null)
+    ]);
+
+    if (curRes && curRes.weekStart) {
+      journalCurrentWeek = curRes.weekStart;
+      document.getElementById('journal-week').textContent = fmtWeekRange(curRes.weekStart);
+      if (curRes.entry) journalApplyEntry(curRes.entry);
+    }
+
+    journalRenderPastList(listRes?.entries || [], listRes?.currentWeek || journalCurrentWeek);
+  } catch (e) {
+    console.warn('[journal] init failed', e);
+    document.getElementById('journal-week').textContent = 'Could not load this week — try refreshing.';
+  }
+}
+
+function journalRenderPastList(entries, currentWeek) {
+  const past = (entries || []).filter(e => e.week_start !== currentWeek);
+  const listEl = document.getElementById('journal-past-list');
+  if (past.length === 0) {
+    listEl.innerHTML = '<div class="journal-past-empty">No past entries yet — your reflections will gather here.</div>';
+    return;
+  }
+  listEl.innerHTML = past.map(e => `
+    <div class="journal-past-row" data-week="${e.week_start}">
+      <span class="journal-past-week">${fmtWeekRange(e.week_start)}</span>
+      <span class="journal-past-mood">${e.mood ? (MOOD_LABELS[e.mood] || e.mood) : '—'}</span>
+    </div>
+  `).join('');
+  listEl.querySelectorAll('.journal-past-row').forEach(row => {
+    row.addEventListener('click', () => journalToggleEntry(row));
+  });
+}
+
+async function journalToggleEntry(row) {
+  // Inline expand/collapse: clicking the row reveals/closes a detail panel.
+  const wk = row.dataset.week;
+  const next = row.nextElementSibling;
+  if (next && next.classList && next.classList.contains('journal-past-detail')) {
+    next.remove(); return;
+  }
+  // Insert a placeholder while loading
+  row.insertAdjacentHTML('afterend', '<div class="journal-past-detail">Loading…</div>');
+  try {
+    const res = await fetch('/.netlify/functions/weekly-journal', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userEmail, action: 'get', weekStart: wk })
+    });
+    const data = await res.json();
+    const detail = row.nextElementSibling;
+    if (!detail) return;
+    if (!data.success || !data.entry) {
+      detail.textContent = 'Could not load this entry.';
+      return;
+    }
+    const e = data.entry;
+    const practices = Array.isArray(e.practices) && e.practices.length
+      ? e.practices.map(p => PRACTICE_LABELS[p] || p).join(', ')
+      : '—';
+    const lines = [];
+    lines.push(`<div class="journal-past-field"><div class="journal-past-field-label">Mood</div><div>${botEscape(e.mood ? (MOOD_LABELS[e.mood] || e.mood) : '—')}</div></div>`);
+    lines.push(`<div class="journal-past-field"><div class="journal-past-field-label">Practices</div><div>${botEscape(practices)}${e.other_practice ? ' · ' + botEscape(e.other_practice) : ''}</div></div>`);
+    if (e.dreams)     lines.push(`<div class="journal-past-field"><div class="journal-past-field-label">Dreams</div><div>${botEscape(e.dreams).replace(/\n/g,'<br>')}</div></div>`);
+    if (e.reflection) lines.push(`<div class="journal-past-field"><div class="journal-past-field-label">Reflection</div><div>${botEscape(e.reflection).replace(/\n/g,'<br>')}</div></div>`);
+    detail.innerHTML = lines.join('');
+  } catch (err) {
+    const detail = row.nextElementSibling;
+    if (detail) detail.textContent = 'Could not load this entry.';
+  }
+}
+
+async function journalSave({ silent = false } = {}) {
+  if (!journalCurrentWeek) return;
+  const status = document.getElementById('journal-status');
+  const btn = document.getElementById('journal-save');
+  if (!silent) { btn.disabled = true; status.textContent = 'Saving…'; }
+  try {
+    const res = await fetch('/.netlify/functions/weekly-journal', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userEmail,
+        action: 'save',
+        weekStart: journalCurrentWeek,
+        mood: journalSelectedMood,
+        practices: journalCollectPractices(),
+        otherPractice: document.getElementById('journal-other').value.trim(),
+        dreams: document.getElementById('journal-dreams').value,
+        reflection: document.getElementById('journal-reflection').value
+      })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      status.textContent = data.error || 'Could not save entry.';
+    } else {
+      const t = new Date().toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+      status.textContent = silent ? `Saved ${t}` : `Saved ${t} · entry sealed at week's end`;
+    }
+  } catch (err) {
+    status.textContent = 'Network error. Try again.';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('journal-save').addEventListener('click', () => journalSave());
+document.querySelectorAll('#journal-mood .mood-pill').forEach(pill => {
+  pill.addEventListener('click', () => journalSetMood(pill.dataset.mood));
+});
+
+// Light auto-save on blur (debounced) so members don't lose work mid-week.
+function journalDebouncedAutosave() {
+  clearTimeout(journalSaveTimer);
+  journalSaveTimer = setTimeout(() => journalSave({ silent: true }), 1500);
+}
+['journal-other','journal-dreams','journal-reflection'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('blur', journalDebouncedAutosave);
+});
+document.querySelectorAll('.practice-check input').forEach(i => i.addEventListener('change', journalDebouncedAutosave));
 
 // ─── START ───────────────────────────────────────────────
 initPortal();

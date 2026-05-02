@@ -152,4 +152,74 @@ async function requireTier(sb, userEmail, allowed = ['root', 'elder']) {
   return { ok: true, tier };
 }
 
-module.exports = { sbClient, getUserTier, checkAccess, requireTier, callClaude, saveReading, TIER_LIMITS };
+// Per-month message allowance for the Astro-Odu Guidance Bot.
+// Seed gets a small free taste; Root + Elder are unmetered.
+const BOT_LIMITS = {
+  seed:  3,
+  root:  Infinity,
+  elder: Infinity
+};
+
+// Confirms the user can post to the bot this month. Counts user-role
+// messages in the bot_messages table since the start of the current
+// UTC calendar month.
+async function checkBotUsage(sb, userEmail) {
+  if (!userEmail) return { ok: false, error: 'Authentication required', status: 401 };
+  const tierInfo = await getUserTier(sb, userEmail);
+  if (!tierInfo) return { ok: false, error: 'Member account not found', status: 404 };
+  const { tier } = tierInfo;
+  const limit = BOT_LIMITS[tier] ?? 0;
+  if (limit === Infinity) return { ok: true, tier, limit, remaining: Infinity };
+
+  const now = new Date();
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
+  const { count, error } = await sb
+    .from('bot_messages')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_email', userEmail.toLowerCase())
+    .eq('role', 'user')
+    .gte('created_at', monthStart);
+  if (error) return { ok: false, error: 'The channel is unreachable. Try again in a moment.', status: 503 };
+
+  const used = count || 0;
+  if (used >= limit) {
+    return {
+      ok: false, status: 402, tier, used, limit,
+      error: `You've used your ${limit} bot messages for this month. Upgrade to Root for unlimited guidance, or wait until the 1st when the channel resets.`
+    };
+  }
+  return { ok: true, tier, used, limit, remaining: limit - used };
+}
+
+// Multi-turn chat call to Claude — returns the assistant's plain text
+// (not JSON-parsed). Used by the guidance bot.
+async function callClaudeChat(systemPrompt, messages, maxTokens = 1024) {
+  if (!ANTHROPIC_KEY) throw new Error('Server missing ANTHROPIC_API_KEY');
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_KEY,
+      'anthropic-version': '2023-06-01'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      messages
+    })
+  });
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error('Claude chat error:', res.status, txt);
+    throw new Error(`The channel returned ${res.status}.`);
+  }
+  const data = await res.json();
+  return data.content.map(i => i.text || '').join('').trim();
+}
+
+module.exports = {
+  sbClient, getUserTier, checkAccess, requireTier, checkBotUsage,
+  callClaude, callClaudeChat, saveReading,
+  TIER_LIMITS, BOT_LIMITS
+};
