@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AstroOdu Initiation — NTAS98</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080d; --gold: #C9A84C; --gold-dim: rgba(201,168,76,0.25);
+  --gold-glow: rgba(201,168,76,0.08); --white: #f0eee8;
+  --muted: rgba(240,238,232,0.5); --border: rgba(201,168,76,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--white); font-family: 'Cormorant Garamond', serif; }
+nav { position: fixed; top:0; left:0; right:0; z-index:100; display: flex; align-items:center; justify-content:space-between; padding: 16px 40px; background: rgba(6,8,13,0.96); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+.logo { font-family: 'Cinzel Decorative', serif; font-size: 16px; font-weight: 700; color: var(--gold); text-decoration:none; letter-spacing: 4px; }
+nav ul { list-style:none; display:flex; gap:28px; }
+nav ul li a { color: var(--white); text-decoration:none; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.6; transition: all 0.3s; }
+nav ul li a:hover, nav ul li a.active { opacity:1; color: var(--gold); }
+nav ul li a.login-nav-link { color: var(--gold); border: 1px solid var(--gold-dim); padding: 5px 14px; }
+
+.crumb { padding: 110px 40px 0; max-width: 1100px; margin: 0 auto; }
+.crumb a { color: var(--muted); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; }
+.crumb a:hover { color: var(--gold); }
+.crumb span { color: var(--gold); margin: 0 10px; }
+
+.hero { padding: 30px 40px 50px; text-align: center; max-width: 880px; margin: 0 auto; }
+.hero-eyebrow { font-size: 11px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); opacity: 0.85; margin-bottom: 16px; }
+.hero-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(38px, 5.5vw, 60px); letter-spacing: 3px; margin-bottom: 18px; line-height: 1.1; }
+.hero-sub { font-size: 19px; color: var(--muted); font-style: italic; line-height: 1.6; max-width: 720px; margin: 0 auto; }
+
+/* ─── PRICE CARD ─── */
+.price-block { max-width: 720px; margin: 0 auto 60px; padding: 0 40px; }
+.price-card { border: 1px solid var(--gold); padding: 40px 36px; background: var(--gold-glow); text-align: center; box-shadow: 0 0 60px rgba(201,168,76,0.06); }
+.price-eyebrow { font-size: 10px; letter-spacing: 5px; color: var(--gold); margin-bottom: 14px; text-transform: uppercase; }
+.price-amount { font-family: 'Cinzel Decorative', serif; font-size: 64px; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+.price-amount span { font-size: 18px; color: var(--muted); margin-left: 6px; font-family: 'Cormorant Garamond', serif; letter-spacing: 1px; }
+.price-note { font-size: 14px; color: var(--muted); font-style: italic; margin-bottom: 24px; }
+.price-divider { height: 1px; background: var(--gold-dim); margin: 22px 0; max-width: 80px; margin-left: auto; margin-right: auto; }
+.price-included { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; opacity: 0.85; }
+.price-included-text { color: var(--white); font-size: 16px; line-height: 1.55; }
+.price-included-text a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
+.price-buttons { display: flex; gap: 14px; margin-top: 26px; flex-wrap: wrap; justify-content: center; }
+.btn { display: inline-block; padding: 15px 28px; border: 1px solid var(--gold); color: var(--gold); font-family: 'Cinzel Decorative', serif; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; text-decoration: none; transition: all 0.3s; }
+.btn:hover { background: var(--gold-glow); }
+.btn.primary { background: var(--gold); color: var(--bg); }
+.btn.primary:hover { background: var(--white); }
+
+/* ─── WHAT YOU LEARN ─── */
+.section { padding: 70px 40px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { text-align: center; font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); opacity: 0.8; margin-bottom: 12px; }
+.section-title { text-align: center; font-family: 'Cinzel Decorative', serif; font-size: clamp(28px, 4vw, 38px); letter-spacing: 3px; margin-bottom: 14px; }
+.section-sub { text-align: center; color: var(--muted); font-style: italic; max-width: 680px; margin: 0 auto 50px; line-height: 1.55; font-size: 16px; }
+
+.curriculum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 920px) { .curriculum { grid-template-columns: 1fr; max-width: 540px; margin: 0 auto; } }
+.curr-card { padding: 32px 26px; border: 1px solid var(--border); background: rgba(255,255,255,0.012); }
+.curr-num { font-family: 'Cinzel Decorative', serif; font-size: 13px; color: var(--gold); letter-spacing: 4px; opacity: 0.7; margin-bottom: 10px; }
+.curr-title { font-family: 'Cinzel Decorative', serif; font-size: 20px; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; }
+.curr-list { list-style: none; padding: 0; }
+.curr-list li { padding: 7px 0 7px 18px; position: relative; font-size: 14.5px; color: var(--white); line-height: 1.5; }
+.curr-list li:before { content: '·'; color: var(--gold); position: absolute; left: 4px; top: 6px; font-size: 18px; opacity: 0.8; }
+
+/* ─── WHAT'S INCLUDED ─── */
+.included { background: rgba(255,255,255,0.012); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 70px 40px; }
+.included-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+@media (max-width: 720px) { .included-grid { grid-template-columns: 1fr; } }
+.inc-item { display: flex; gap: 18px; align-items: flex-start; }
+.inc-glyph { font-family: 'Cinzel Decorative', serif; font-size: 22px; color: var(--gold); opacity: 0.8; flex-shrink: 0; padding-top: 2px; min-width: 28px; }
+.inc-name { font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 2px; color: var(--gold); margin-bottom: 6px; text-transform: uppercase; }
+.inc-desc { font-size: 15px; color: var(--white); opacity: 0.85; line-height: 1.55; }
+
+/* ─── DESIGNATION ─── */
+.designation { padding: 80px 40px; text-align: center; max-width: 800px; margin: 0 auto; }
+.des-glyph { font-family: 'Cinzel Decorative', serif; font-size: 36px; color: var(--gold); margin-bottom: 18px; }
+.des-name { font-family: 'Cinzel Decorative', serif; font-size: 42px; letter-spacing: 5px; color: var(--gold); margin-bottom: 8px; }
+.des-translate { font-style: italic; color: var(--muted); margin-bottom: 24px; font-size: 15px; letter-spacing: 2px; }
+.des-body { font-size: 17px; color: var(--white); opacity: 0.88; line-height: 1.7; margin-bottom: 22px; }
+.des-next { margin-top: 32px; padding: 20px 24px; border: 1px solid var(--border); background: rgba(255,255,255,0.012); display: inline-block; font-size: 14px; color: var(--muted); }
+.des-next a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold-dim); padding-bottom: 1px; }
+
+/* ─── ENROLL ─── */
+.enroll { padding: 70px 40px; text-align: center; border-top: 1px solid var(--border); }
+.enroll h2 { font-family: 'Cinzel Decorative', serif; font-size: 32px; letter-spacing: 3px; margin-bottom: 14px; }
+.enroll p { color: var(--muted); font-style: italic; margin-bottom: 28px; font-size: 16px; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.55; }
+
+footer { padding: 50px 40px; text-align: center; border-top: 1px solid var(--border); }
+.fn { font-family: 'Cinzel Decorative', serif; color: var(--gold); font-size: 16px; letter-spacing: 4px; margin-bottom: 8px; }
+.ft { font-size: 12px; letter-spacing: 3px; color: var(--muted); margin-bottom: 12px; }
+.fc { font-size: 11px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  nav { padding: 14px 20px; } nav ul { display: none; }
+  .crumb { padding: 100px 20px 0; } .hero { padding: 20px 20px 40px; }
+  .price-block, .section, .included, .designation, .enroll { padding-left: 20px; padding-right: 20px; }
+  .price-card { padding: 32px 22px; } .price-amount { font-size: 52px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="logo">NTAS98</a>
+  <ul>
+    <li><a href="../courses.html">Ancestral Studies</a></li>
+    <li><a href="index.html" class="active">AstroOdu</a></li>
+    <li><a href="../portal.html">The Root Portal</a></li>
+    <li><a href="../shop.html">Shop</a></li>
+    <li><a href="../booking.html">Booking</a></li>
+    <li><a href="../login.html" class="login-nav-link">Member Login</a></li>
+  </ul>
+</nav>
+
+<div class="crumb">
+  <a href="index.html">AstroOdu</a><span>›</span><a href="initiation.html" style="color: var(--gold);">Initiation</a>
+</div>
+
+<section class="hero">
+  <div class="hero-eyebrow">Layer Two · The Curriculum</div>
+  <h1 class="hero-title">AstroOdu Initiation</h1>
+  <p class="hero-sub">Learn the framework. Read your own life. Awaken the cosmic compass that has been speaking through you all along.</p>
+</section>
+
+<!-- ─── PRICE ─── -->
+<div class="price-block">
+  <div class="price-card">
+    <div class="price-eyebrow">One-Time Investment</div>
+    <div class="price-amount">$555</div>
+    <div class="price-note">Lifetime access · self-paced · workbooks included</div>
+    <div class="price-divider"></div>
+    <div class="price-included">Or — Already an Elder?</div>
+    <div class="price-included-text">Initiation is <strong style="color: var(--gold);">included free</strong> with the Elder tier of <a href="../portal.html">The Root Portal →</a></div>
+    <div class="price-buttons">
+      <a href="#enroll" class="btn primary">Enroll in Initiation</a>
+      <a href="../portal.html" class="btn">Compare Portal Tiers</a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CURRICULUM ─── -->
+<section class="section">
+  <div class="section-eyebrow">The Three Pillars</div>
+  <h2 class="section-title">What You Will Learn</h2>
+  <p class="section-sub">AstroOdu Initiation walks you through the complete framework Mama Janaee channels in her readings — taught in her voice, at your pace.</p>
+
+  <div class="curriculum">
+    <div class="curr-card">
+      <div class="curr-num">PILLAR I</div>
+      <h3 class="curr-title">Ifá &amp; The Odu</h3>
+      <ul class="curr-list">
+        <li>The 256 sacred verses</li>
+        <li>The 16 Major Odu</li>
+        <li>How destiny is spoken</li>
+        <li>Reading your Talking Odu</li>
+        <li>The Reverse Wheel introduced</li>
+      </ul>
+    </div>
+    <div class="curr-card">
+      <div class="curr-num">PILLAR II</div>
+      <h3 class="curr-title">Astrology &amp; The Wheel</h3>
+      <ul class="curr-list">
+        <li>The Djet snapshot — your first breath</li>
+        <li>Sun · Moon · Rising as Ori, Ancestral, Masque</li>
+        <li>The vowels &amp; consonants of the chart</li>
+        <li>Houses as living rooms</li>
+        <li>Aspects — flowing &amp; karmic</li>
+      </ul>
+    </div>
+    <div class="curr-card">
+      <div class="curr-num">PILLAR III</div>
+      <h3 class="curr-title">Chakras &amp; The Body</h3>
+      <ul class="curr-list">
+        <li>Seven gates · seven Orisha</li>
+        <li>Where the heavens land in flesh</li>
+        <li>Eshu at the crown · Shango at the root</li>
+        <li>Reading the body as cosmology</li>
+        <li>Daily AstroOdu hygiene</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── INCLUDED ─── -->
+<section class="included">
+  <div class="section-eyebrow">In Your Hands</div>
+  <h2 class="section-title">What's Included</h2>
+  <div class="included-grid" style="margin-top: 50px;">
+
+    <div class="inc-item">
+      <div class="inc-glyph">▤</div>
+      <div>
+        <div class="inc-name">Self-Paced Video Lessons</div>
+        <div class="inc-desc">All three pillars taught in Mama Janaee's voice. Watch in any order, return as often as the spirit calls.</div>
+      </div>
+    </div>
+
+    <div class="inc-item">
+      <div class="inc-glyph">▦</div>
+      <div>
+        <div class="inc-name">Printable Workbooks</div>
+        <div class="inc-desc">Chart casting templates, Odu reflection prompts, and the AstroOdu integration journal — yours to print and keep.</div>
+      </div>
+    </div>
+
+    <div class="inc-item">
+      <div class="inc-glyph">⚹</div>
+      <div>
+        <div class="inc-name">The Djet Snapshot Tool</div>
+        <div class="inc-desc">Use the AstroOdu engine to cast your own chart and read it through the framework as you learn.</div>
+      </div>
+    </div>
+
+    <div class="inc-item">
+      <div class="inc-glyph">◈</div>
+      <div>
+        <div class="inc-name">Progression Tracker</div>
+        <div class="inc-desc">A visible path through the curriculum, with completion markers at each pillar gate.</div>
+      </div>
+    </div>
+
+    <div class="inc-item">
+      <div class="inc-glyph">✦</div>
+      <div>
+        <div class="inc-name">Closing Ceremony</div>
+        <div class="inc-desc">A final transmission and naming — the moment you receive the <em>Omo</em> designation.</div>
+      </div>
+    </div>
+
+    <div class="inc-item">
+      <div class="inc-glyph">∞</div>
+      <div>
+        <div class="inc-name">Lifetime Access</div>
+        <div class="inc-desc">No expiration. The lessons live on your account forever, including any future updates to the framework.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── DESIGNATION ─── -->
+<section class="designation">
+  <div class="des-glyph">⊹ ✦ ⊹</div>
+  <div class="des-name">OMO</div>
+  <div class="des-translate">Yoruba · "Student" · "Child of the lineage"</div>
+  <p class="des-body">At completion of the Initiation, you receive the <em>Omo</em> designation — the formal recognition that you have walked the framework and now carry it in your own body. Omo is not yet a practitioner credential. It is the foundation. The name worn before any other.</p>
+  <div class="des-next">
+    Called to read for others? <a href="certification.html">Explore the Certification path →</a>
+  </div>
+</section>
+
+<!-- ─── ENROLL ─── -->
+<section class="enroll" id="enroll">
+  <h2>Begin When You Are Ready</h2>
+  <p>Enrollment opens the moment payment is confirmed. The first transmission arrives by email within minutes.</p>
+  <div class="price-buttons">
+    <a href="../login.html" class="btn primary">Enroll · $555 One-Time</a>
+    <a href="../portal.html" class="btn">Get Free with Elder</a>
+  </div>
+</section>
+
+<footer>
+  <div class="fn">NTAS98</div>
+  <div class="ft">Mama Janaee · AstroOdu · The Root Portal</div>
+  <div class="fc">© 2026 janaeelorraine.com · All rights reserved</div>
+</footer>
+
+<script src="../mobile-nav.js"></script>
+</body>
+</html>
