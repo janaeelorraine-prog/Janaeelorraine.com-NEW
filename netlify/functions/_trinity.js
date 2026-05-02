@@ -133,4 +133,23 @@ async function saveReading(sb, { userEmail, tool, inputs, chart, output, talking
   }
 }
 
-module.exports = { sbClient, getUserTier, checkAccess, callClaude, saveReading, TIER_LIMITS };
+// Lighter cousin of checkAccess(): just confirms the user holds one of the
+// allowed tiers. No monthly metering. Used by unmetered features like the
+// daily channeled snippet and weekly deep dive.
+async function requireTier(sb, userEmail, allowed = ['root', 'elder']) {
+  if (!userEmail) return { ok: false, error: 'Authentication required', status: 401 };
+  const tierInfo = await getUserTier(sb, userEmail);
+  if (!tierInfo) return { ok: false, error: 'Member account not found', status: 404 };
+  const { tier } = tierInfo;
+  if (!allowed.includes(tier)) {
+    return {
+      ok: false,
+      status: 403,
+      error: 'This is a Root and Elder member feature. Upgrade to unlock.',
+      tier
+    };
+  }
+  return { ok: true, tier };
+}
+
+module.exports = { sbClient, getUserTier, checkAccess, requireTier, callClaude, saveReading, TIER_LIMITS };

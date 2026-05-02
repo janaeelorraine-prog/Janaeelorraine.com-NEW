@@ -853,7 +853,19 @@ function AstroOduSystem() {
   const [r1, setR1] = useState(null), [r2, setR2] = useState(null), [r3, setR3] = useState(null), [r4, setR4] = useState(null);
   const [error, setError] = useState(null);
   const [stage, setStage] = useState('');
-  const [prefill, setPrefill] = useState(null);
+  // URL querystring takes first crack at prefilling the form — lets the
+  // member dashboard hand off birth data without round-tripping localStorage.
+  const [prefill, setPrefill] = useState(() => {
+    try {
+      const q = new URLSearchParams(window.location.search);
+      const out = {};
+      if (q.get('name')) out.full_name = q.get('name');
+      if (q.get('dob'))  out.dob = q.get('dob');
+      if (q.get('time')) out.birth_time = q.get('time');
+      if (q.get('loc'))  out.birth_location = q.get('loc');
+      return Object.keys(out).length ? out : null;
+    } catch { return null; }
+  });
 
   // Pull birth data prefill from cached profile (instant) and from Supabase (authoritative)
   useEffect(() => {

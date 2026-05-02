@@ -424,6 +424,84 @@ nav ul li a.login-nav-link {
 }
 .update-btn:hover { border-color:var(--gold-dim); color:var(--white); }
 
+/* === CORE IDENTITY CARD === */
+.identity-card {
+  border: 1px solid var(--gold-dim);
+  background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, rgba(6,8,13,0.6) 100%);
+  margin-bottom: 22px;
+  overflow: hidden;
+  position: relative;
+}
+.identity-card::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 20% 30%, rgba(201,168,76,0.10), transparent 45%),
+              radial-gradient(circle at 80% 70%, rgba(140,90,180,0.08), transparent 50%);
+}
+.identity-inner { position: relative; padding: 28px 32px 24px; }
+.identity-eyebrow { font-family:'Cinzel',serif; font-size:10px; letter-spacing:4px; color:var(--gold); text-transform:uppercase; opacity:0.75; margin-bottom:6px; }
+.identity-title { font-family:'Cinzel Decorative',serif; font-size:clamp(18px,2.6vw,22px); color:var(--white); letter-spacing:1px; margin-bottom:18px; }
+.identity-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.identity-pillar {
+  border:1px solid var(--gold-dim); border-radius:3px;
+  background: rgba(0,0,0,0.4);
+  padding: 18px 18px 16px;
+}
+.identity-pillar-label { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; opacity:0.75; margin-bottom:10px; }
+.identity-row { display:flex; justify-content:space-between; gap:8px; margin-bottom:6px; font-size:14px; line-height:1.5; }
+.identity-row:last-child { margin-bottom:0; }
+.identity-row-label { color: var(--muted); }
+.identity-row-value { color: var(--white); font-style: italic; text-align:right; }
+.identity-row-orisha { font-size:11px; color: var(--gold); opacity:0.8; }
+.identity-prompt {
+  font-size:12px; color:var(--muted); font-style:italic;
+  padding-top: 10px; margin-top: 12px;
+  border-top: 1px solid rgba(201,168,76,0.12);
+}
+.identity-prompt a { color: var(--gold); text-decoration:none; border-bottom:1px solid var(--gold-dim); }
+@media (max-width:720px) {
+  .identity-grid { grid-template-columns: 1fr; }
+  .identity-inner { padding: 22px 20px; }
+}
+
+/* === CHANNEL CARDS (Daily Snippet · Weekly Deep Dive) === */
+.channel-card {
+  position: relative;
+  border: 1px solid var(--gold-dim);
+  background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, rgba(6,8,13,0.6) 100%);
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+.channel-card::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 85% 15%, rgba(201,168,76,0.10), transparent 55%);
+}
+.channel-inner { position: relative; padding: 30px 34px 28px; }
+.channel-eyebrow { font-family:'Cinzel',serif; font-size:10px; letter-spacing:4px; color:var(--gold); text-transform:uppercase; opacity:0.75; margin-bottom:6px; }
+.channel-title { font-family:'Cinzel Decorative',serif; font-size:clamp(20px,3vw,26px); color:var(--white); letter-spacing:1px; margin-bottom:6px; }
+.channel-meta { font-size:11px; letter-spacing:1px; color:var(--muted); margin-bottom:16px; }
+.channel-body { font-family:'Cormorant Garamond',serif; font-size:clamp(15px,1.8vw,18px); line-height:1.85; color:rgba(240,238,232,0.86); }
+.channel-body p { margin-bottom: 14px; }
+.channel-body p:last-child { margin-bottom: 0; }
+.channel-body .channel-loading { color: var(--muted); font-style: italic; }
+.channel-body .channel-err { color: #ff9090; font-style: italic; }
+.channel-locked .channel-body { position: relative; min-height: 120px; filter: blur(4px); user-select: none; pointer-events: none; }
+.channel-locked .channel-lock {
+  position: absolute; inset: 0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap: 10px; padding: 30px 20px; backdrop-filter: blur(2px); background: rgba(6,8,13,0.55);
+}
+.channel-lock-icon { font-size: 24px; color: var(--gold); opacity: 0.7; }
+.channel-lock-title { font-family:'Cinzel Decorative',serif; font-size:13px; letter-spacing:2px; color:var(--white); }
+.channel-lock-sub { font-size:13px; color:var(--muted); text-align:center; max-width:320px; line-height:1.6; }
+.channel-lock-cta {
+  font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold); border:1px solid var(--gold-dim);
+  padding:8px 22px; text-decoration:none; transition: all 0.3s; margin-top: 4px;
+}
+.channel-lock-cta:hover { background: rgba(201,168,76,0.1); }
+@media (max-width:720px) {
+  .channel-inner { padding: 24px 20px 22px; }
+}
+
 /* === RESPONSIVE === */
 @media (max-width:640px) {
   nav { padding:14px 20px; }
@@ -463,6 +541,67 @@ nav ul li a.login-nav-link {
     <div class="nav-actions">
       <span class="tier-badge" id="tier-badge-display"></span>
       <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- CORE IDENTITY CARD — at-a-glance trinity pillars (all tiers) -->
+  <div class="identity-card" id="identity-card">
+    <div class="identity-inner">
+      <div class="identity-eyebrow">The Astro-Odu Trinity</div>
+      <div class="identity-title">Your Core Identity</div>
+      <div class="identity-grid">
+        <div class="identity-pillar">
+          <div class="identity-pillar-label">Astrology</div>
+          <div class="identity-row"><span class="identity-row-label">Sun</span><span class="identity-row-value" id="id-sun">—</span></div>
+          <div class="identity-row"><span class="identity-row-label">Moon</span><span class="identity-row-value" id="id-moon">—</span></div>
+          <div class="identity-row"><span class="identity-row-label">Asc</span><span class="identity-row-value" id="id-asc">—</span></div>
+        </div>
+        <div class="identity-pillar">
+          <div class="identity-pillar-label">Numerology</div>
+          <div class="identity-row"><span class="identity-row-label">Life Path</span><span class="identity-row-value" id="id-lp">—</span></div>
+          <div class="identity-row identity-row-orisha" id="id-lp-orisha-row" style="display:none;"><span class="identity-row-label">·</span><span class="identity-row-value" id="id-lp-orisha">—</span></div>
+          <div class="identity-row"><span class="identity-row-label">Personal Year</span><span class="identity-row-value" id="id-py">—</span></div>
+        </div>
+        <div class="identity-pillar">
+          <div class="identity-pillar-label">Human Design</div>
+          <div class="identity-row"><span class="identity-row-label">Type</span><span class="identity-row-value" id="id-type">—</span></div>
+          <div class="identity-row"><span class="identity-row-label">Authority</span><span class="identity-row-value" id="id-auth">—</span></div>
+          <div class="identity-row"><span class="identity-row-label">Profile</span><span class="identity-row-value" id="id-profile">—</span></div>
+        </div>
+      </div>
+      <div class="identity-prompt" id="id-prompt" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- TODAY'S CHANNELED SNIPPET — Root + Elder unlocked, Seed locked -->
+  <div class="channel-card" id="snippet-card">
+    <div class="channel-inner">
+      <div class="channel-eyebrow">Today's Channeled Snippet</div>
+      <div class="channel-title">A Word from the Cosmos, For You</div>
+      <div class="channel-meta" id="snippet-meta">—</div>
+      <div class="channel-body" id="snippet-body"><span class="channel-loading">Channeling…</span></div>
+      <div class="channel-lock" id="snippet-lock" style="display:none;">
+        <div class="channel-lock-icon">◈</div>
+        <div class="channel-lock-title">Root + Elder Members</div>
+        <div class="channel-lock-sub">Today's channeled snippet — fresh each visit, drawn from your chart and the moon's current phase.</div>
+        <a href="portal.html" class="channel-lock-cta">Upgrade to Unlock</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- THIS WEEK'S DEEP DIVE — Root + Elder unlocked, Seed locked -->
+  <div class="channel-card" id="deep-dive-card">
+    <div class="channel-inner">
+      <div class="channel-eyebrow">This Week's Deep Dive</div>
+      <div class="channel-title">The Working of the Week</div>
+      <div class="channel-meta" id="dive-meta">—</div>
+      <div class="channel-body" id="dive-body"><span class="channel-loading">Channeling…</span></div>
+      <div class="channel-lock" id="dive-lock" style="display:none;">
+        <div class="channel-lock-icon">✦</div>
+        <div class="channel-lock-title">Root + Elder Members</div>
+        <div class="channel-lock-sub">A 400-500 word reading anchored to this week's moon arc and your full chart. Refreshes through the week.</div>
+        <a href="portal.html" class="channel-lock-cta">Upgrade to Unlock</a>
+      </div>
     </div>
   </div>
 
@@ -750,6 +889,164 @@ async function initPortal() {
   } catch (e) {
     console.warn('Could not fetch canonical profile (offline?)', e);
   }
+
+  // 4. New member-profile sections (identity card, daily snippet, weekly deep dive).
+  //    Each is independent — failures degrade gracefully without breaking the page.
+  loadIdentity();
+  loadDailySnippet();
+  loadWeeklyDeepDive();
+}
+
+// ─── CORE IDENTITY CARD ──────────────────────────────────
+async function loadIdentity() {
+  try {
+    const res = await fetch('/.netlify/functions/compute-identity', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userEmail })
+    });
+    const data = await res.json();
+    if (!data.success || !data.identity) return paintIdentityEmpty();
+    paintIdentity(data.identity);
+  } catch (e) {
+    console.warn('[identity] fetch failed', e);
+    paintIdentityEmpty();
+  }
+}
+
+function paintIdentityEmpty() {
+  document.getElementById('id-prompt').style.display = 'block';
+  document.getElementById('id-prompt').innerHTML =
+    'Complete your blueprint above to surface your full Astro-Odu trinity.';
+}
+
+function paintIdentity(identity) {
+  const a = identity.astrology || {};
+  const n = identity.numerology || {};
+  const h = identity.humanDesign || {};
+
+  // Astrology pillar
+  if (a.sun) {
+    const sun = a.sun.sign || '—';
+    const elem = a.sun.element ? ` · ${a.sun.element}` : '';
+    document.getElementById('id-sun').textContent = sun + elem;
+  }
+  if (a.moon) {
+    document.getElementById('id-moon').textContent = a.moon.sign + (a.moon.element ? ` · ${a.moon.element}` : '');
+  }
+  if (a.ascendant) {
+    document.getElementById('id-asc').textContent = a.ascendant.sign + (a.ascendant.element ? ` · ${a.ascendant.element}` : '');
+  }
+  if (a.talkingOdu) {
+    // Surface Talking Odu in the identity card by appending to Asc row label
+    const ttEl = document.getElementById('trinity-talking');
+    const ttName = document.getElementById('tt-name');
+    if (ttEl && ttName) {
+      ttEl.style.display = 'block';
+      ttName.textContent = a.talkingOdu;
+    }
+  }
+
+  // Numerology pillar
+  if (n.lifePath) {
+    const lp = n.lifePath;
+    document.getElementById('id-lp').textContent = lp.final + (lp.master ? ' · Master' : '') + (lp.karmic ? ' · Karmic' : '');
+    if (lp.orisha) {
+      document.getElementById('id-lp-orisha-row').style.display = 'flex';
+      document.getElementById('id-lp-orisha').textContent = `${lp.orisha} — ${lp.archetype || ''}`;
+    }
+  }
+  if (n.personalYear) {
+    const py = n.personalYear;
+    const orisha = py.orisha ? ` · ${py.orisha.split('-')[0]}` : '';
+    document.getElementById('id-py').textContent = `${py.final}${orisha}`;
+  }
+
+  // Human Design pillar
+  if (h.type) {
+    const ts = h.typeOrisha ? ` · ${h.typeOrisha}` : '';
+    document.getElementById('id-type').textContent = h.type + ts;
+  }
+  if (h.authority) {
+    const as = h.authorityOrisha ? ` · ${h.authorityOrisha}` : '';
+    document.getElementById('id-auth').textContent = h.authority + as;
+  }
+  if (h.profile) document.getElementById('id-profile').textContent = h.profile;
+
+  // Soft prompts where data is missing
+  const prompts = [];
+  if (!identity.meta?.hasBirthTime) prompts.push('Add your birth time to your blueprint to surface Moon, Ascendant, and Human Design Type.');
+  else if (!identity.meta?.hasLocation) prompts.push("We couldn't resolve your birth location — try a more specific city to surface your Ascendant.");
+  if (prompts.length) {
+    const pEl = document.getElementById('id-prompt');
+    pEl.style.display = 'block';
+    pEl.textContent = prompts.join(' ');
+  }
+}
+
+// ─── DAILY CHANNELED SNIPPET ─────────────────────────────
+async function loadDailySnippet() {
+  if (currentTier === 'seed') return paintSnippetLocked();
+  const bodyEl = document.getElementById('snippet-body');
+  const metaEl = document.getElementById('snippet-meta');
+  metaEl.textContent = new Date().toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
+  try {
+    const res = await fetch('/.netlify/functions/daily-snippet', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userEmail })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      bodyEl.innerHTML = `<span class="channel-err">${data.error || "Could not generate today's snippet right now."}</span>`;
+      return;
+    }
+    bodyEl.innerHTML = toParas(data.snippet);
+  } catch (e) {
+    console.warn('[snippet] fetch failed', e);
+    bodyEl.innerHTML = `<span class="channel-err">Channel temporarily quiet. Try again in a moment.</span>`;
+  }
+}
+
+function paintSnippetLocked() {
+  document.getElementById('snippet-card').classList.add('channel-locked');
+  document.getElementById('snippet-lock').style.display = 'flex';
+  document.getElementById('snippet-meta').textContent = 'Locked at the Seed tier';
+  // Render a faux preview that gets blurred by .channel-locked
+  document.getElementById('snippet-body').innerHTML =
+    "<p>The cosmos has been speaking through your chart all morning. Today's message is short, channeled fresh from the moon's current phase and your Talking Odu — the words your progressed Ascendant carries to you now.</p>";
+}
+
+// ─── WEEKLY DEEP DIVE ────────────────────────────────────
+async function loadWeeklyDeepDive() {
+  if (currentTier === 'seed') return paintDeepDiveLocked();
+  const bodyEl = document.getElementById('dive-body');
+  const metaEl = document.getElementById('dive-meta');
+  try {
+    const res = await fetch('/.netlify/functions/weekly-deep-dive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userEmail })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      bodyEl.innerHTML = `<span class="channel-err">${data.error || "Could not generate this week's deep dive right now."}</span>`;
+      return;
+    }
+    metaEl.textContent = data.week ? `Week ${data.week}` : '';
+    bodyEl.innerHTML = toParas(data.deepDive);
+  } catch (e) {
+    console.warn('[deep-dive] fetch failed', e);
+    bodyEl.innerHTML = `<span class="channel-err">Channel temporarily quiet. Try again in a moment.</span>`;
+  }
+}
+
+function paintDeepDiveLocked() {
+  document.getElementById('deep-dive-card').classList.add('channel-locked');
+  document.getElementById('dive-lock').style.display = 'flex';
+  document.getElementById('dive-meta').textContent = 'Locked at the Seed tier';
+  document.getElementById('dive-body').innerHTML =
+    '<p>This week the moon moves through three distinct phases, and your chart meets each of them differently. The deep dive walks you through the medicine of the week, where you meet it in your own body, and the iwa-pele practice that aligns you to it. Channeled fresh, week by week.</p>';
 }
 
 function paintChrome(userData) {
@@ -777,13 +1074,24 @@ function paintChrome(userData) {
 }
 
 // ─── DIVINATION SANCTUARY (TRINITY) CARD ─────────────────
+function trinityHref(base, userData) {
+  // Pass birth data via URL so the trinity tools can pre-fill their forms.
+  const qs = new URLSearchParams();
+  if (userData.full_name)      qs.set('name', userData.full_name);
+  if (userData.dob)            qs.set('dob', userData.dob);
+  if (userData.birth_time)     qs.set('time', userData.birth_time);
+  if (userData.birth_location) qs.set('loc', userData.birth_location);
+  const q = qs.toString();
+  return q ? `${base}?${q}` : base;
+}
+
 function paintTrinityCard(userData) {
   const noteEl = document.getElementById('trinity-note');
   const tools = ['astro', 'num', 'hd'];
   const toolHrefs = {
-    astro: 'trinity/astro-odu.html',
-    num: 'trinity/astro-odu-numerology.html',
-    hd: 'trinity/astro-odu-human-design.html'
+    astro: trinityHref('trinity/astro-odu.html',            userData),
+    num:   trinityHref('trinity/astro-odu-numerology.html', userData),
+    hd:    trinityHref('trinity/astro-odu-human-design.html', userData)
   };
 
   // Surface Talking Odu if profile carries one
