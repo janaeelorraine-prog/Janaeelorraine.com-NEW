@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundations of Africana Spiritual Traditions — NTAS98</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080d;
+  --bg-2: #0c1218;
+  --gold: #d4af3c;
+  --gold-soft: #c9a84c;
+  --gold-glow: rgba(212,175,60,0.45);
+  --gold-line: rgba(212,175,60,0.28);
+  --gold-faint: rgba(212,175,60,0.10);
+  --white: #f0eee8;
+  --muted: rgba(240,238,232,0.55);
+  --emerald: #2d5f4f;
+  --emerald-glow: rgba(72,180,140,0.35);
+  --plum: #4a2454;
+  --rose: #d97a7a;
+  --indigo: #1d2540;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--white); font-family:'Cormorant Garamond', serif; }
+canvas { display:block; }
+
+/* ─── 3D STAGE ──────────────────────────────────────────── */
+#stage { position:fixed; inset:0; z-index:1; }
+#stage canvas { width:100% !important; height:100% !important; }
+
+/* ─── ATMOSPHERE OVERLAYS ───────────────────────────────── */
+.vignette { position:fixed; inset:0; pointer-events:none; z-index:2;
+  background:radial-gradient(ellipse at center, transparent 30%, rgba(6,8,13,0.85) 100%); }
+.haze { position:fixed; inset:0; pointer-events:none; z-index:3; opacity:0.35;
+  background:radial-gradient(ellipse 60% 40% at 50% 60%, rgba(212,175,60,0.18), transparent 70%); }
+.particles { position:fixed; inset:0; pointer-events:none; z-index:3; }
+
+/* ─── LOADING SCREEN ────────────────────────────────────── */
+#loader { position:fixed; inset:0; z-index:200; background:var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
+  transition:opacity 1.2s ease; }
+#loader.gone { opacity:0; pointer-events:none; }
+.loader-mark { width:80px; height:80px; border:1px solid var(--gold-line);
+  border-radius:50%; position:relative;
+  animation:breathe 3s ease-in-out infinite; }
+.loader-mark::before, .loader-mark::after { content:''; position:absolute; inset:8px;
+  border:1px solid var(--gold-line); border-radius:50%; }
+.loader-mark::after { inset:18px; background:radial-gradient(circle, var(--gold) 0%, transparent 70%); }
+.loader-text { font-family:'Cinzel Decorative',serif; font-size:11px; letter-spacing:8px;
+  color:var(--gold); text-transform:uppercase; opacity:0.7; }
+.loader-bar { width:240px; height:1px; background:var(--gold-faint); position:relative; overflow:hidden; }
+.loader-bar::after { content:''; position:absolute; left:-30%; top:0; height:100%; width:30%;
+  background:var(--gold); animation:slide 2.4s ease-in-out infinite; }
+@keyframes slide { 0%,100% { left:-30%; } 50% { left:100%; } }
+@keyframes breathe { 0%,100% { transform:scale(1); opacity:0.85; } 50% { transform:scale(1.05); opacity:1; } }
+
+/* ─── HUD ───────────────────────────────────────────────── */
+#hud { position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 26px; pointer-events:none;
+  background:linear-gradient(180deg, rgba(6,8,13,0.85), transparent); }
+#hud > * { pointer-events:auto; }
+
+.hud-left { display:flex; align-items:center; gap:14px; }
+.hud-avatar { width:48px; height:48px; border-radius:50%;
+  background:radial-gradient(circle, #2a1f10, #08060a);
+  border:2px solid var(--gold); position:relative;
+  box-shadow:0 0 18px rgba(212,175,60,0.4); }
+.hud-avatar::after { content:''; position:absolute; inset:-4px; border:1px solid var(--gold-line);
+  border-radius:50%; }
+.hud-avatar-glyph { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Cinzel Decorative',serif; color:var(--gold); font-size:18px; }
+.hud-name { font-family:'Cinzel',serif; font-size:14px; color:var(--white); letter-spacing:1.5px; }
+.hud-tier { font-size:10px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; opacity:0.85; margin-top:2px; }
+
+.hud-xp { display:flex; flex-direction:column; gap:4px; min-width:200px; }
+.hud-xp-row { display:flex; justify-content:space-between; align-items:baseline; }
+.hud-level { font-family:'Cinzel',serif; font-size:12px; color:var(--gold); letter-spacing:2px; }
+.hud-xp-num { font-size:11px; color:var(--muted); letter-spacing:1px; font-variant-numeric:tabular-nums; }
+.hud-bar { height:3px; background:rgba(255,255,255,0.06); position:relative; }
+.hud-bar-fill { position:absolute; inset:0 auto 0 0; background:linear-gradient(90deg, var(--gold), #f5d678);
+  box-shadow:0 0 8px var(--gold-glow); transition:width 0.6s ease; }
+
+.hud-center { font-family:'Cinzel Decorative',serif; font-size:12px; letter-spacing:5px;
+  color:var(--gold); text-transform:uppercase; opacity:0.85;
+  text-shadow:0 0 14px rgba(212,175,60,0.4); }
+
+.hud-progress { display:flex; align-items:center; gap:14px; }
+.hud-wheel { width:54px; height:54px; position:relative; }
+.hud-wheel svg { width:100%; height:100%; transform:rotate(-90deg); }
+.hud-wheel circle { fill:none; stroke-width:3; }
+.hud-wheel .bg { stroke:rgba(212,175,60,0.12); }
+.hud-wheel .fg { stroke:var(--gold); stroke-linecap:round; transition:stroke-dashoffset 1s ease; filter:drop-shadow(0 0 4px var(--gold-glow)); }
+.hud-wheel-pct { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Cinzel',serif; font-size:13px; color:var(--white); }
+.hud-progress-text { font-size:11px; color:var(--muted); letter-spacing:1.5px; }
+.hud-progress-text strong { color:var(--white); display:block; font-family:'Cinzel',serif; font-size:13px; letter-spacing:1px; }
+
+/* ─── COURSE TITLE PLATE ────────────────────────────────── */
+#title-plate { position:fixed; top:96px; left:50%; transform:translateX(-50%);
+  z-index:30; text-align:center; pointer-events:none;
+  animation:fadeDown 1.4s ease 0.6s both; }
+.plate-eyebrow { font-size:10px; letter-spacing:8px; color:var(--gold); opacity:0.7; text-transform:uppercase; }
+.plate-title { font-family:'Cinzel Decorative',serif; font-size:32px; letter-spacing:4px;
+  background:linear-gradient(135deg, #f5d678 0%, #ffffff 30%, #d4af3c 60%, #c8a0d0 100%);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  margin-top:8px; line-height:1.15;
+  filter:drop-shadow(0 0 24px rgba(212,175,60,0.4)); }
+.plate-sub { font-style:italic; font-size:14px; color:var(--muted); margin-top:8px; letter-spacing:1px; }
+.plate-rule { width:60px; height:1px; background:var(--gold); margin:14px auto 0; opacity:0.6; }
+@keyframes fadeDown { from { opacity:0; transform:translate(-50%, -10px); } to { opacity:1; transform:translateX(-50%); } }
+
+/* ─── PORTAL LABELS (3D HOTSPOTS) ────────────────────────── */
+.portal-label { position:absolute; transform:translate(-50%, -50%);
+  text-align:center; pointer-events:auto; cursor:pointer;
+  transition:transform 0.3s ease, opacity 0.3s ease; }
+.portal-label:hover .portal-icon { transform:scale(1.15); border-color:var(--gold); box-shadow:0 0 30px var(--gold-glow); }
+.portal-label:hover .portal-name { color:var(--white); }
+.portal-label.locked { opacity:0.45; }
+.portal-label.locked .portal-icon { background:radial-gradient(circle, rgba(80,80,90,0.25), rgba(6,8,13,0.4)); border-color:rgba(120,120,130,0.4); box-shadow:none; }
+.portal-label.locked:hover { opacity:0.7; }
+.portal-label.locked:hover .portal-icon { box-shadow:0 0 18px rgba(212,175,60,0.2); border-color:rgba(212,175,60,0.4); }
+.portal-label.locked .portal-tag { color:rgba(212,175,60,0.55); letter-spacing:3px; }
+.portal-icon { width:64px; height:64px; border-radius:50%; margin:0 auto 8px;
+  border:1.5px solid currentColor; background:radial-gradient(circle, rgba(212,175,60,0.22), rgba(6,8,13,0.4));
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cinzel Decorative',serif; font-size:24px;
+  transition:all 0.4s ease; backdrop-filter:blur(6px);
+  animation:pulse 4s ease-in-out infinite; position:relative; }
+.portal-icon::before { content:''; position:absolute; inset:-6px; border-radius:50%;
+  border:1px solid currentColor; opacity:0.4; }
+.portal-icon::after { content:''; position:absolute; inset:-12px; border-radius:50%;
+  border:1px solid currentColor; opacity:0.18; }
+.portal-icon.locked { opacity:0.35; }
+.portal-icon.locked::after { content:'⌬'; }
+.portal-name { font-family:'Cinzel',serif; font-size:11px; letter-spacing:3px;
+  color:var(--gold); text-transform:uppercase;
+  text-shadow:0 0 12px rgba(0,0,0,0.9); }
+.portal-tag { font-size:11px; color:var(--muted); margin-top:3px; font-style:italic; letter-spacing:0.5px; }
+@keyframes pulse { 0%,100% { box-shadow:0 0 12px var(--gold-faint); } 50% { box-shadow:0 0 22px var(--gold-glow); } }
+
+/* ─── BEGIN BUTTON ──────────────────────────────────────── */
+#begin-btn { position:fixed; bottom:38px; left:50%; transform:translateX(-50%); z-index:40;
+  background:transparent; border:1px solid var(--gold); color:var(--gold);
+  padding:14px 38px; font-family:'Cinzel Decorative',serif; font-size:11px; letter-spacing:5px;
+  text-transform:uppercase; cursor:pointer; transition:all 0.3s;
+  display:flex; align-items:center; gap:14px; }
+#begin-btn:hover { background:rgba(212,175,60,0.12); color:var(--white); letter-spacing:6px; }
+#begin-btn::before, #begin-btn::after { content:'❖'; font-size:9px; opacity:0.7; }
+
+/* ─── SIDE NAV ──────────────────────────────────────────── */
+#nav { position:fixed; left:0; top:50%; transform:translateY(-50%); z-index:40;
+  background:linear-gradient(90deg, rgba(6,8,13,0.92), rgba(6,8,13,0.6));
+  border-right:1px solid var(--gold-line);
+  padding:18px 0; display:flex; flex-direction:column; }
+.nav-item { display:flex; align-items:center; gap:14px; padding:11px 22px 11px 18px;
+  border-left:2px solid transparent; cursor:pointer;
+  font-family:'Cinzel',serif; font-size:11px; letter-spacing:3px; color:var(--muted);
+  text-transform:uppercase; transition:all 0.25s; }
+.nav-item:hover { color:var(--gold); border-left-color:var(--gold-faint); background:rgba(212,175,60,0.04); }
+.nav-item.active { color:var(--gold); border-left-color:var(--gold); background:rgba(212,175,60,0.06); }
+.nav-glyph { font-family:'Cinzel Decorative',serif; font-size:14px; width:18px; text-align:center; opacity:0.85; }
+
+/* ─── MODULES PANEL (RIGHT) ─────────────────────────────── */
+#modules-panel { position:fixed; right:24px; top:96px; width:300px; z-index:40;
+  background:rgba(8,10,16,0.78); border:1px solid var(--gold-line);
+  backdrop-filter:blur(10px); padding:0; max-height:calc(100vh - 140px); overflow-y:auto;
+  animation:slideLeft 1.2s ease 0.8s both; }
+@keyframes slideLeft { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:none; } }
+.modp-head { padding:16px 18px; border-bottom:1px solid var(--gold-faint);
+  display:flex; justify-content:space-between; align-items:baseline; }
+.modp-head-title { font-family:'Cinzel Decorative',serif; font-size:11px; letter-spacing:4px;
+  color:var(--gold); text-transform:uppercase; }
+.modp-head-count { font-size:11px; color:var(--muted); letter-spacing:1px; }
+.modp-list { padding:0; }
+.modp-item { display:flex; gap:12px; padding:12px 18px;
+  border-bottom:1px solid rgba(212,175,60,0.06); cursor:pointer;
+  transition:background 0.25s; align-items:center; }
+.modp-item:hover { background:rgba(212,175,60,0.05); }
+.modp-num { width:32px; height:32px; border:1px solid var(--gold-line); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; flex:0 0 32px;
+  font-family:'Cinzel',serif; font-size:13px; color:var(--gold); }
+.modp-item.locked .modp-num { opacity:0.4; }
+.modp-info { flex:1; min-width:0; }
+.modp-name { font-family:'Cinzel',serif; font-size:13px; color:var(--white); letter-spacing:0.5px; }
+.modp-meta { font-size:11px; color:var(--muted); margin-top:3px; letter-spacing:0.5px; }
+.modp-prog { font-family:'Cinzel',serif; font-size:11px; color:var(--gold); letter-spacing:1px; flex:0 0 auto; }
+.modp-foot { padding:14px 18px; border-top:1px solid var(--gold-faint); text-align:center;
+  font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; color:var(--gold);
+  text-transform:uppercase; cursor:pointer; transition:color 0.2s; }
+.modp-foot:hover { color:var(--white); }
+
+/* ─── MODULE INTERIOR OVERLAY ───────────────────────────── */
+#module-interior { position:fixed; inset:0; z-index:90; display:none;
+  background:radial-gradient(ellipse at 50% 60%, #1a0f08 0%, #06080d 70%);
+  flex-direction:column; }
+#module-interior.show { display:flex; animation:fadeIn 0.8s ease; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+.mi-head { padding:24px 40px; border-bottom:1px solid var(--gold-faint);
+  display:flex; align-items:center; justify-content:space-between;
+  background:linear-gradient(180deg, rgba(6,8,13,0.95), rgba(6,8,13,0.7)); }
+.mi-back { background:none; border:none; color:var(--gold); cursor:pointer;
+  font-family:'Cinzel',serif; font-size:11px; letter-spacing:3px;
+  text-transform:uppercase; display:flex; align-items:center; gap:10px; }
+.mi-back:hover { color:var(--white); }
+.mi-title-wrap { text-align:center; }
+.mi-eyebrow { font-size:10px; letter-spacing:5px; color:var(--gold); opacity:0.75; text-transform:uppercase; }
+.mi-title { font-family:'Cinzel Decorative',serif; font-size:24px; letter-spacing:3px; color:var(--white); margin-top:4px; }
+.mi-progress-mini { font-family:'Cinzel',serif; font-size:11px; letter-spacing:2px; color:var(--gold); }
+
+.mi-stage { flex:1; position:relative; overflow:hidden; }
+.mi-bg { position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 30% 25%, rgba(168,124,217,0.15), transparent 55%),
+    radial-gradient(ellipse at 70% 30%, rgba(72,180,140,0.10), transparent 55%),
+    radial-gradient(ellipse at 50% 95%, rgba(217,122,122,0.20), transparent 60%),
+    linear-gradient(180deg, #1a0f24 0%, #2a1a3a 30%, #1a1208 65%, #0a0805 100%);
+}
+.mi-bg::before { content:''; position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle at 50% 90%, rgba(255,180,84,0.45) 0%, transparent 20%),
+    radial-gradient(circle at 20% 85%, rgba(212,175,60,0.25) 0%, transparent 14%),
+    radial-gradient(circle at 80% 88%, rgba(212,175,60,0.25) 0%, transparent 14%),
+    radial-gradient(circle at 12% 70%, rgba(217,122,122,0.18) 0%, transparent 10%),
+    radial-gradient(circle at 88% 70%, rgba(168,124,217,0.18) 0%, transparent 10%);
+  filter:blur(22px); animation:flicker 4s ease-in-out infinite; }
+.mi-bg::after { content:''; position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle at 50% 50%, transparent 0%, transparent 35%, rgba(212,175,60,0.04) 36%, transparent 38%),
+    radial-gradient(circle at 50% 50%, transparent 0%, transparent 45%, rgba(212,175,60,0.04) 46%, transparent 48%),
+    radial-gradient(circle at 50% 50%, transparent 0%, transparent 55%, rgba(212,175,60,0.04) 56%, transparent 58%);
+  pointer-events:none; }
+
+/* the silhouette of an ancestral figure on the back wall */
+.mi-figure { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:280px; height:520px; pointer-events:none; opacity:0.18;
+  background:
+    radial-gradient(ellipse 90px 110px at 50% 14%, #f5d678 0%, transparent 60%),
+    radial-gradient(ellipse 130px 240px at 50% 60%, #d4af3c 0%, transparent 55%);
+  filter:blur(2px); }
+.mi-figure::before { content:'⚜'; position:absolute; left:50%; top:14%; transform:translate(-50%,-50%);
+  font-family:'Cinzel Decorative',serif; font-size:48px; color:#f5d678;
+  text-shadow:0 0 30px rgba(212,175,60,0.8); opacity:0.6; }
+.mi-figure::after { content:'☥'; position:absolute; left:50%; top:60%; transform:translate(-50%,-50%);
+  font-family:'Cinzel Decorative',serif; font-size:120px; color:#f5d678;
+  text-shadow:0 0 60px rgba(212,175,60,0.6); opacity:0.4; }
+
+/* hanging adinkra symbols overhead */
+.mi-glyphs { position:absolute; top:0; left:0; right:0; height:120px; pointer-events:none;
+  display:flex; justify-content:space-around; align-items:flex-start; padding:18px 80px 0;
+  font-family:'Cinzel Decorative',serif; font-size:34px; color:rgba(212,175,60,0.35); }
+.mi-glyphs span { animation:hang 6s ease-in-out infinite; text-shadow:0 0 18px rgba(212,175,60,0.4); }
+.mi-glyphs span:nth-child(2){ animation-delay:0.6s; color:rgba(217,122,122,0.4); text-shadow:0 0 18px rgba(217,122,122,0.4); }
+.mi-glyphs span:nth-child(3){ animation-delay:1.2s; color:rgba(125,224,160,0.4); text-shadow:0 0 18px rgba(125,224,160,0.4); }
+.mi-glyphs span:nth-child(4){ animation-delay:1.8s; color:rgba(168,124,217,0.4); text-shadow:0 0 18px rgba(168,124,217,0.4); }
+.mi-glyphs span:nth-child(5){ animation-delay:2.4s; }
+.mi-glyphs span:nth-child(6){ animation-delay:3.0s; color:rgba(245,214,120,0.5); }
+.mi-glyphs span:nth-child(7){ animation-delay:3.6s; color:rgba(217,122,122,0.4); text-shadow:0 0 18px rgba(217,122,122,0.4); }
+@keyframes hang { 0%,100% { transform:translateY(0) rotate(-2deg); opacity:0.6; } 50% { transform:translateY(8px) rotate(2deg); opacity:1; } }
+
+/* glowing floor circle around the altar */
+.mi-floor-glow { position:absolute; left:50%; bottom:8%; transform:translateX(-50%);
+  width:80%; max-width:700px; height:120px; pointer-events:none;
+  background:radial-gradient(ellipse at center bottom, rgba(255,180,84,0.45) 0%, rgba(212,175,60,0.18) 30%, transparent 70%);
+  filter:blur(6px); }
+
+/* ─── THEMED MODULE INTERIORS ──────────────────────────── */
+
+/* COSMOLOGY — deep space starmap */
+.theme-starmap .mi-bg {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(168,124,217,0.30), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(94,138,184,0.20), transparent 60%),
+    linear-gradient(180deg, #06051a 0%, #0e0a32 40%, #0a0820 100%);
+}
+.theme-starmap .mi-bg::before {
+  background-image:
+    radial-gradient(2px 2px at 12% 22%, #fff, transparent 50%),
+    radial-gradient(1px 1px at 28% 8%, #fff, transparent 50%),
+    radial-gradient(1px 1px at 44% 38%, #f5d678, transparent 50%),
+    radial-gradient(2px 2px at 62% 12%, #fff, transparent 50%),
+    radial-gradient(1px 1px at 78% 28%, #c8a0d0, transparent 50%),
+    radial-gradient(1.5px 1.5px at 88% 18%, #fff, transparent 50%),
+    radial-gradient(1px 1px at 8% 60%, #fff, transparent 50%),
+    radial-gradient(2px 2px at 32% 78%, #f5d678, transparent 50%),
+    radial-gradient(1px 1px at 52% 64%, #fff, transparent 50%),
+    radial-gradient(1.5px 1.5px at 72% 82%, #fff, transparent 50%),
+    radial-gradient(1px 1px at 92% 58%, #c8a0d0, transparent 50%);
+  filter:none; animation:twinkle 5s ease-in-out infinite; opacity:0.85;
+}
+@keyframes twinkle { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
+.theme-starmap .mi-figure {
+  background: radial-gradient(ellipse 200px 200px at 50% 50%, rgba(245,214,120,0.4) 0%, rgba(168,124,217,0.2) 40%, transparent 70%);
+  width:400px; height:400px; opacity:0.5; filter:blur(1px); }
+.theme-starmap .mi-figure::before { content:'☉'; font-size:180px; color:#f5d678; opacity:0.7;
+  text-shadow:0 0 80px rgba(245,214,120,1), 0 0 40px rgba(168,124,217,0.8); top:50%; }
+.theme-starmap .mi-figure::after { content:''; }
+.theme-starmap .mi-floor-glow {
+  background:radial-gradient(ellipse at center bottom, rgba(168,124,217,0.4), transparent 70%); }
+
+/* ORISHA — ocean/river waters */
+.theme-orishaWaters .mi-bg {
+  background:
+    radial-gradient(ellipse at 30% 30%, rgba(125,224,160,0.20), transparent 55%),
+    radial-gradient(ellipse at 70% 30%, rgba(224,143,184,0.25), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(94,138,184,0.40), transparent 60%),
+    linear-gradient(180deg, #1a0e28 0%, #1a2a4a 40%, #0a1830 100%);
+}
+.theme-orishaWaters .mi-bg::before {
+  background-image:
+    radial-gradient(circle at 50% 90%, rgba(224,143,184,0.5) 0%, transparent 22%),
+    radial-gradient(circle at 25% 80%, rgba(125,224,160,0.35) 0%, transparent 16%),
+    radial-gradient(circle at 75% 80%, rgba(94,138,184,0.4) 0%, transparent 16%),
+    repeating-linear-gradient(90deg, transparent 0, transparent 40px, rgba(125,224,160,0.05) 40px, rgba(125,224,160,0.05) 41px);
+  filter:blur(20px); animation:wave 6s ease-in-out infinite; }
+@keyframes wave { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+.theme-orishaWaters .mi-figure {
+  background: radial-gradient(ellipse 100px 130px at 50% 18%, #e08fb8 0%, transparent 60%),
+              radial-gradient(ellipse 150px 280px at 50% 60%, #5d8fb3 0%, transparent 55%);
+  opacity:0.28; }
+.theme-orishaWaters .mi-figure::before { content:'⚓'; color:#e08fb8; }
+.theme-orishaWaters .mi-figure::after { content:'◈'; color:#7ec0e8; }
+.theme-orishaWaters .mi-floor-glow {
+  background:radial-gradient(ellipse at center bottom, rgba(224,143,184,0.5), rgba(94,138,184,0.2) 30%, transparent 70%); }
+
+/* DIVINATION — cowrie mat under candlelight */
+.theme-cowrieMat .mi-bg {
+  background:
+    radial-gradient(ellipse at 50% 25%, rgba(168,124,217,0.30), transparent 55%),
+    radial-gradient(ellipse at 50% 95%, rgba(245,214,120,0.30), transparent 55%),
+    linear-gradient(180deg, #18102a 0%, #2a1840 40%, #18102a 100%);
+}
+.theme-cowrieMat .mi-bg::before {
+  background-image:
+    radial-gradient(circle at 50% 92%, rgba(245,214,120,0.6) 0%, transparent 22%),
+    radial-gradient(circle at 18% 86%, rgba(168,124,217,0.4) 0%, transparent 14%),
+    radial-gradient(circle at 82% 86%, rgba(168,124,217,0.4) 0%, transparent 14%);
+  filter:blur(22px); }
+.theme-cowrieMat .mi-bg::after {
+  background-image:
+    radial-gradient(circle at 50% 50%, transparent 0, transparent 200px, rgba(168,124,217,0.18) 201px, transparent 203px),
+    radial-gradient(circle at 50% 50%, transparent 0, transparent 240px, rgba(245,214,120,0.12) 241px, transparent 243px),
+    radial-gradient(circle at 50% 50%, transparent 0, transparent 280px, rgba(168,124,217,0.10) 281px, transparent 283px); }
+.theme-cowrieMat .mi-figure { width:340px; height:340px; opacity:0.32; filter:none;
+  background: radial-gradient(circle at 50% 50%, rgba(168,124,217,0.3) 0%, transparent 60%); }
+.theme-cowrieMat .mi-figure::before { content:'◉'; font-size:160px; color:#a87cd9;
+  text-shadow:0 0 60px rgba(168,124,217,0.9); top:50%; }
+.theme-cowrieMat .mi-figure::after { content:''; }
+.theme-cowrieMat .mi-floor-glow {
+  background:radial-gradient(ellipse at center bottom, rgba(168,124,217,0.5), rgba(245,214,120,0.2) 35%, transparent 70%); }
+
+/* RITUAL — fire & rose */
+.theme-ritualFire .mi-bg {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(217,122,122,0.25), transparent 55%),
+    radial-gradient(ellipse at 70% 20%, rgba(245,214,120,0.20), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(255,140,80,0.45), transparent 60%),
+    linear-gradient(180deg, #2a0a14 0%, #4a1a1a 35%, #2a0a05 100%);
+}
+.theme-ritualFire .mi-bg::before {
+  background-image:
+    radial-gradient(circle at 50% 95%, rgba(255,180,84,0.7) 0%, transparent 26%),
+    radial-gradient(circle at 22% 88%, rgba(217,122,122,0.5) 0%, transparent 16%),
+    radial-gradient(circle at 78% 88%, rgba(217,122,122,0.5) 0%, transparent 16%),
+    radial-gradient(circle at 12% 75%, rgba(245,214,120,0.3) 0%, transparent 10%),
+    radial-gradient(circle at 88% 75%, rgba(245,214,120,0.3) 0%, transparent 10%);
+  filter:blur(22px); animation:flicker 2.5s ease-in-out infinite; }
+.theme-ritualFire .mi-figure {
+  background: radial-gradient(ellipse 100px 140px at 50% 20%, #f5d678 0%, transparent 60%),
+              radial-gradient(ellipse 160px 280px at 50% 60%, #d97a7a 0%, transparent 55%);
+  opacity:0.3; }
+.theme-ritualFire .mi-figure::before { content:'✦'; color:#f5d678; font-size:60px; }
+.theme-ritualFire .mi-figure::after { content:'☩'; color:#d97a7a; }
+.theme-ritualFire .mi-floor-glow {
+  background:radial-gradient(ellipse at center bottom, rgba(255,180,84,0.65), rgba(217,122,122,0.3) 30%, transparent 70%); }
+
+/* HERBOLOGY — sacred grove */
+.theme-herbCabinet .mi-bg {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(72,180,140,0.35), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(72,180,140,0.30), transparent 55%),
+    linear-gradient(180deg, #082218 0%, #0e3a2a 35%, #04140e 100%);
+}
+.theme-herbCabinet .mi-bg::before {
+  background-image:
+    radial-gradient(circle at 50% 92%, rgba(125,224,160,0.45) 0%, transparent 22%),
+    radial-gradient(circle at 18% 18%, rgba(72,180,140,0.25) 0%, transparent 18%),
+    radial-gradient(circle at 82% 18%, rgba(72,180,140,0.25) 0%, transparent 18%),
+    radial-gradient(circle at 25% 60%, rgba(245,214,120,0.10) 0%, transparent 12%),
+    radial-gradient(circle at 75% 60%, rgba(245,214,120,0.10) 0%, transparent 12%);
+  filter:blur(20px); }
+/* hanging herb bundles silhouettes from the top */
+.theme-herbCabinet .mi-bg::after {
+  background-image:
+    linear-gradient(180deg, rgba(72,180,140,0.4) 0%, transparent 90px),
+    radial-gradient(ellipse 18px 50px at 12% 60px, #2a5a3a, transparent 70%),
+    radial-gradient(ellipse 18px 60px at 24% 75px, #2a5a3a, transparent 70%),
+    radial-gradient(ellipse 18px 45px at 36% 55px, #2a5a3a, transparent 70%),
+    radial-gradient(ellipse 18px 65px at 48% 80px, #2a5a3a, transparent 70%),
+    radial-gradient(ellipse 18px 50px at 60% 60px, #2a5a3a, transparent 70%),
+    radial-gradient(ellipse 18px 70px at 72% 85px, #2a5a3a, transparent 70%),
+    radial-gradient(ellipse 18px 55px at 84% 65px, #2a5a3a, transparent 70%);
+  background-repeat:no-repeat; opacity:0.6; }
+.theme-herbCabinet .mi-figure {
+  background: radial-gradient(ellipse 90px 110px at 50% 18%, #f5d678 0%, transparent 60%),
+              radial-gradient(ellipse 140px 260px at 50% 60%, #48b48c 0%, transparent 55%);
+  opacity:0.22; }
+.theme-herbCabinet .mi-figure::before { content:'⚘'; color:#7ce0a0; font-size:54px; }
+.theme-herbCabinet .mi-figure::after { content:'◈'; color:#48b48c; font-size:100px; }
+.theme-herbCabinet .mi-floor-glow {
+  background:radial-gradient(ellipse at center bottom, rgba(125,224,160,0.5), rgba(245,214,120,0.2) 35%, transparent 70%); }
+
+/* DIASPORA — atlantic crossing waters */
+.theme-diasporaWater .mi-bg {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(126,192,232,0.30), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(212,175,60,0.30), transparent 60%),
+    linear-gradient(180deg, #08182e 0%, #0e2a52 35%, #0a1830 70%, #1a1408 100%);
+}
+.theme-diasporaWater .mi-bg::before {
+  background-image:
+    radial-gradient(circle at 50% 92%, rgba(245,214,120,0.5) 0%, transparent 22%),
+    repeating-linear-gradient(90deg, transparent 0, transparent 30px, rgba(126,192,232,0.06) 30px, rgba(126,192,232,0.06) 31px),
+    radial-gradient(circle at 20% 30%, rgba(126,192,232,0.15) 0%, transparent 18%),
+    radial-gradient(circle at 80% 25%, rgba(126,192,232,0.15) 0%, transparent 18%);
+  filter:blur(8px); animation:wave 8s ease-in-out infinite; }
+.theme-diasporaWater .mi-figure {
+  background: radial-gradient(ellipse 100px 130px at 50% 18%, #f5d678 0%, transparent 60%),
+              radial-gradient(ellipse 150px 260px at 50% 60%, #7ec0e8 0%, transparent 55%);
+  opacity:0.25; }
+.theme-diasporaWater .mi-figure::before { content:'⚓'; color:#7ec0e8; font-size:54px; }
+.theme-diasporaWater .mi-figure::after { content:'⏣'; color:#f5d678; font-size:100px; }
+.theme-diasporaWater .mi-floor-glow {
+  background:radial-gradient(ellipse at center bottom, rgba(126,192,232,0.4), rgba(245,214,120,0.3) 35%, transparent 70%); }
+@keyframes flicker { 0%,100% { opacity:0.85; } 33% { opacity:1; } 66% { opacity:0.7; } }
+
+/* the altar diagram */
+.altar { position:absolute; inset:0; pointer-events:none; z-index:3; }
+/* When showing a non-ancestry module, hide ancestry-only decor (figure, hanging glyphs, floor glow, altar frame) */
+#module-interior.hide-ancestry-decor .mi-figure,
+#module-interior.hide-ancestry-decor .mi-glyphs,
+#module-interior.hide-ancestry-decor .mi-floor-glow,
+#module-interior.hide-ancestry-decor .altar-frame { display:none; }
+.altar-frame { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:580px; height:380px;
+  border:1px solid var(--gold-line); pointer-events:none; opacity:0.5; }
+.altar-frame::before, .altar-frame::after { content:''; position:absolute; width:30px; height:30px;
+  border:1px solid var(--gold); }
+.altar-frame::before { top:-8px; left:-8px; border-right:none; border-bottom:none; }
+.altar-frame::after { bottom:-8px; right:-8px; border-left:none; border-top:none; }
+
+/* sacred objects on the altar */
+.sacred-obj { position:absolute; transform:translate(-50%,-50%); cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  transition:transform 0.3s ease; pointer-events:auto; }
+.sacred-obj:hover { transform:translate(-50%,-50%) translateY(-6px) scale(var(--obj-scale, 1)); }
+.sacred-obj:hover .sacred-glyph { color:var(--white); text-shadow:0 0 18px var(--gold); }
+.sacred-glyph { font-family:'Cinzel Decorative',serif; font-size:32px; color:var(--gold);
+  text-shadow:0 0 14px rgba(212,175,60,0.6); transition:all 0.3s; line-height:1; }
+.sacred-name { font-family:'Cinzel',serif; font-size:10px; color:var(--gold);
+  letter-spacing:2.5px; text-transform:uppercase; opacity:0.85; white-space:nowrap; }
+.sacred-status { font-size:10px; color:var(--rose); margin-top:2px; }
+.sacred-status.done { color:#7ce0a0; }
+.sacred-obj.done .sacred-glyph::after { content:'·'; position:absolute; right:-14px; top:0;
+  color:#7ce0a0; font-size:18px; }
+.sacred-obj.locked { opacity:0.35; cursor:not-allowed; }
+
+/* lesson list (left side of module) */
+.mi-list { position:absolute; left:30px; top:30px; bottom:30px; width:260px; z-index:5;
+  background:rgba(6,8,13,0.7); border:1px solid var(--gold-line);
+  padding:18px; backdrop-filter:blur(8px); overflow-y:auto; }
+.mil-title { font-family:'Cinzel Decorative',serif; font-size:11px; letter-spacing:4px;
+  color:var(--gold); text-transform:uppercase; padding-bottom:10px; border-bottom:1px solid var(--gold-faint); margin-bottom:12px; }
+.mil-item { padding:10px 4px; border-bottom:1px solid rgba(212,175,60,0.06); cursor:pointer;
+  display:flex; align-items:center; gap:10px; transition:background 0.2s; }
+.mil-item:hover { background:rgba(212,175,60,0.04); }
+.mil-item.active { background:rgba(212,175,60,0.08); }
+.mil-check { width:14px; height:14px; border:1px solid var(--gold-line); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; flex:0 0 14px; }
+.mil-check.done { background:var(--gold); border-color:var(--gold); }
+.mil-check.done::after { content:'✓'; color:var(--bg); font-size:9px; font-weight:700; }
+.mil-text { flex:1; font-size:13px; color:var(--white); line-height:1.3; }
+
+/* notes panel (right side of module) */
+.mi-notes { position:absolute; right:30px; top:30px; bottom:30px; width:280px; z-index:5;
+  background:rgba(6,8,13,0.7); border:1px solid var(--gold-line);
+  padding:18px; backdrop-filter:blur(8px); display:flex; flex-direction:column; }
+.mn-title { font-family:'Cinzel Decorative',serif; font-size:11px; letter-spacing:4px;
+  color:var(--gold); text-transform:uppercase; padding-bottom:10px; border-bottom:1px solid var(--gold-faint); margin-bottom:12px; }
+.mn-prompt { font-style:italic; font-size:13px; color:var(--muted); line-height:1.5; margin-bottom:12px; }
+.mn-area { flex:1; background:rgba(255,255,255,0.02); border:1px solid var(--gold-faint);
+  color:var(--white); font-family:'Cormorant Garamond',serif; font-size:14px; line-height:1.6;
+  padding:12px; resize:none; outline:none; }
+.mn-area:focus { border-color:var(--gold-line); }
+.mn-save { margin-top:10px; background:transparent; border:1px solid var(--gold-line); color:var(--gold);
+  padding:9px; font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; cursor:pointer;
+  transition:all 0.2s; }
+.mn-save:hover { background:rgba(212,175,60,0.08); border-color:var(--gold); color:var(--white); }
+.mn-saved { font-size:11px; color:#7ce0a0; text-align:center; margin-top:6px; opacity:0; transition:opacity 0.3s; letter-spacing:1px; }
+.mn-saved.show { opacity:1; }
+
+/* ─── LESSON SCROLL OVERLAY ─────────────────────────────── */
+#lesson-scroll { position:fixed; inset:0; z-index:120; display:none;
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center; padding:40px; }
+#lesson-scroll.show { display:flex; animation:fadeIn 0.4s ease; }
+.scroll-panel { width:min(820px, 100%); max-height:90vh;
+  background:linear-gradient(180deg, #0e0a05 0%, #06080d 100%);
+  border:1px solid var(--gold); display:flex; flex-direction:column;
+  box-shadow:0 0 80px rgba(212,175,60,0.25); position:relative; }
+.scroll-panel::before, .scroll-panel::after { content:''; position:absolute; width:40px; height:40px;
+  border:1px solid var(--gold); }
+.scroll-panel::before { top:-12px; left:-12px; border-right:none; border-bottom:none; }
+.scroll-panel::after { bottom:-12px; right:-12px; border-left:none; border-top:none; }
+.scroll-head { padding:24px 30px; border-bottom:1px solid var(--gold-line);
+  display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
+.scroll-head-info { flex:1; }
+.scroll-eyebrow { font-size:10px; letter-spacing:5px; color:var(--gold); opacity:0.75; text-transform:uppercase; }
+.scroll-title { font-family:'Cinzel Decorative',serif; font-size:22px; letter-spacing:2px; color:var(--white); margin-top:6px; }
+.scroll-meta { font-size:13px; color:var(--muted); margin-top:6px; font-style:italic; }
+.scroll-close { background:none; border:1px solid var(--gold-line); color:var(--gold);
+  width:36px; height:36px; cursor:pointer; font-family:'Cinzel',serif; font-size:14px;
+  flex:0 0 36px; transition:all 0.2s; }
+.scroll-close:hover { background:rgba(212,175,60,0.1); color:var(--white); border-color:var(--gold); }
+.scroll-body { padding:28px 36px; overflow-y:auto; flex:1; }
+.scroll-video { width:100%; aspect-ratio:16/9; background:#000; border:1px solid var(--gold-line);
+  margin-bottom:24px; display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden; }
+.scroll-video::before { content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 50% 50%, rgba(212,175,60,0.18), transparent 60%); }
+.scroll-video-play { position:relative; width:64px; height:64px; border:1.5px solid var(--gold);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all 0.3s; background:rgba(6,8,13,0.7); }
+.scroll-video-play:hover { background:var(--gold); transform:scale(1.05); }
+.scroll-video-play::after { content:''; width:0; height:0; border-style:solid;
+  border-width:10px 0 10px 16px; border-color:transparent transparent transparent var(--gold);
+  margin-left:4px; transition:border-color 0.3s; }
+.scroll-video-play:hover::after { border-left-color:var(--bg); }
+.scroll-video-label { position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+  font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; }
+.scroll-text { font-size:16px; line-height:1.75; color:var(--white); }
+.scroll-text p { margin-bottom:16px; }
+.scroll-text p:first-letter { font-family:'Cinzel Decorative',serif; font-size:42px; color:var(--gold);
+  float:left; line-height:0.9; padding:8px 10px 0 0; }
+.scroll-text strong { color:var(--gold); font-weight:600; }
+.scroll-quote { border-left:2px solid var(--gold); padding:8px 0 8px 20px; margin:18px 0;
+  font-style:italic; color:var(--gold-soft); }
+.scroll-foot { padding:18px 30px; border-top:1px solid var(--gold-line);
+  display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+.scroll-prompt { font-style:italic; font-size:13px; color:var(--muted); flex:1; min-width:200px; }
+.scroll-actions { display:flex; gap:10px; }
+.scroll-btn { background:transparent; border:1px solid var(--gold-line); color:var(--gold);
+  padding:10px 22px; font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px;
+  text-transform:uppercase; cursor:pointer; transition:all 0.2s; }
+.scroll-btn:hover { background:rgba(212,175,60,0.08); border-color:var(--gold); color:var(--white); }
+.scroll-btn.primary { border-color:var(--gold); color:var(--gold);
+  background:linear-gradient(135deg, rgba(212,175,60,0.06), rgba(212,175,60,0.16)); }
+.scroll-btn.primary:hover { background:rgba(212,175,60,0.2); }
+.scroll-btn.primary.done { background:rgba(125,224,160,0.1); border-color:#7ce0a0; color:#7ce0a0; }
+
+/* ─── MOBILE ────────────────────────────────────────────── */
+@media (max-width: 880px) {
+  #title-plate { top:80px; }
+  .plate-title { font-size:22px; letter-spacing:2px; }
+  #nav { display:none; }
+  #modules-panel { right:0; left:0; bottom:0; top:auto; width:100%; max-height:42vh;
+    animation:slideUp 1.2s ease 0.8s both; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+  .hud-name, .hud-tier, .hud-progress-text { display:none; }
+  #begin-btn { bottom:auto; top:160px; }
+  .mi-list, .mi-notes { display:none; }
+  .mi-stage { padding:80px 20px 100px; }
+  .altar-frame { width:90vw; height:60vh; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-mark"></div>
+  <div class="loader-text">Entering the Sacred Center</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- 3D STAGE -->
+<div id="stage"></div>
+<div class="vignette"></div>
+<div class="haze"></div>
+<canvas class="particles" id="particles"></canvas>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="hud-left">
+    <div class="hud-avatar">
+      <div class="hud-avatar-glyph" id="hud-glyph">J</div>
+    </div>
+    <div>
+      <div class="hud-name" id="hud-name">Janaee Lorraine</div>
+      <div class="hud-tier" id="hud-tier">Initiate · Root</div>
+    </div>
+  </div>
+  <div class="hud-center">Foundations of Africana Spiritual Traditions</div>
+  <div class="hud-progress">
+    <div class="hud-xp">
+      <div class="hud-xp-row">
+        <div class="hud-level" id="hud-level">Level 3</div>
+        <div class="hud-xp-num"><span id="hud-xp">640</span> / 1200 xp</div>
+      </div>
+      <div class="hud-bar"><div class="hud-bar-fill" id="hud-bar-fill" style="width:53%"></div></div>
+    </div>
+    <div class="hud-wheel">
+      <svg viewBox="0 0 60 60">
+        <circle class="bg" cx="30" cy="30" r="26"></circle>
+        <circle class="fg" id="wheel-fg" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="60"></circle>
+      </svg>
+      <div class="hud-wheel-pct" id="wheel-pct">63%</div>
+    </div>
+  </div>
+</div>
+
+<!-- TITLE PLATE -->
+<div id="title-plate">
+  <div class="plate-eyebrow">Course One · 7 Modules · 35 Lessons</div>
+  <div class="plate-title">FOUNDATIONS OF AFRICANA<br/>SPIRITUAL TRADITIONS</div>
+  <div class="plate-sub">A comprehensive journey through indigenous African spiritual systems</div>
+  <div class="plate-rule"></div>
+</div>
+
+<!-- SIDE NAV -->
+<div id="nav">
+  <div class="nav-item active"><span class="nav-glyph">⌂</span>Home</div>
+  <div class="nav-item"><span class="nav-glyph">❖</span>Modules</div>
+  <div class="nav-item"><span class="nav-glyph">⏣</span>Sacred Spaces</div>
+  <div class="nav-item"><span class="nav-glyph">◈</span>Ritual Practice</div>
+  <div class="nav-item"><span class="nav-glyph">⚱</span>Ancestral Altar</div>
+  <div class="nav-item"><span class="nav-glyph">≡</span>Library</div>
+  <div class="nav-item"><span class="nav-glyph">◐</span>Community</div>
+  <div class="nav-item"><span class="nav-glyph">✎</span>Journal</div>
+  <div class="nav-item" id="nav-back"><span class="nav-glyph">←</span>Portal</div>
+</div>
+
+<!-- MODULES PANEL -->
+<div id="modules-panel">
+  <div class="modp-head">
+    <div class="modp-head-title">Course Modules</div>
+    <div class="modp-head-count" id="modp-count">7 Modules · 35 Lessons</div>
+  </div>
+  <div class="modp-list" id="modp-list"><!-- generated --></div>
+  <div class="modp-foot">View All Modules →</div>
+</div>
+
+<!-- MODULE INTERIOR (HIDDEN) -->
+<div id="module-interior">
+  <div class="mi-head">
+    <button class="mi-back" id="mi-back">← Return to Sacred Center</button>
+    <div class="mi-title-wrap">
+      <div class="mi-eyebrow" id="mi-eyebrow">Module Two</div>
+      <div class="mi-title" id="mi-title">Ancestral Veneration</div>
+    </div>
+    <div class="mi-progress-mini" id="mi-progress">3 / 5 Lessons</div>
+  </div>
+  <div class="mi-stage">
+    <div class="mi-bg"></div>
+    <div class="mi-glyphs"><span>☥</span><span>⚜</span><span>◈</span><span>✦</span><span>⏣</span><span>☉</span><span>☩</span></div>
+    <div class="mi-figure"></div>
+    <div class="mi-floor-glow"></div>
+
+    <div class="mi-list">
+      <div class="mil-title">Lessons</div>
+      <div id="mil-items"><!-- generated --></div>
+    </div>
+
+    <div class="altar">
+      <div class="altar-frame"></div>
+      <!-- sacred objects are positioned absolutely as JS-rendered .sacred-obj -->
+      <div id="sacred-objs"></div>
+    </div>
+
+    <div class="mi-notes">
+      <div class="mn-title">Reflection Journal</div>
+      <div class="mn-prompt" id="mn-prompt">Select a sacred object to begin reflecting...</div>
+      <textarea class="mn-area" id="mn-area" placeholder="The page is yours. Speak to your ancestors."></textarea>
+      <button class="mn-save" id="mn-save">Save Reflection</button>
+      <div class="mn-saved" id="mn-saved">✦ Saved to your journal</div>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON SCROLL -->
+<div id="lesson-scroll">
+  <div class="scroll-panel">
+    <div class="scroll-head">
+      <div class="scroll-head-info">
+        <div class="scroll-eyebrow" id="ls-eyebrow">Lesson</div>
+        <div class="scroll-title" id="ls-title">The Altar as Threshold</div>
+        <div class="scroll-meta" id="ls-meta">12 min · Module Two · Ancestral Veneration</div>
+      </div>
+      <button class="scroll-close" id="ls-close">✕</button>
+    </div>
+    <div class="scroll-body">
+      <div class="scroll-video">
+        <div class="scroll-video-play"></div>
+        <div class="scroll-video-label" id="ls-video-label">Video Teaching · Tap to Play</div>
+      </div>
+      <div class="scroll-text" id="ls-text">
+        <!-- populated by JS -->
+      </div>
+    </div>
+    <div class="scroll-foot">
+      <div class="scroll-prompt" id="ls-prompt">Reflect: What does it mean to be remembered?</div>
+      <div class="scroll-actions">
+        <button class="scroll-btn" id="ls-prev">← Previous</button>
+        <button class="scroll-btn primary" id="ls-complete">Mark Complete</button>
+        <button class="scroll-btn" id="ls-next">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BEGIN BUTTON -->
+<button id="begin-btn">Begin Your Journey</button>
+
+<!-- THREE.JS -->
+<link rel="stylesheet" href="course-book.css?v=2"/>
+<link rel="stylesheet" href="course-quiz.css?v=2"/>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="module1-lessons.js?v=2"></script>
+<script src="module1-quiz.js?v=2"></script>
+<script src="module2-lessons.js?v=2"></script>
+<script src="module2-quiz.js?v=2"></script>
+<script src="module3-lessons.js?v=1"></script>
+<script src="module3-quiz.js?v=1"></script>
+<script src="module4-lessons.js?v=1"></script>
+<script src="module4-quiz.js?v=1"></script>
+<script src="module5-lessons.js?v=1"></script>
+<script src="module5-quiz.js?v=2"></script>
+<script src="module6-quiz.js?v=1"></script>
+<script src="module7-quiz.js?v=1"></script>
+<script src="course-quiz.js?v=3"></script>
+<script src="course-data.js?v=5"></script>
+<script src="course-scene.js?v=2"></script>
+<script src="course-book.js?v=2"></script>
+<script src="course-app.js?v=2"></script>
+
+</body>
+</html>
