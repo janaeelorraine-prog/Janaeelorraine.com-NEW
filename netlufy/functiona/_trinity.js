@@ -1,0 +1,136 @@
+// ============================================================
+// Shared helpers for Trinity (Divination Sanctuary) functions
+// Tier gating + monthly rate limiting + persistence
+// ============================================================
+
+const { createClient } = require('@supabase/supabase-js');
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
+
+// Per-month allowance per tool, per tier
+const TIER_LIMITS = {
+  seed:  0,        // gated — must upgrade
+  root:  3,        // 3 readings per tool per month
+  elder: Infinity  // unlimited
+};
+
+function sbClient() {
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) return null;
+  return createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+}
+
+// Look up the user's tier. Defaults to 'seed' if missing.
+async function getUserTier(sb, userEmail) {
+  if (!sb || !userEmail) return null;
+  const { data: user } = await sb
+    .from('users')
+    .select('email, portal_tier, is_admin')
+    .eq('email', userEmail.toLowerCase())
+    .maybeSingle();
+  if (!user) return null;
+  // Admins get elder-tier privileges automatically.
+  if (user.is_admin) return { tier: 'elder', user };
+  return { tier: user.portal_tier || 'seed', user };
+}
+
+// Count this user's readings of a given tool in the current calendar month.
+async function countMonthlyReadings(sb, userEmail, tool) {
+  if (!sb) return 0;
+  const now = new Date();
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
+  const { count } = await sb
+    .from('trinity_readings')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_email', userEmail.toLowerCase())
+    .eq('tool', tool)
+    .gte('created_at', monthStart);
+  return count || 0;
+}
+
+// Enforce gating. Returns { ok: true } or { ok: false, error, status }.
+async function checkAccess(sb, userEmail, tool) {
+  if (!userEmail) return { ok: false, error: 'Authentication required', status: 401 };
+  const tierInfo = await getUserTier(sb, userEmail);
+  if (!tierInfo) return { ok: false, error: 'Member account not found', status: 404 };
+  const { tier } = tierInfo;
+  const limit = TIER_LIMITS[tier] ?? 0;
+  if (limit === 0) {
+    return {
+      ok: false,
+      status: 403,
+      error: 'The Divination Sanctuary opens at the Root tier. Please upgrade to begin your readings.',
+      tier
+    };
+  }
+  if (limit === Infinity) return { ok: true, tier, remaining: Infinity };
+  const used = await countMonthlyReadings(sb, userEmail, tool);
+  if (used >= limit) {
+    return {
+      ok: false,
+      status: 429,
+      error: `You have used your ${limit} ${tool} readings for this month. Resets on the 1st.`,
+      tier,
+      used,
+      limit
+    };
+  }
+  return { ok: true, tier, used, limit, remaining: limit - used };
+}
+
+// Call Claude. Returns parsed JSON.
+async function callClaude(systemPrompt, userPrompt, maxTokens = 1500) {
+  if (!ANTHROPIC_KEY) throw new Error('Server missing ANTHROPIC_API_KEY');
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_KEY,
+      'anthropic-version': '2023-06-01'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }]
+    })
+  });
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error('Claude error:', res.status, txt);
+    throw new Error(`Generation service returned ${res.status}`);
+  }
+  const data = await res.json();
+  const text = data.content.map(i => i.text || '').join('').replace(/```json|```/g, '').trim();
+  return JSON.parse(text);
+}
+
+// Persist a reading. Best-effort — failures are logged but don't break the response.
+async function saveReading(sb, { userEmail, tool, inputs, chart, output, talkingOdu, hdType }) {
+  if (!sb || !userEmail) return;
+  try {
+    await sb.from('trinity_readings').insert({
+      user_email: userEmail.toLowerCase(),
+      tool,
+      inputs: inputs || null,
+      chart: chart || null,
+      output: output || null,
+      talking_odu: talkingOdu || null
+    });
+    // Cache denormalized values on the profile for fast Sacred Center reads.
+    if (talkingOdu || hdType) {
+      const patch = { user_email: userEmail.toLowerCase(), updated_at: new Date().toISOString() };
+      if (talkingOdu) {
+        patch.last_talking_odu = talkingOdu;
+        patch.last_talking_odu_at = new Date().toISOString();
+      }
+      if (hdType) patch.last_human_design_type = hdType;
+      await sb.from('profiles').upsert(patch, { onConflict: 'user_email' });
+    }
+  } catch (err) {
+    console.error('Trinity save error:', err);
+  }
+}
+
+module.exports = { sbClient, getUserTier, checkAccess, callClaude, saveReading, TIER_LIMITS };
