@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astro-Odu — NTAS98</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    background: #1a0e2e;
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  /* ─── TRINITY ATMOSPHERE: altar, candlelit ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    z-index: -3; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 60%, rgba(240,198,104,0.32) 0%, transparent 55%),
+      radial-gradient(ellipse 90% 60% at 50% 100%, rgba(232,122,93,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 30% 20%, rgba(74,31,71,0.6) 0%, transparent 65%),
+      radial-gradient(ellipse 80% 60% at 80% 30%, rgba(181,51,137,0.25) 0%, transparent 60%),
+      linear-gradient(180deg, #1a0e2e 0%, #2a0f3d 40%, #1a0e2e 100%);
+  }
+  /* one mint planet, lower-left, half-hidden */
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -120px; left: -80px;
+    width: 320px; height: 320px;
+    z-index: -2; pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #9be0c4 0%, #6fc9a8 50%, #2d7d83 100%);
+    box-shadow:
+      inset -30px -30px 60px rgba(0,0,0,0.5),
+      inset 20px 20px 40px rgba(255,255,255,0.12),
+      0 0 80px rgba(155,224,196,0.3),
+      0 0 160px rgba(111,201,168,0.18);
+    opacity: 0.7;
+    animation: trinityPlanetDrift 100s ease-in-out infinite;
+  }
+  @keyframes trinityPlanetDrift {
+    0%, 100% { transform: translate(0,0); }
+    50% { transform: translate(20px,-15px); }
+  }
+  /* dense gold sparkle field, weighted toward center */
+  .trinity-cosmos {
+    position: fixed; inset: 0;
+    z-index: -1; pointer-events: none;
+    background-image:
+      radial-gradient(2px 2px at 20% 18%, rgba(240,198,104,0.85), transparent),
+      radial-gradient(1.5px 1.5px at 32% 32%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(2px 2px at 42% 22%, rgba(240,198,104,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 52% 12%, rgba(255,255,255,0.75), transparent),
+      radial-gradient(2.5px 2.5px at 50% 50%, rgba(240,198,104,0.95), transparent),
+      radial-gradient(1.5px 1.5px at 62% 38%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(2px 2px at 70% 28%, rgba(240,198,104,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 78% 52%, rgba(255,255,255,0.65), transparent),
+      radial-gradient(2px 2px at 82% 18%, rgba(240,198,104,0.7), transparent),
+      radial-gradient(1.5px 1.5px at 28% 62%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 48% 72%, rgba(240,198,104,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 65% 82%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 38% 88%, rgba(240,198,104,0.65), transparent),
+      radial-gradient(1.5px 1.5px at 75% 92%, rgba(255,255,255,0.55), transparent),
+      radial-gradient(2px 2px at 12% 8%, rgba(240,198,104,0.55), transparent),
+      radial-gradient(1.5px 1.5px at 88% 8%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(2px 2px at 8% 48%, rgba(240,198,104,0.6), transparent),
+      radial-gradient(1.5px 1.5px at 92% 68%, rgba(255,255,255,0.55), transparent);
+    animation: trinityTwinkle 10s ease-in-out infinite;
+  }
+  @keyframes trinityTwinkle { 0%,100%{opacity:0.75;} 50%{opacity:1;} }
+  /* warm vignette */
+  .trinity-vignette {
+    position: fixed; inset: 0;
+    z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(26,14,46,0.5) 100%);
+  }
+
+  .font-serif { font-family: 'Cormorant Garamond', serif; }
+  .font-display { font-family: 'Cinzel', serif; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 1s ease-out forwards; }
+  @media print {
+    body { background: white !important; color: black !important; }
+    body::before, body::after, .trinity-cosmos, .trinity-vignette { display: none !important; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="trinity-cosmos"></div>
+<div class="trinity-vignette"></div>
+<div id="root"></div>
+
+<script>
+// Auth gate — bounce unauthenticated users to login
+(function(){
+  var u = (localStorage.getItem('ntas98_user') || '').toLowerCase();
+  if (!u) { window.location.href = '../login.html'; return; }
+  var raw = localStorage.getItem('ntas98_userdata_' + u);
+  if (raw) {
+    try {
+      var d = JSON.parse(raw);
+      var tier = d.portal_tier || d.tier || 'seed';
+      if (tier === 'seed' && !d.is_admin) { window.location.href = '../portal.html'; return; }
+    } catch(e){}
+  }
+})();
+</script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+// Backend endpoint — wired to the NTAS98 trinity-astro-odu Netlify function
+const API_ENDPOINT = "/api/trinity-astro-odu";
+
+// ═══════════════════════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════════════════════
+const SIGNS = [
+  { name: 'Aries', glyph: '♈', element: 'Fire', mode: 'Cardinal' },
+  { name: 'Taurus', glyph: '♉', element: 'Earth', mode: 'Fixed' },
+  { name: 'Gemini', glyph: '♊', element: 'Air', mode: 'Mutable' },
+  { name: 'Cancer', glyph: '♋', element: 'Water', mode: 'Cardinal' },
+  { name: 'Leo', glyph: '♌', element: 'Fire', mode: 'Fixed' },
+  { name: 'Virgo', glyph: '♍', element: 'Earth', mode: 'Mutable' },
+  { name: 'Libra', glyph: '♎', element: 'Air', mode: 'Cardinal' },
+  { name: 'Scorpio', glyph: '♏', element: 'Water', mode: 'Fixed' },
+  { name: 'Sagittarius', glyph: '♐', element: 'Fire', mode: 'Mutable' },
+  { name: 'Capricorn', glyph: '♑', element: 'Earth', mode: 'Cardinal' },
+  { name: 'Aquarius', glyph: '♒', element: 'Air', mode: 'Fixed' },
+  { name: 'Pisces', glyph: '♓', element: 'Water', mode: 'Mutable' }
+];
+
+const PLANET_LIST = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
+const PERSONAL_PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars'];
+
+const PLANET_GLYPHS = {
+  Sun: '☉', Moon: '☽', Mercury: '☿', Venus: '♀', Mars: '♂',
+  Jupiter: '♃', Saturn: '♄', Uranus: '♅', Neptune: '♆', Pluto: '♇',
+  NorthNode: '☊', SouthNode: '☋'
+};
+
+const ORISHA_CHAKRAS = [
+  { chakra: 'Crown', orisha: 'Eshu / Elegua', planet: 'Mercury', domain: 'Gateway, messenger of the crossroads' },
+  { chakra: 'Third Eye', orisha: 'Oya', planet: 'Uranus', domain: 'Vision, winds of change, transformation' },
+  { chakra: 'Throat', orisha: 'Obatala', planet: 'Jupiter', domain: 'Pure speech, wisdom, the white cloth' },
+  { chakra: 'Heart', orisha: 'Oshun', planet: 'Venus', domain: 'Love, beauty, sweet waters, gold' },
+  { chakra: 'Solar Plexus', orisha: 'Ogun', planet: 'Mars', domain: 'Will, iron, action, clearing the path' },
+  { chakra: 'Sacral', orisha: 'Yemoja', planet: 'Moon', domain: 'Mother waters, womb, emotional flow' },
+  { chakra: 'Root', orisha: 'Shango', planet: 'Sun', domain: 'Security, fire foundation, royal stability' }
+];
+
+const ELEMENT_COLORS = {
+  Fire: 'rgba(196, 89, 47, 0.13)',
+  Earth: 'rgba(139, 121, 85, 0.13)',
+  Air: 'rgba(228, 209, 158, 0.10)',
+  Water: 'rgba(95, 130, 150, 0.15)'
+};
+const ELEMENT_HEX = { Fire: '#c4592f', Earth: '#8b7955', Air: '#e4d19e', Water: '#5f8296' };
+
+const COMMON_CITIES = [
+  { name: 'Columbus, OH', lat: 39.9612, lng: -83.0007, tz: -5 },
+  { name: 'Atlanta, GA', lat: 33.7490, lng: -84.3880, tz: -5 },
+  { name: 'New York, NY', lat: 40.7128, lng: -74.0060, tz: -5 },
+  { name: 'Chicago, IL', lat: 41.8781, lng: -87.6298, tz: -6 },
+  { name: 'Houston, TX', lat: 29.7604, lng: -95.3698, tz: -6 },
+  { name: 'Los Angeles, CA', lat: 34.0522, lng: -118.2437, tz: -8 },
+  { name: 'Jackson, MS', lat: 32.2988, lng: -90.1848, tz: -6 },
+  { name: 'Hattiesburg, MS', lat: 31.3271, lng: -89.2903, tz: -6 },
+  { name: 'New Orleans, LA', lat: 29.9511, lng: -90.0715, tz: -6 },
+  { name: 'Detroit, MI', lat: 42.3314, lng: -83.0458, tz: -5 },
+  { name: 'Miami, FL', lat: 25.7617, lng: -80.1918, tz: -5 },
+  { name: 'Washington, DC', lat: 38.9072, lng: -77.0369, tz: -5 }
+];
+
+// ═══════════════════════════════════════════════════════════════
+// ASTRONOMY ENGINE
+// ═══════════════════════════════════════════════════════════════
+const PI = Math.PI, RAD = PI / 180, DEG = 180 / PI;
+const rev = a => ((a % 360) + 360) % 360;
+const sind = a => Math.sin(a * RAD);
+const cosd = a => Math.cos(a * RAD);
+const tand = a => Math.tan(a * RAD);
+const atan2d = (y, x) => Math.atan2(y, x) * DEG;
+
+function julianDay(year, month, day, hour, minute, tzOffset) {
+  const utHour = hour + minute / 60 - tzOffset;
+  let y = year, m = month;
+  if (m <= 2) { y -= 1; m += 12; }
+  const a = Math.floor(y / 100);
+  const b = 2 - a + Math.floor(a / 4);
+  return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day + b - 1524.5 + utHour / 24;
+}
+
+function solveKepler(M, e) {
+  let E = M + e * DEG * sind(M) * (1 + e * cosd(M));
+  for (let i = 0; i < 8; i++) {
+    const dE = (E - e * DEG * sind(E) - M) / (1 - e * cosd(E));
+    E -= dE;
+    if (Math.abs(dE) < 0.0001) break;
+  }
+  return E;
+}
+
+function sunPosition(d) {
+  const w = 282.9404 + 4.70935e-5 * d;
+  const e = 0.016709 - 1.151e-9 * d;
+  const M = rev(356.0470 + 0.9856002585 * d);
+  const E = solveKepler(M, e);
+  const xv = cosd(E) - e;
+  const yv = Math.sqrt(1 - e * e) * sind(E);
+  return { lon: rev(atan2d(yv, xv) + w), r: Math.sqrt(xv * xv + yv * yv) };
+}
+
+function moonPosition(d) {
+  const N = rev(125.1228 - 0.0529538083 * d);
+  const i = 5.1454, w = rev(318.0634 + 0.1643573223 * d);
+  const a = 60.2666, e = 0.054900;
+  const M = rev(115.3654 + 13.0649929509 * d);
+  const E = solveKepler(M, e);
+  const xv = a * (cosd(E) - e);
+  const yv = a * Math.sqrt(1 - e * e) * sind(E);
+  const v = atan2d(yv, xv);
+  const xh = (cosd(N) * cosd(v + w) - sind(N) * sind(v + w) * cosd(i));
+  const yh = (sind(N) * cosd(v + w) + cosd(N) * sind(v + w) * cosd(i));
+  let lon = rev(atan2d(yh, xh));
+  const Ms = rev(356.0470 + 0.9856002585 * d);
+  const ws = 282.9404 + 4.70935e-5 * d;
+  const Ls = rev(Ms + ws);
+  const Lm = rev(M + w + N);
+  const D = rev(Lm - Ls);
+  lon += -1.274 * sind(M - 2 * D) + 0.658 * sind(2 * D) - 0.186 * sind(Ms)
+    - 0.059 * sind(2 * M - 2 * D) - 0.057 * sind(M - 2 * D + Ms)
+    + 0.053 * sind(M + 2 * D) + 0.046 * sind(2 * D - Ms)
+    + 0.041 * sind(M - Ms) - 0.035 * sind(D) - 0.031 * sind(M + Ms);
+  return rev(lon);
+}
+
+function planetPosition(planet, d) {
+  if (planet === 'Pluto') {
+    const S = (50.03 + 0.033459652 * d), P = (238.95 + 0.003968789 * d);
+    return rev(238.9508 + 0.00400703 * d
+      - 19.799 * sind(P) + 19.848 * cosd(P)
+      + 0.897 * sind(2*P) - 4.956 * cosd(2*P)
+      + 0.610 * sind(3*P) + 1.211 * cosd(3*P)
+      - 0.341 * sind(4*P) - 0.190 * cosd(4*P)
+      + 0.128 * sind(5*P) - 0.034 * cosd(5*P)
+      - 0.038 * sind(6*P) + 0.031 * cosd(6*P));
+  }
+  const elements = {
+    Mercury: { N: 48.3313 + 3.24587e-5 * d, i: 7.0047, w: 29.1241 + 1.01444e-5 * d, a: 0.387098, e: 0.205635, M: rev(168.6562 + 4.0923344368 * d) },
+    Venus: { N: 76.6799 + 2.46590e-5 * d, i: 3.3946, w: 54.8910 + 1.38374e-5 * d, a: 0.723330, e: 0.006773, M: rev(48.0052 + 1.6021302244 * d) },
+    Mars: { N: 49.5574 + 2.11081e-5 * d, i: 1.8497, w: 286.5016 + 2.92961e-5 * d, a: 1.523688, e: 0.093405, M: rev(18.6021 + 0.5240207766 * d) },
+    Jupiter: { N: 100.4542 + 2.76854e-5 * d, i: 1.3030, w: 273.8777 + 1.64505e-5 * d, a: 5.20256, e: 0.048498, M: rev(19.8950 + 0.0830853001 * d) },
+    Saturn: { N: 113.6634 + 2.38980e-5 * d, i: 2.4886, w: 339.3939 + 2.97661e-5 * d, a: 9.55475, e: 0.055546, M: rev(316.9670 + 0.0334442282 * d) },
+    Uranus: { N: 74.0005 + 1.3978e-5 * d, i: 0.7733, w: 96.6612 + 3.0565e-5 * d, a: 19.18171, e: 0.047318, M: rev(142.5905 + 0.011725806 * d) },
+    Neptune: { N: 131.7806 + 3.0173e-5 * d, i: 1.7700, w: 272.8461, a: 30.05826, e: 0.008606, M: rev(260.2471 + 0.005995147 * d) }
+  };
+  const el = elements[planet];
+  if (!el) return 0;
+  const E = solveKepler(el.M, el.e);
+  const xv = el.a * (cosd(E) - el.e);
+  const yv = el.a * Math.sqrt(1 - el.e * el.e) * sind(E);
+  const v = atan2d(yv, xv);
+  const r = Math.sqrt(xv * xv + yv * yv);
+  const xh = r * (cosd(el.N) * cosd(v + el.w) - sind(el.N) * sind(v + el.w) * cosd(el.i));
+  const yh = r * (sind(el.N) * cosd(v + el.w) + cosd(el.N) * sind(v + el.w) * cosd(el.i));
+  const sun = sunPosition(d);
+  return rev(atan2d(yh + sun.r * sind(sun.lon), xh + sun.r * cosd(sun.lon)));
+}
+
+function meanNodePosition(d) { return rev(125.0445550 - 0.05295377 * d); }
+
+function calculateAscendant(jd, lat, lng) {
+  const T = (jd - 2451545.0) / 36525;
+  let gmst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * T * T - T * T * T / 38710000;
+  gmst = rev(gmst);
+  const lst = rev(gmst + lng);
+  const eps = 23.4392911 - 0.0130041667 * T;
+  const num = -cosd(lst);
+  const den = sind(lst) * cosd(eps) + tand(lat) * sind(eps);
+  let asc = rev(atan2d(num, den));
+  let mc = rev(atan2d(sind(lst), cosd(lst) * cosd(eps)));
+  return { asc, mc };
+}
+
+function getSignFromLongitude(lon) {
+  const idx = Math.floor(lon / 30);
+  const degInSign = lon % 30;
+  return {
+    sign: SIGNS[idx].name, glyph: SIGNS[idx].glyph,
+    element: SIGNS[idx].element, mode: SIGNS[idx].mode,
+    degree: Math.floor(degInSign), minute: Math.floor((degInSign % 1) * 60),
+    fullDegree: degInSign, signIndex: idx
+  };
+}
+
+function getHouseFromLongitude(lon, ascLon) {
+  const ascIdx = Math.floor(ascLon / 30);
+  const planetIdx = Math.floor(lon / 30);
+  return ((planetIdx - ascIdx + 12) % 12) + 1;
+}
+
+function calculateAspects(planets) {
+  const aspects = [];
+  const types = [
+    { name: 'Conjunction', angle: 0, orb: 8, category: 'unifying', symbol: '☌' },
+    { name: 'Opposition', angle: 180, orb: 8, category: 'karmic', symbol: '☍' },
+    { name: 'Square', angle: 90, orb: 7, category: 'karmic', symbol: '☐' },
+    { name: 'Trine', angle: 120, orb: 7, category: 'flowing', symbol: '△' },
+    { name: 'Sextile', angle: 60, orb: 5, category: 'flowing', symbol: '⚹' }
+  ];
+  const names = Object.keys(planets);
+  for (let i = 0; i < names.length; i++) {
+    for (let j = i + 1; j < names.length; j++) {
+      let diff = Math.abs(planets[names[i]].longitude - planets[names[j]].longitude);
+      if (diff > 180) diff = 360 - diff;
+      for (const t of types) {
+        if (Math.abs(diff - t.angle) <= t.orb) {
+          aspects.push({ p1: names[i], p2: names[j], type: t.name, category: t.category, symbol: t.symbol, orb: parseFloat(Math.abs(diff - t.angle).toFixed(2)) });
+          break;
+        }
+      }
+    }
+  }
+  return aspects;
+}
+
+function getMoonPhase(sunLon, moonLon) {
+  const elong = rev(moonLon - sunLon);
+  if (elong < 22.5 || elong >= 337.5) return { phase: 'New Moon', direction: 'waxing', meaning: 'planting intentions, beginnings' };
+  if (elong < 67.5) return { phase: 'Waxing Crescent', direction: 'waxing', meaning: 'drawing in, building, attraction' };
+  if (elong < 112.5) return { phase: 'First Quarter', direction: 'waxing', meaning: 'action, decision, momentum' };
+  if (elong < 157.5) return { phase: 'Waxing Gibbous', direction: 'waxing', meaning: 'refinement, manifestation' };
+  if (elong < 202.5) return { phase: 'Full Moon', direction: 'culmination', meaning: 'fullness, illumination, release' };
+  if (elong < 247.5) return { phase: 'Waning Gibbous', direction: 'waning', meaning: 'gratitude, dissemination' };
+  if (elong < 292.5) return { phase: 'Last Quarter', direction: 'waning', meaning: 'banishing, breaking patterns' };
+  return { phase: 'Waning Crescent', direction: 'waning', meaning: 'surrender, ancestral connection' };
+}
+
+function findNextMoonEvents() {
+  const today = new Date();
+  const events = [];
+  let lastPhase = null;
+  for (let i = 0; i < 35; i++) {
+    const date = new Date(today.getTime() + i * 86400000);
+    const jd = julianDay(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate(), 12, 0, 0);
+    const d = jd - 2451543.5;
+    const sunLon = sunPosition(d).lon;
+    const moonLon = moonPosition(d);
+    const phase = getMoonPhase(sunLon, moonLon).phase;
+    if (phase !== lastPhase) { events.push({ date, phase }); lastPhase = phase; }
+  }
+  const findNext = name => events.find(e => e.phase === name);
+  return {
+    nextNewMoon: findNext('New Moon'),
+    nextFirstQuarter: findNext('First Quarter'),
+    nextFullMoon: findNext('Full Moon'),
+    nextLastQuarter: findNext('Last Quarter')
+  };
+}
+
+function analyzeChart(planets, sunHouse) {
+  const elements = { Fire: 0, Earth: 0, Air: 0, Water: 0 };
+  const modes = { Cardinal: 0, Fixed: 0, Mutable: 0 };
+  const signCount = {}, houseCount = {};
+  for (const p of PLANET_LIST) {
+    const pl = planets[p];
+    const weight = PERSONAL_PLANETS.includes(p) ? 1 : 0.5;
+    elements[pl.element] += weight;
+    modes[pl.mode] += weight;
+    signCount[pl.sign] = (signCount[pl.sign] || 0) + 1;
+    houseCount[pl.house] = (houseCount[pl.house] || 0) + 1;
+  }
+  const stelliums = [];
+  Object.entries(signCount).forEach(([sign, count]) => { if (count >= 3) stelliums.push({ kind: 'sign', name: sign, count }); });
+  Object.entries(houseCount).forEach(([house, count]) => { if (count >= 3) stelliums.push({ kind: 'house', name: `House ${house}`, count }); });
+  const dominantElement = Object.entries(elements).sort((a, b) => b[1] - a[1])[0][0];
+  const lackingElement = Object.entries(elements).sort((a, b) => a[1] - b[1])[0][0];
+  const sect = sunHouse >= 7 ? 'Day' : 'Night';
+  return { elements, modes, stelliums, dominantElement, lackingElement, sect };
+}
+
+// Talking Odu — derive from progressed Ascendant degree
+const ODU_NAMES = ['Ogbe','Oyeku','Iwori','Odi','Irosun','Owonrin','Obara','Okanran','Ogunda','Osa','Ika','Oturupon','Otura','Irete','Oshe','Ofun'];
+function deriveTalkingOdu(progressedAscLon) {
+  const idx = Math.floor(progressedAscLon / 22.5) % 16;
+  const elemIdx = Math.floor(progressedAscLon / 30) % 12;
+  return `${ODU_NAMES[idx]}-${SIGNS[elemIdx].element}`;
+}
+
+function calculateChart(birthData) {
+  const { year, month, day, hour, minute, lat, lng, tz } = birthData;
+  const jd = julianDay(year, month, day, hour, minute, tz);
+  const d = jd - 2451543.5;
+  const { asc, mc } = calculateAscendant(jd, lat, lng);
+  const sun = sunPosition(d);
+  const moonLon = moonPosition(d);
+  const nodeLon = meanNodePosition(d);
+  const southNodeLon = rev(nodeLon + 180);
+  const planets = {
+    Sun: { longitude: sun.lon, ...getSignFromLongitude(sun.lon), house: getHouseFromLongitude(sun.lon, asc) },
+    Moon: { longitude: moonLon, ...getSignFromLongitude(moonLon), house: getHouseFromLongitude(moonLon, asc) }
+  };
+  for (const p of ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto']) {
+    const lon = planetPosition(p, d);
+    planets[p] = { longitude: lon, ...getSignFromLongitude(lon), house: getHouseFromLongitude(lon, asc) };
+  }
+  const northNode = { longitude: nodeLon, ...getSignFromLongitude(nodeLon), house: getHouseFromLongitude(nodeLon, asc) };
+  const southNode = { longitude: southNodeLon, ...getSignFromLongitude(southNodeLon), house: getHouseFromLongitude(southNodeLon, asc) };
+  const aspects = calculateAspects(planets);
+  const moonPhase = getMoonPhase(sun.lon, moonLon);
+  const upcomingMoons = findNextMoonEvents();
+  const analysis = analyzeChart(planets, planets.Sun.house);
+  const today = new Date();
+  const birthDate = new Date(year, month - 1, day);
+  const ageInYears = (today - birthDate) / (1000 * 60 * 60 * 24 * 365.25);
+  const progressedASC = rev(asc + ageInYears);
+  const progressedASCSign = getSignFromLongitude(progressedASC);
+  const talkingOdu = deriveTalkingOdu(progressedASC);
+  return {
+    asc, mc,
+    ascSign: getSignFromLongitude(asc),
+    mcSign: getSignFromLongitude(mc),
+    planets, northNode, southNode, aspects, moonPhase, upcomingMoons, analysis,
+    progressedASC, progressedASCSign,
+    ageInYears: Math.floor(ageInYears),
+    karmicAspects: aspects.filter(a => a.category === 'karmic'),
+    flowingAspects: aspects.filter(a => a.category === 'flowing'),
+    birthData,
+    talkingOdu,
+    // backend-friendly shape (mirrors what the trinity-astro-odu function expects)
+    placements: PLANET_LIST.reduce((acc, p) => {
+      acc[p] = { astroName: planets[p].sign, sign: planets[p].sign, degree: planets[p].fullDegree, lon: planets[p].longitude };
+      return acc;
+    }, { Asc: { astroName: getSignFromLongitude(asc).sign, degree: asc % 30, lon: asc } }),
+    sect: analysis.sect
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// READING GENERATION (via NTAS98 trinity backend)
+// ═══════════════════════════════════════════════════════════════
+async function callBackend(chart, part) {
+  const userEmail = (window.localStorage.getItem('ntas98_user') || '').toLowerCase();
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userEmail, chart, part })
+  });
+  if (!response.ok) {
+    let msg = `The channel returned ${response.status}.`;
+    try { const j = await response.json(); if (j && j.error) msg = j.error; } catch(e) {}
+    throw new Error(msg);
+  }
+  return await response.json();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SVG NATAL CHART
+// ═══════════════════════════════════════════════════════════════
+function NatalChart({ chart }) {
+  const cx = 350, cy = 350;
+  const R_DECO_OUT = 340, R_DECO_IN = 332, R_OUTER = 320, R_SIGN_INNER = 275;
+  const R_HOUSE_INNER = 230, R_PLANET = 185, R_INNER = 100;
+  const ascLon = chart.asc;
+  const lonToSvgAngle = lon => rev(180 - rev(lon - ascLon));
+  const polar = (r, ang) => ({ x: cx + r * cosd(ang), y: cy + r * sind(ang) });
+
+  function wedgePath(rOuter, rInner, startLon, span) {
+    const a1 = lonToSvgAngle(startLon);
+    const a2 = lonToSvgAngle(startLon + span);
+    const so = polar(rOuter, a1), eo = polar(rOuter, a2);
+    const si = polar(rInner, a1), ei = polar(rInner, a2);
+    return `M ${so.x} ${so.y} A ${rOuter} ${rOuter} 0 0 0 ${eo.x} ${eo.y} L ${ei.x} ${ei.y} A ${rInner} ${rInner} 0 0 1 ${si.x} ${si.y} Z`;
+  }
+
+  const signSegments = SIGNS.map((sign, i) => ({
+    sign, path: wedgePath(R_OUTER, R_SIGN_INNER, i * 30, 30),
+    labelPos: polar((R_OUTER + R_SIGN_INNER) / 2, lonToSvgAngle(i * 30 + 15))
+  }));
+
+  const spokes = [];
+  for (let i = 0; i < 12; i++) {
+    const ang = lonToSvgAngle(i * 30);
+    spokes.push({ inner: polar(R_HOUSE_INNER, ang), outer: polar(R_OUTER, ang) });
+  }
+
+  const ascSignIdx = chart.ascSign.signIndex;
+  const houseLabels = [];
+  for (let i = 0; i < 12; i++) {
+    const houseSignIdx = (ascSignIdx + i) % 12;
+    const houseLon = houseSignIdx * 30 + 15;
+    houseLabels.push({ num: i + 1, pos: polar((R_HOUSE_INNER + R_PLANET + 30) / 2, lonToSvgAngle(houseLon)) });
+  }
+
+  const planetEntries = PLANET_LIST.map(p => ({ name: p, ...chart.planets[p], glyph: PLANET_GLYPHS[p] }))
+    .concat([
+      { name: 'NorthNode', ...chart.northNode, glyph: PLANET_GLYPHS.NorthNode, isNode: true },
+      { name: 'SouthNode', ...chart.southNode, glyph: PLANET_GLYPHS.SouthNode, isNode: true }
+    ])
+    .sort((a, b) => a.longitude - b.longitude);
+
+  const adjusted = planetEntries.map(p => lonToSvgAngle(p.longitude));
+  for (let pass = 0; pass < 3; pass++) {
+    for (let i = 0; i < adjusted.length; i++) {
+      for (let j = 0; j < adjusted.length; j++) {
+        if (i === j) continue;
+        let d = adjusted[i] - adjusted[j];
+        while (d > 180) d -= 360;
+        while (d < -180) d += 360;
+        if (Math.abs(d) < 7) adjusted[i] += d > 0 ? 0.6 : -0.6;
+      }
+    }
+  }
+
+  const planetPositions = planetEntries.map((p, i) => ({
+    ...p,
+    svgPos: polar(R_PLANET, adjusted[i]),
+    tickInner: polar(R_HOUSE_INNER, lonToSvgAngle(p.longitude)),
+    tickOuter: polar(R_HOUSE_INNER + 8, lonToSvgAngle(p.longitude))
+  }));
+
+  const ascAng = lonToSvgAngle(chart.asc);
+  const mcAng = lonToSvgAngle(chart.mc);
+  const ascPos = polar(R_OUTER + 18, ascAng);
+  const mcPos = polar(R_OUTER + 18, mcAng);
+
+  const aspectLines = chart.aspects
+    .filter(a => ['Square', 'Opposition', 'Trine', 'Sextile'].includes(a.type))
+    .map((a, idx) => ({
+      ...a, idx,
+      pos1: polar(R_INNER, lonToSvgAngle(chart.planets[a.p1].longitude)),
+      pos2: polar(R_INNER, lonToSvgAngle(chart.planets[a.p2].longitude)),
+      isKarmic: a.category === 'karmic'
+    }));
+
+  const decoTicks = [];
+  for (let i = 0; i < 72; i++) {
+    const ang = i * 5;
+    decoTicks.push({ p1: polar(R_DECO_IN, ang), p2: polar(R_DECO_OUT, ang), big: i % 3 === 0 });
+  }
+
+  const flowerR = 32;
+  const flowerCircles = [
+    [0, 0], [flowerR, 0], [-flowerR, 0],
+    [flowerR / 2, flowerR * Math.sqrt(3) / 2], [-flowerR / 2, flowerR * Math.sqrt(3) / 2],
+    [flowerR / 2, -flowerR * Math.sqrt(3) / 2], [-flowerR / 2, -flowerR * Math.sqrt(3) / 2]
+  ];
+
+  const formatDate = () => {
+    const { year, month, day, hour, minute } = chart.birthData;
+    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    return `${day} ${months[month - 1]} ${year}  ·  ${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`;
+  };
+
+  return (
+    <svg viewBox="0 0 700 720" className="w-full max-w-2xl mx-auto">
+      <defs>
+        <radialGradient id="bgGrad" cx="50%" cy="50%">
+          <stop offset="0%" stopColor="#1a1612" />
+          <stop offset="60%" stopColor="#0e0c0a" />
+          <stop offset="100%" stopColor="#050403" />
+        </radialGradient>
+        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#a8852a" />
+          <stop offset="50%" stopColor="#f4d03f" />
+          <stop offset="100%" stopColor="#a8852a" />
+        </linearGradient>
+        <linearGradient id="goldFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#d4af37" stopOpacity="0.3" />
+          <stop offset="50%" stopColor="#f4d03f" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#d4af37" stopOpacity="0.3" />
+        </linearGradient>
+        <filter id="goldGlow"><feGaussianBlur stdDeviation="1.5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+      </defs>
+      <rect width="700" height="720" fill="#050403" />
+      <circle cx={cx} cy={cy} r={R_DECO_OUT + 5} fill="url(#bgGrad)" />
+      {decoTicks.map((t, i) => (
+        <line key={`tick-${i}`} x1={t.p1.x} y1={t.p1.y} x2={t.p2.x} y2={t.p2.y} stroke="#d4af37" strokeWidth={t.big ? 1 : 0.4} opacity={t.big ? 0.85 : 0.4} />
+      ))}
+      <circle cx={cx} cy={cy} r={R_DECO_OUT} fill="none" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
+      <circle cx={cx} cy={cy} r={R_DECO_IN} fill="none" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
+      {signSegments.map((s, i) => (<path key={`elem-${i}`} d={s.path} fill={ELEMENT_COLORS[s.sign.element]} stroke="none" />))}
+      <circle cx={cx} cy={cy} r={R_OUTER} fill="none" stroke="url(#goldGrad)" strokeWidth="2" filter="url(#goldGlow)" />
+      <circle cx={cx} cy={cy} r={R_SIGN_INNER} fill="none" stroke="#d4af37" strokeWidth="1" opacity="0.7" />
+      <circle cx={cx} cy={cy} r={R_HOUSE_INNER} fill="none" stroke="#d4af37" strokeWidth="0.8" opacity="0.5" />
+      <circle cx={cx} cy={cy} r={R_INNER} fill="none" stroke="#d4af37" strokeWidth="0.8" opacity="0.4" />
+      {spokes.map((s, i) => (<line key={`spoke-${i}`} x1={s.inner.x} y1={s.inner.y} x2={s.outer.x} y2={s.outer.y} stroke="#d4af37" strokeWidth="0.8" opacity="0.55" />))}
+      {[ascAng, lonToSvgAngle(rev(chart.asc + 180)), mcAng, lonToSvgAngle(rev(chart.mc + 180))].map((ang, i) => {
+        const p1 = polar(R_INNER, ang), p2 = polar(R_HOUSE_INNER, ang);
+        return <line key={`axis-${i}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#d4af37" strokeWidth="1.2" opacity="0.7" strokeDasharray="3 3" />;
+      })}
+      {signSegments.map((s, i) => (
+        <text key={`sign-${i}`} x={s.labelPos.x} y={s.labelPos.y} textAnchor="middle" dominantBaseline="middle" fill={ELEMENT_HEX[s.sign.element]} fontSize="22" fontFamily="serif" fontWeight="500" opacity="0.95">{s.sign.glyph}</text>
+      ))}
+      {houseLabels.map((h, i) => (
+        <text key={`house-${i}`} x={h.pos.x} y={h.pos.y} textAnchor="middle" dominantBaseline="middle" fill="#8a7340" fontSize="11" fontFamily="serif" opacity="0.65">{h.num}</text>
+      ))}
+      <g opacity="0.18">{flowerCircles.map(([dx, dy], i) => (<circle key={`fol-${i}`} cx={cx + dx} cy={cy + dy} r={flowerR} fill="none" stroke="#d4af37" strokeWidth="0.4" />))}</g>
+      {aspectLines.map(a => (
+        <line key={`asp-${a.idx}`} x1={a.pos1.x} y1={a.pos1.y} x2={a.pos2.x} y2={a.pos2.y}
+          stroke={a.isKarmic ? 'url(#goldFlow)' : '#f5f1e8'} strokeWidth={a.isKarmic ? 1.4 : 0.5}
+          opacity={a.isKarmic ? 0.85 : 0.22}
+          strokeDasharray={a.type === 'Opposition' ? '5 3' : a.type === 'Square' ? '2 2' : 'none'} />
+      ))}
+      {planetPositions.map(p => (
+        <line key={`tick-${p.name}`} x1={p.tickInner.x} y1={p.tickInner.y} x2={p.tickOuter.x} y2={p.tickOuter.y} stroke="#f5f1e8" strokeWidth={p.isNode ? 0.7 : 1} />
+      ))}
+      {planetPositions.map(p => (
+        <g key={`planet-${p.name}`}>
+          <circle cx={p.svgPos.x} cy={p.svgPos.y} r="15" fill="#0a0908" stroke={p.isNode ? '#8a7340' : '#d4af37'} strokeWidth={p.isNode ? 0.8 : 1.2} />
+          <text x={p.svgPos.x} y={p.svgPos.y} textAnchor="middle" dominantBaseline="central" fill={p.isNode ? '#d4af37' : '#f5f1e8'} fontSize={p.isNode ? 14 : 17} fontFamily="serif">{p.glyph}</text>
+        </g>
+      ))}
+      <text x={ascPos.x} y={ascPos.y} textAnchor="middle" dominantBaseline="middle" fill="#d4af37" fontSize="12" fontFamily="serif" fontWeight="bold" letterSpacing="2">ASC</text>
+      <text x={mcPos.x} y={mcPos.y} textAnchor="middle" dominantBaseline="middle" fill="#d4af37" fontSize="12" fontFamily="serif" fontWeight="bold" letterSpacing="2">MC</text>
+      <circle cx={cx} cy={cy} r={36} fill="#050403" stroke="#d4af37" strokeWidth="1" opacity="0.8" />
+      <circle cx={cx} cy={cy} r={42} fill="none" stroke="#d4af37" strokeWidth="0.4" opacity="0.5" />
+      <g transform={`translate(${cx},${cy})`} stroke="url(#goldGrad)" strokeWidth="2.2" fill="none" strokeLinecap="round" filter="url(#goldGlow)">
+        <ellipse cx="0" cy="-13" rx="9" ry="11" />
+        <line x1="-13" y1="3" x2="13" y2="3" />
+        <line x1="0" y1="3" x2="0" y2="22" />
+      </g>
+      <g>
+        <line x1="200" y1="690" x2="500" y2="690" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
+        <text x={cx} y="685" textAnchor="middle" fill="#d4af37" fontSize="11" fontFamily="serif" letterSpacing="6">{formatDate()}</text>
+        <text x={cx} y="708" textAnchor="middle" fill="#8a7340" fontSize="9" fontFamily="serif" letterSpacing="5" fontStyle="italic">⊹  D J E T   S N A P S H O T  ⊹</text>
+      </g>
+    </svg>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UI COMPONENTS
+// ═══════════════════════════════════════════════════════════════
+function BirthForm({ onSubmit, prefill }) {
+  const [name, setName] = useState(prefill?.full_name || '');
+  const [date, setDate] = useState(prefill?.dob || '');
+  const [time, setTime] = useState(prefill?.birth_time || '12:00');
+  const initialCity = prefill?.birth_location && COMMON_CITIES.find(c => c.name === prefill.birth_location)
+    ? prefill.birth_location : 'Columbus, OH';
+  const [city, setCity] = useState(initialCity);
+  const [customMode, setCustomMode] = useState(false);
+  const [lat, setLat] = useState(''), [lng, setLng] = useState(''), [tz, setTz] = useState('-5');
+
+  // Re-sync when prefill arrives async from Supabase
+  useEffect(() => {
+    if (prefill?.full_name && !name) setName(prefill.full_name);
+    if (prefill?.dob && !date) setDate(prefill.dob);
+    if (prefill?.birth_time && time === '12:00') setTime(prefill.birth_time);
+    if (prefill?.birth_location && COMMON_CITIES.find(c => c.name === prefill.birth_location)) {
+      setCity(prefill.birth_location);
+    }
+  }, [prefill]);
+
+  const handleSubmit = () => {
+    if (!date) return;
+    const [yStr, mStr, dStr] = date.split('-');
+    const [hStr, minStr] = time.split(':');
+    let coords;
+    if (customMode) {
+      if (!lat || !lng) return;
+      coords = { lat: parseFloat(lat), lng: parseFloat(lng), tz: parseFloat(tz) };
+    } else {
+      const c = COMMON_CITIES.find(c => c.name === city);
+      coords = { lat: c.lat, lng: c.lng, tz: c.tz };
+    }
+    onSubmit({ full_name: name, year: parseInt(yStr), month: parseInt(mStr), day: parseInt(dStr), hour: parseInt(hStr), minute: parseInt(minStr), ...coords });
+  };
+
+  return (
+    <div className="max-w-lg mx-auto px-6 py-12">
+      <div className="text-center mb-10">
+        <a href="../portal-member.html" className="text-amber-300/60 text-xs tracking-widest hover:text-amber-300 font-display">← BACK TO PORTAL</a>
+      </div>
+      <div className="text-center mb-10">
+        <svg viewBox="-30 -40 60 80" className="w-12 h-16 mx-auto mb-4">
+          <g stroke="#d4af37" strokeWidth="2.2" fill="none" strokeLinecap="round">
+            <ellipse cx="0" cy="-15" rx="11" ry="13" />
+            <line x1="-15" y1="3" x2="15" y2="3" />
+            <line x1="0" y1="3" x2="0" y2="30" />
+          </g>
+        </svg>
+        <div className="text-amber-400 text-xs tracking-[0.5em] mb-3 font-display">NTAS98</div>
+        <div className="h-px w-16 bg-amber-400 mx-auto opacity-60 mb-6"></div>
+        <h1 className="text-5xl font-serif text-stone-100 mb-3 tracking-wide italic">Astro-Odu</h1>
+        <p className="text-amber-200/70 italic font-serif text-lg">The frozen moment of your first breath</p>
+      </div>
+      <div className="space-y-6">
+        <div>
+          <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">FULL NAME</label>
+          <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif" />
+        </div>
+        <div>
+          <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">BIRTH DATE</label>
+          <input type="date" value={date} onChange={e => setDate(e.target.value)} className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif" />
+        </div>
+        <div>
+          <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">BIRTH TIME (24-hour)</label>
+          <input type="time" value={time} onChange={e => setTime(e.target.value)} className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif" />
+          <p className="text-amber-200/40 text-xs mt-1 italic">Exact time matters — the Ascendant moves 1° every 4 minutes</p>
+        </div>
+        {!customMode ? (
+          <div>
+            <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">BIRTH CITY</label>
+            <select value={city} onChange={e => setCity(e.target.value)} className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif">
+              {COMMON_CITIES.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+            </select>
+            <button onClick={() => setCustomMode(true)} className="text-amber-300/60 text-xs mt-2 italic hover:text-amber-300 transition">City not listed? Enter coordinates →</button>
+          </div>
+        ) : (
+          <div className="space-y-3 border border-amber-700/30 rounded p-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-amber-300/90 text-sm tracking-widest font-serif">CUSTOM COORDINATES</span>
+              <button onClick={() => setCustomMode(false)} className="text-amber-300/60 text-xs italic hover:text-amber-300">← Use city list</button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div><label className="block text-amber-200/60 text-xs mb-1">Latitude</label><input value={lat} onChange={e => setLat(e.target.value)} placeholder="39.96" className="w-full bg-black/60 border border-amber-700/40 rounded px-3 py-2 text-stone-100 focus:border-amber-400 focus:outline-none" /></div>
+              <div><label className="block text-amber-200/60 text-xs mb-1">Longitude</label><input value={lng} onChange={e => setLng(e.target.value)} placeholder="-83.00" className="w-full bg-black/60 border border-amber-700/40 rounded px-3 py-2 text-stone-100 focus:border-amber-400 focus:outline-none" /></div>
+            </div>
+            <div><label className="block text-amber-200/60 text-xs mb-1">Timezone offset from UTC</label><input value={tz} onChange={e => setTz(e.target.value)} className="w-full bg-black/60 border border-amber-700/40 rounded px-3 py-2 text-stone-100 focus:border-amber-400 focus:outline-none" /></div>
+          </div>
+        )}
+        <button onClick={handleSubmit} className="w-full mt-8 bg-gradient-to-r from-amber-700 via-amber-500 to-amber-700 text-black font-display tracking-[0.3em] py-4 rounded hover:from-amber-600 hover:to-amber-600 transition shadow-lg shadow-amber-900/40">CAST THE DJET SNAPSHOT</button>
+      </div>
+    </div>
+  );
+}
+
+function LoadingRitual({ stage }) {
+  const messages = ['Suspending time...', 'Calculating the heavens...', 'Listening for the Odu...', 'Channeling the reading...'];
+  const [msgIdx, setMsgIdx] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setMsgIdx(i => (i + 1) % messages.length), 1800);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[60vh] py-12">
+      <div className="relative w-32 h-32 mb-8">
+        <div className="absolute inset-0 rounded-full border-2 border-amber-700/30"></div>
+        <div className="absolute inset-0 rounded-full border-t-2 border-amber-400 animate-spin" style={{animationDuration: '3s'}}></div>
+        <div className="absolute inset-2 rounded-full border-b-2 border-amber-300/50 animate-spin" style={{animationDuration: '5s', animationDirection: 'reverse'}}></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg viewBox="-20 -28 40 56" className="w-10 h-14">
+            <g stroke="#d4af37" strokeWidth="2" fill="none" strokeLinecap="round">
+              <ellipse cx="0" cy="-10" rx="8" ry="10" /><line x1="-11" y1="2" x2="11" y2="2" /><line x1="0" y1="2" x2="0" y2="22" />
+            </g>
+          </svg>
+        </div>
+      </div>
+      <p className="text-amber-200/80 italic font-serif text-lg">{messages[msgIdx]}</p>
+      {stage && <p className="text-amber-300/50 text-xs tracking-widest mt-3 font-serif">{stage}</p>}
+    </div>
+  );
+}
+
+function ElementBalance({ analysis }) {
+  const total = analysis.elements.Fire + analysis.elements.Earth + analysis.elements.Air + analysis.elements.Water;
+  const items = [
+    { name: 'Fire', value: analysis.elements.Fire, hex: ELEMENT_HEX.Fire },
+    { name: 'Earth', value: analysis.elements.Earth, hex: ELEMENT_HEX.Earth },
+    { name: 'Air', value: analysis.elements.Air, hex: ELEMENT_HEX.Air },
+    { name: 'Water', value: analysis.elements.Water, hex: ELEMENT_HEX.Water }
+  ];
+  return (
+    <div className="bg-black/40 border border-amber-700/30 rounded p-5">
+      <div className="text-amber-300/80 text-xs font-serif tracking-widest mb-4">ELEMENTAL CONSTITUTION</div>
+      <div className="space-y-3">
+        {items.map(it => (
+          <div key={it.name} className="flex items-center gap-3">
+            <div className="w-16 text-stone-300 font-serif text-sm">{it.name}</div>
+            <div className="flex-1 h-2 bg-stone-900 rounded-full overflow-hidden">
+              <div className="h-full transition-all" style={{ width: `${(it.value / total) * 100}%`, backgroundColor: it.hex, opacity: 0.85 }}></div>
+            </div>
+            <div className="w-10 text-right text-stone-400 font-serif text-xs">{it.value.toFixed(1)}</div>
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-amber-700/20">
+        <div><div className="text-amber-200/50 text-xs font-serif">Cardinal</div><div className="text-stone-100 font-serif">{analysis.modes.Cardinal.toFixed(1)}</div></div>
+        <div><div className="text-amber-200/50 text-xs font-serif">Fixed</div><div className="text-stone-100 font-serif">{analysis.modes.Fixed.toFixed(1)}</div></div>
+        <div><div className="text-amber-200/50 text-xs font-serif">Mutable</div><div className="text-stone-100 font-serif">{analysis.modes.Mutable.toFixed(1)}</div></div>
+      </div>
+      <div className="mt-4 pt-4 border-t border-amber-700/20 text-xs font-serif">
+        <div className="text-amber-300">Sect: <span className="text-stone-200">{analysis.sect} chart</span></div>
+        {analysis.stelliums.length > 0 && (<div className="text-amber-300 mt-1">Stellium: <span className="text-stone-200">{analysis.stelliums.map(s => `${s.count} in ${s.name}`).join(' · ')}</span></div>)}
+      </div>
+    </div>
+  );
+}
+
+function ChartDataPanel({ chart }) {
+  return (
+    <div className="bg-black/40 border border-amber-700/30 rounded p-5">
+      <div className="text-amber-300/80 text-xs font-serif tracking-widest mb-3">PLACEMENTS</div>
+      <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm font-serif">
+        <div className="text-amber-300/80">Asc · Ori</div><div className="text-stone-100">{chart.ascSign.glyph} {chart.ascSign.sign} {chart.ascSign.degree}°</div>
+        <div className="text-amber-300/80">MC</div><div className="text-stone-100">{chart.mcSign.glyph} {chart.mcSign.sign} {chart.mcSign.degree}°</div>
+        {PLANET_LIST.map(p => {
+          const pl = chart.planets[p];
+          return (
+            <React.Fragment key={p}>
+              <div className="text-amber-300/80"><span className="mr-2">{PLANET_GLYPHS[p]}</span>{p}</div>
+              <div className="text-stone-100">{pl.glyph} {pl.sign} {pl.degree}°<span className="text-amber-200/40 text-xs ml-2">H{pl.house}</span></div>
+            </React.Fragment>
+          );
+        })}
+        <div className="text-amber-300/80 mt-2">☊ N. Node</div>
+        <div className="text-stone-100 mt-2">{chart.northNode.glyph} {chart.northNode.sign} {chart.northNode.degree}° <span className="text-amber-200/40 text-xs ml-1">H{chart.northNode.house}</span></div>
+        <div className="text-amber-300/80">☋ S. Node</div>
+        <div className="text-stone-100">{chart.southNode.glyph} {chart.southNode.sign} {chart.southNode.degree}° <span className="text-amber-200/40 text-xs ml-1">H{chart.southNode.house}</span></div>
+      </div>
+      <div className="mt-4 pt-4 border-t border-amber-700/20">
+        <div className="text-amber-300/80 text-xs font-serif tracking-widest mb-2">CURRENT MOON</div>
+        <div className="text-stone-100 text-sm font-serif">{chart.moonPhase.phase} <span className="italic text-amber-200/70">— {chart.moonPhase.meaning}</span></div>
+      </div>
+      <div className="mt-4 pt-4 border-t border-amber-700/20">
+        <div className="text-amber-300/80 text-xs font-serif tracking-widest mb-2">TALKING ODU</div>
+        <div className="text-stone-100 text-base font-serif italic">{chart.talkingOdu}</div>
+      </div>
+    </div>
+  );
+}
+
+function Section({ number, title, children }) {
+  return (
+    <div className="mb-12">
+      <div className="flex items-center mb-5"><div className="text-amber-400 text-xs tracking-[0.4em] font-display mr-3">{number}</div><div className="h-px flex-1 bg-amber-700/40"></div></div>
+      <h2 className="text-3xl font-serif text-amber-300 mb-4 tracking-wide italic">{title}</h2>
+      <div className="text-stone-200 font-serif leading-relaxed text-base space-y-3">{children}</div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════════════════════════════
+function AstroOduSystem() {
+  const [view, setView] = useState('form');
+  const [chart, setChart] = useState(null);
+  const [r1, setR1] = useState(null), [r2, setR2] = useState(null), [r3, setR3] = useState(null), [r4, setR4] = useState(null);
+  const [error, setError] = useState(null);
+  const [stage, setStage] = useState('');
+  const [prefill, setPrefill] = useState(null);
+
+  // Pull birth data prefill from cached profile (instant) and from Supabase (authoritative)
+  useEffect(() => {
+    const u = (localStorage.getItem('ntas98_user') || '').toLowerCase();
+    if (!u) return;
+
+    // 1) Instant prefill from cached profile + cached user data
+    try {
+      const raw = localStorage.getItem('ntas98_profile_' + u);
+      if (raw) {
+        const p = JSON.parse(raw);
+        setPrefill({ full_name: p.full_name, dob: p.dob, birth_time: p.birth_time, birth_location: p.birth_location });
+      } else {
+        const ud = localStorage.getItem('ntas98_userdata_' + u);
+        if (ud) {
+          const d = JSON.parse(ud);
+          if (d.full_name || d.name) setPrefill(prev => ({ ...(prev || {}), full_name: d.full_name || d.name }));
+        }
+      }
+    } catch(e) {}
+
+    // 2) Authoritative fetch from Supabase — overwrites cache
+    (async () => {
+      try {
+        const res = await fetch('/.netlify/functions/get-profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userEmail: u })
+        });
+        const data = await res.json();
+        if (data && data.success && data.profile) {
+          const p = data.profile;
+          const next = {
+            full_name: p.full_name || null,
+            dob: p.dob || null,
+            birth_time: p.birth_time || null,
+            birth_location: p.birth_location || null
+          };
+          setPrefill(next);
+          // Cache for next visit
+          try { localStorage.setItem('ntas98_profile_' + u, JSON.stringify(p)); } catch(e) {}
+        }
+      } catch(e) { /* offline / network — cached prefill is fine */ }
+    })();
+  }, []);
+
+  const handleBirthSubmit = async (birthData) => {
+    setError(null); setView('calculating'); setStage('Calculating the heavens');
+    setR1(null); setR2(null); setR3(null); setR4(null);
+    try {
+      const calculatedChart = calculateChart(birthData);
+      setChart(calculatedChart);
+      await new Promise(r => setTimeout(r, 800));
+      setView('reading');
+      // Stitch the running parts onto the chart payload so part 4 can persist them all together.
+      const accumulator = { ...calculatedChart, allParts: {} };
+      setStage("Channeling — I of IV: opening the Djet");
+      const p1 = await callBackend(accumulator, 1); setR1(p1); accumulator.allParts.part1 = p1;
+      setStage("Channeling — II of IV: the soul's curriculum");
+      const p2 = await callBackend(accumulator, 2); setR2(p2); accumulator.allParts.part2 = p2;
+      setStage("Channeling — III of IV: the Divine Script");
+      const p3 = await callBackend(accumulator, 3); setR3(p3); accumulator.allParts.part3 = p3;
+      setStage("Channeling — IV of IV: the working & the seal");
+      const p4 = await callBackend(accumulator, 4); setR4(p4);
+      setStage('');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'The channel has been disturbed. Try again.');
+      setStage('');
+    }
+  };
+
+  const reset = () => { setView('form'); setChart(null); setR1(null); setR2(null); setR3(null); setR4(null); setError(null); };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-black via-stone-950 to-black text-stone-100">
+      {view === 'form' && <BirthForm onSubmit={handleBirthSubmit} prefill={prefill} />}
+      {view === 'calculating' && <LoadingRitual stage={stage} />}
+      {view === 'reading' && chart && (
+        <div className="max-w-3xl mx-auto px-6 py-10">
+          <div className="text-center mb-6 no-print">
+            <a href="../portal-member.html" className="text-amber-300/60 text-xs tracking-widest hover:text-amber-300 font-display">← BACK TO PORTAL</a>
+          </div>
+          <div className="text-center mb-10 fade-up">
+            <div className="text-amber-400 text-xs tracking-[0.5em] mb-3 font-display">NTAS98 · ASTRO-ODU</div>
+            <div className="h-px w-24 bg-amber-400 mx-auto opacity-60 mb-6"></div>
+            <h1 className="text-4xl font-serif text-stone-100 italic">Your Djet Snapshot</h1>
+          </div>
+          <div className="mb-10 fade-up"><NatalChart chart={chart} /></div>
+          <div className="grid md:grid-cols-2 gap-4 mb-10">
+            <ChartDataPanel chart={chart} />
+            <ElementBalance analysis={chart.analysis} />
+          </div>
+          {stage && (
+            <div className="text-center py-6 mb-6">
+              <div className="inline-flex items-center gap-3">
+                <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                <span className="text-amber-300/80 italic font-serif text-sm tracking-widest">{stage}</span>
+              </div>
+            </div>
+          )}
+          {error && (
+            <div className="bg-red-900/20 border border-red-800/40 rounded p-4 text-red-300 mb-6">
+              {error}<button onClick={reset} className="block mt-3 text-amber-300 underline">Begin again</button>
+            </div>
+          )}
+          {r1 && (
+            <div className="fade-up">
+              <Section number="I" title="The Frozen Moment"><p>{r1.frozen_moment || r1.opening}</p></Section>
+              {r1.elemental_constitution && <Section number="II" title="Elemental Constitution"><p>{r1.elemental_constitution}</p></Section>}
+              {r1.ori_and_sun && <Section number="II" title="The Ori — Sun"><p>{r1.ori_and_sun}</p></Section>}
+              {r1.moon_and_ancestral && <Section number="III" title="The Moon — Ancestral Memory"><p>{r1.moon_and_ancestral}</p></Section>}
+              {r1.vowels_personal && (
+                <Section number="III" title="The Vowels — Personal Faculties">
+                  {r1.vowels_personal.map(v => (
+                    <div key={v.planet} className="border-l-2 border-amber-700/40 pl-4 py-2 mb-4">
+                      <div className="flex items-baseline gap-3 mb-2 flex-wrap">
+                        <span className="text-2xl text-amber-400">{PLANET_GLYPHS[v.planet]}</span>
+                        <span className="font-serif text-amber-200 text-lg">{v.planet}</span>
+                        <span className="text-stone-400 text-sm font-serif italic">{chart.planets[v.planet].sign} {chart.planets[v.planet].degree}° · House {chart.planets[v.planet].house}</span>
+                      </div>
+                      <p className="text-stone-200 font-serif leading-relaxed">{v.reading}</p>
+                    </div>
+                  ))}
+                </Section>
+              )}
+            </div>
+          )}
+          {r2 && (
+            <div className="fade-up">
+              {r2.ascendant_and_masque && <Section number="IV" title="The Ascendant — The Masque"><p>{r2.ascendant_and_masque}</p></Section>}
+              {r2.mercury_venus_mars && <Section number="V" title="Mercury · Venus · Mars"><p>{r2.mercury_venus_mars}</p></Section>}
+              {r2.jupiter_saturn && <Section number="VI" title="Jupiter · Saturn"><p>{r2.jupiter_saturn}</p></Section>}
+              {r2.consonants && <Section number="V" title="The Consonants — Environmental Windows"><p>{r2.consonants}</p></Section>}
+              {r2.souls_curriculum && (
+                <Section number="VI" title="Soul's Curriculum — The Lunar Axis">
+                  <div className="grid md:grid-cols-2 gap-3 mb-5">
+                    <div className="bg-black/40 border border-amber-700/30 rounded p-4">
+                      <div className="text-amber-400 text-xs tracking-[0.3em] font-display mb-1">☊ NORTH NODE</div>
+                      <div className="text-stone-100 font-serif text-lg">{chart.northNode.sign} · House {chart.northNode.house}</div>
+                      <div className="text-amber-200/70 italic text-sm font-serif">soul's growth direction</div>
+                    </div>
+                    <div className="bg-black/40 border border-amber-700/30 rounded p-4">
+                      <div className="text-amber-400 text-xs tracking-[0.3em] font-display mb-1">☋ SOUTH NODE</div>
+                      <div className="text-stone-100 font-serif text-lg">{chart.southNode.sign} · House {chart.southNode.house}</div>
+                      <div className="text-amber-200/70 italic text-sm font-serif">ancestral inheritance · Sankofa gift</div>
+                    </div>
+                  </div>
+                  <p>{r2.souls_curriculum}</p>
+                </Section>
+              )}
+            </div>
+          )}
+          {r3 && (
+            <div className="fade-up">
+              {r3.outer_planets && <Section number="VII" title="The Outer Forces"><p>{r3.outer_planets}</p></Section>}
+              {r3.nodes_and_destiny && <Section number="VIII" title="The Nodes & Destiny"><p>{r3.nodes_and_destiny}</p></Section>}
+              {r3.key_aspects && <Section number="IX" title="Key Aspects — Orisha in Conversation"><p>{r3.key_aspects}</p></Section>}
+              {r3.divine_script && <Section number="VII" title="The Divine Script — Your Odu"><p>{r3.divine_script}</p></Section>}
+              {r3.internal_engine && (
+                <Section number="VIII" title="The Internal Engine — Orisha & Chakra">
+                  <p>{r3.internal_engine}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-6 text-sm">
+                    {ORISHA_CHAKRAS.map(oc => (
+                      <div key={oc.chakra} className="border border-amber-700/30 rounded px-3 py-2 bg-black/30">
+                        <div className="text-amber-400 font-serif text-base">{oc.orisha} <span className="text-stone-400 text-xs">· {oc.chakra}</span></div>
+                        <div className="text-stone-300 text-xs italic">{oc.domain}</div>
+                      </div>
+                    ))}
+                  </div>
+                </Section>
+              )}
+            </div>
+          )}
+          {r4 && (
+            <div className="fade-up">
+              {r4.current_movement && <Section number="X" title="Current Movement"><p>{r4.current_movement}</p></Section>}
+              {r4.iwa_pele_practice && <Section number="XI" title="Iwa-Pele Practice"><p>{r4.iwa_pele_practice}</p></Section>}
+              {r4.sankofa_blessing && <Section number="XII" title="Sankofa — Reach Back"><p>{r4.sankofa_blessing}</p></Section>}
+              <div className="text-center mt-16 mb-8 no-print">
+                <div className="h-px w-24 bg-amber-400/60 mx-auto mb-6"></div>
+                <button onClick={() => window.print()} className="mr-4 bg-amber-700/30 border border-amber-500/60 text-amber-200 font-display tracking-widest px-6 py-3 rounded hover:bg-amber-700/50 transition">SAVE AS PDF</button>
+                <button onClick={reset} className="bg-transparent border border-amber-500/60 text-amber-200 font-display tracking-widest px-6 py-3 rounded hover:bg-amber-700/30 transition">CAST ANOTHER</button>
+              </div>
+              <div className="text-center text-amber-700/50 font-serif italic text-sm pb-12">⊹  NTAS98 · Nature · Trap · Soul · 1998  ⊹</div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AstroOduSystem />);
+</script>
+</body>
+</html>

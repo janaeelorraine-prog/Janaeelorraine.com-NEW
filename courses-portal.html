@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Courses | NTAS98</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root{--gold:#C9A84C;--purple:#6B3FA0;--purple-dark:#3b1f6e;--purple-mid:#8B5CC8;--blue-glow:#4a9eff;--black:#06080d;--white:#f0eee8;--white-dim:rgba(240,238,232,0.75);}
+        *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+        body{background-color:var(--black);color:var(--white);font-family:'Cormorant Garamond',serif;overflow-x:hidden;}
+        .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden;}
+        .particle{position:absolute;border-radius:50%;animation:drift linear infinite;opacity:0;}
+        @keyframes drift{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:0.6;}100%{transform:translateY(-20px) scale(1);opacity:0;}}
+        nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:22px 50px;background:linear-gradient(to bottom,rgba(6,8,13,0.9),transparent);border-bottom:1px solid rgba(201,168,76,0.2);backdrop-filter:blur(4px);}
+        .logo{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--gold);letter-spacing:5px;text-decoration:none;}
+        .nav-right{display:flex;align-items:center;gap:20px;}
+        .nav-user{font-size:0.65rem;letter-spacing:3px;color:rgba(240,238,232,0.5);text-transform:uppercase;}
+        .nav-user span{color:var(--gold);}
+        .nav-link{font-size:0.65rem;letter-spacing:3px;color:rgba(240,238,232,0.4);text-transform:uppercase;text-decoration:none;transition:color 0.3s;}
+        .nav-link:hover{color:var(--gold);}
+        .logout-btn{font-size:0.65rem;letter-spacing:3px;color:rgba(240,238,232,0.3);text-transform:uppercase;background:none;border:1px solid rgba(240,238,232,0.15);padding:6px 14px;cursor:pointer;font-family:'Cormorant Garamond',serif;transition:all 0.3s;}
+        .logout-btn:hover{color:var(--gold);border-color:var(--gold);}
+        .member-hero{padding:140px 40px 60px;text-align:center;position:relative;}
+        .member-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(107,63,160,0.25) 0%,transparent 60%),linear-gradient(160deg,#0a0612 0%,#06080d 60%);}
+        .member-hero-fade{position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,var(--black));}
+        .member-hero-content{position:relative;z-index:2;}
+        .member-hero h1{font-family:'Cinzel Decorative',serif;font-size:clamp(1.8rem,5vw,3.5rem);color:var(--white);letter-spacing:4px;margin-bottom:10px;}
+        .member-hero h1 em{color:var(--gold);font-style:normal;}
+        .member-hero p{font-style:italic;color:var(--white-dim);font-size:1.05rem;line-height:2;}
+        .gold-line{width:150px;height:1px;background:linear-gradient(to right,transparent,var(--gold),var(--purple-mid),transparent);margin:16px auto;}
+        #dashboard{padding:60px 40px;background:var(--black);position:relative;z-index:2;}
+        .dash-inner{max-width:960px;margin:0 auto;}
+        .section-label{font-size:0.6rem;letter-spacing:8px;text-transform:uppercase;color:var(--purple-mid);margin-bottom:14px;}
+        .section-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3vw,1.8rem);color:var(--white);letter-spacing:3px;margin-bottom:40px;}
+        .section-title span{color:var(--gold);}
+        .course-block{border:1px solid rgba(107,63,160,0.25);background:linear-gradient(160deg,rgba(59,31,110,0.1),rgba(6,8,13,0.97));margin-bottom:40px;}
+        .course-block-header{padding:28px 32px;border-bottom:1px solid rgba(107,63,160,0.15);display:flex;justify-content:space-between;align-items:flex-start;gap:20px;cursor:pointer;}
+        .course-num{font-size:0.55rem;letter-spacing:5px;text-transform:uppercase;color:var(--purple-mid);margin-bottom:8px;}
+        .course-name-display{font-family:'Cinzel Decorative',serif;font-size:clamp(0.9rem,2vw,1.2rem);color:var(--white);letter-spacing:2px;}
+        .course-designation{font-size:0.62rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-top:6px;}
+        .course-header-right{text-align:right;flex-shrink:0;}
+        .course-progress-label{font-size:0.58rem;letter-spacing:3px;text-transform:uppercase;color:rgba(240,238,232,0.35);margin-bottom:6px;}
+        .progress-bar-wrap{width:150px;height:4px;background:rgba(107,63,160,0.2);margin-bottom:6px;}
+        .progress-bar{height:100%;background:linear-gradient(to right,var(--purple-mid),var(--gold));transition:width 0.5s ease;}
+        .progress-pct{font-family:'Cinzel Decorative',serif;font-size:0.75rem;color:var(--gold);}
+        .course-toggle{font-size:1.2rem;color:rgba(240,238,232,0.4);transition:all 0.3s;margin-top:4px;}
+        .modules-wrap{padding:0 32px 28px;display:none;}
+        .modules-wrap.open{display:block;}
+        .module-block{margin-bottom:20px;border:1px solid rgba(107,63,160,0.15);}
+        .module-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background 0.3s;}
+        .module-header:hover{background:rgba(59,31,110,0.08);}
+        .module-header-left{display:flex;align-items:center;gap:14px;}
+        .module-check{width:20px;height:20px;border:1px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--gold);flex-shrink:0;}
+        .module-check.complete{background:rgba(201,168,76,0.1);border-color:var(--gold);}
+        .module-title-text{font-family:'Cinzel Decorative',serif;font-size:0.72rem;letter-spacing:2px;color:var(--white);}
+        .module-num-label{font-size:0.55rem;letter-spacing:3px;color:rgba(240,238,232,0.3);text-transform:uppercase;}
+        .module-toggle{font-size:0.9rem;color:rgba(240,238,232,0.3);transition:transform 0.3s;}
+        .module-toggle.open{transform:rotate(180deg);}
+        .lessons-wrap{padding:0 20px 16px;display:none;}
+        .lessons-wrap.open{display:block;}
+        .lesson-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(107,63,160,0.08);cursor:pointer;transition:all 0.3s;}
+        .lesson-item:last-child{border-bottom:none;}
+        .lesson-check{width:18px;height:18px;border:1px solid rgba(107,63,160,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;flex-shrink:0;transition:all 0.3s;}
+        .lesson-check.complete{background:rgba(201,168,76,0.1);border-color:var(--gold);color:var(--gold);}
+        .lesson-title{font-size:0.85rem;color:rgba(240,238,232,0.6);transition:color 0.3s;font-style:italic;flex:1;}
+        .lesson-title.complete{color:rgba(240,238,232,0.3);text-decoration:line-through;}
+        .lesson-type{font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:rgba(107,63,160,0.6);}
+        .mark-btn{font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid rgba(201,168,76,0.2);color:rgba(240,238,232,0.3);padding:4px 10px;cursor:pointer;font-family:'Cormorant Garamond',serif;transition:all 0.3s;white-space:nowrap;}
+        .mark-btn:hover{border-color:var(--gold);color:var(--gold);}
+        .certificate-wrap{margin-top:20px;padding:24px;border:1px solid rgba(201,168,76,0.15);text-align:center;background:rgba(201,168,76,0.03);display:none;}
+        .certificate-wrap.earned{display:block;border-color:rgba(201,168,76,0.4);background:rgba(201,168,76,0.05);}
+        .cert-icon{font-size:2rem;margin-bottom:12px;}
+        .cert-title{font-family:'Cinzel Decorative',serif;font-size:0.8rem;letter-spacing:3px;color:var(--gold);margin-bottom:8px;text-transform:uppercase;}
+        .cert-text{font-style:italic;font-size:0.85rem;color:var(--white-dim);line-height:1.8;margin-bottom:16px;}
+        .cert-designation{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold);}
+        .no-courses{text-align:center;padding:60px 40px;border:1px solid rgba(107,63,160,0.15);}
+        .no-courses-icon{font-size:2.5rem;margin-bottom:16px;opacity:0.4;}
+        .no-courses-title{font-family:'Cinzel Decorative',serif;font-size:1rem;color:rgba(240,238,232,0.4);letter-spacing:3px;margin-bottom:10px;}
+        .no-courses-text{font-style:italic;font-size:0.88rem;color:rgba(240,238,232,0.25);line-height:1.9;margin-bottom:20px;}
+        .enroll-link{display:inline-block;padding:12px 32px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;transition:all 0.3s;}
+        footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.18);padding:40px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+        .footer-logo{font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--gold);letter-spacing:5px;}
+        .footer-right{font-size:0.62rem;color:rgba(240,238,232,0.22);letter-spacing:2px;}
+        @media(max-width:768px){nav{padding:18px 24px;}.nav-right{gap:12px;}.course-block-header{flex-direction:column;}.progress-bar-wrap{width:100%;}}
+    </style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav>
+    <a href="index.html" class="logo">NTAS98</a>
+    <div class="nav-right">
+        <span class="nav-user">Welcome, <span id="nav-name">Member</span></span>
+        <a href="portal-member.html" class="nav-link">My Portal</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</nav>
+
+<div class="member-hero">
+    <div class="member-hero-bg"></div>
+    <div class="member-hero-fade"></div>
+    <div class="member-hero-content">
+        <h1>My <em>Sacred</em> Studies</h1>
+        <div class="gold-line"></div>
+        <p>Track your progress, complete your lessons, and earn your designation.</p>
+    </div>
+</div>
+
+<section id="dashboard">
+    <div class="dash-inner">
+        <div class="section-label">✦ &nbsp; Your Enrolled Courses &nbsp; ✦</div>
+        <div class="section-title">Your <span>Learning Path</span></div>
+        <div id="courses-container"><div style="text-align:center;padding:40px;font-style:italic;color:rgba(240,238,232,0.3);">Loading your courses...</div></div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-logo">NTAS98</div>
+    <div class="footer-right">© 2026 Janaee Lorraine · All rights reserved.</div>
+</footer>
+
+<script>
+const SUPABASE_URL = 'https://zwjixfyoquospeaxzcjp.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_h5S2zRNnaEwn8ouh1dlNlA_hgnvv85G';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const saved = sessionStorage.getItem('ntas98_user');
+if (!saved) { window.location.href = 'login.html'; }
+const user = JSON.parse(saved);
+document.getElementById('nav-name').textContent = user.name || 'Member';
+
+function logout() { sessionStorage.removeItem('ntas98_user'); window.location.href = 'index.html'; }
+
+const COURSES = {
+    course1: { title: 'Foundations of Africana Spiritual Traditions', num: '01', designation: 'Rooted in Spirit',
+        modules: [
+            { title: 'African Cosmology and the Nature of Existence', lessons: [{title:'Spirit as a Unifying Life Force',type:'Video'},{title:'Concepts of God in African Traditions',type:'Reading'},{title:'The Cyclical Nature of Time',type:'Video'},{title:'Module 1 Reflection',type:'Exercise'}] },
+            { title: 'The Spiritual Hierarchy and Ancestral Traditions', lessons: [{title:'Nature Forces — Orisha, Abosom, Nkisi, Neteru',type:'Video'},{title:'Ancestral Veneration',type:'Reading'},{title:'Deification and Ancestors as Guardians',type:'Video'},{title:'Module 2 Reflection',type:'Exercise'}] },
+            { title: 'Human Nature, Destiny, and Purpose', lessons: [{title:'The Person as a Spirit Being — Body, Soul, and Ori',type:'Video'},{title:'Ayanmo — The Concept of Destiny',type:'Reading'},{title:'Using Divination to Align with Purpose',type:'Video'},{title:'Module 3 Reflection',type:'Exercise'}] },
+            { title: 'Forms of Veneration and Rituals for Living', lessons: [{title:'Prayer, Libation, Sacrifice — Sacred Tools',type:'Video'},{title:'Music and Dance as Spiritual Practice',type:'Reading'},{title:'Communal vs Individual Ritual',type:'Video'},{title:'Final Integration Practice',type:'Exercise'}] }
+        ]
+    },
+    course2: { title: 'African Sacred Sciences — Kemetic Myth, Astronomy & Astrology', num: '02', designation: 'Keeper of the Stars',
+        modules: [
+            { title: 'The Antiquity of African Science', lessons: [{title:'The Lebombo and Ishango Bones',type:'Video'},{title:'Kemet as an African Civilization',type:'Reading'},{title:'Scientific Contributions of Ancient Africa',type:'Video'},{title:'Module 1 Reflection',type:'Exercise'}] },
+            { title: 'Kemetic Astronomy and the Great Year', lessons: [{title:'The Precession of the Equinoxes',type:'Video'},{title:'Precessional Ages and Their Meaning',type:'Reading'},{title:'The Galactic Center and Human Destiny',type:'Video'},{title:'Module 2 Reflection',type:'Exercise'}] },
+            { title: 'Cosmological Continuity — From Kemet to the Akan', lessons: [{title:'Kemetic and Akan Conceptions of Time',type:'Video'},{title:'Myth and the Person Across Traditions',type:'Reading'},{title:'Ritual Timing — Sacred and Mundane Days',type:'Video'},{title:'Module 3 Reflection',type:'Exercise'}] },
+            { title: 'Astrology as a Tool for Liberation', lessons: [{title:'The Two Cradle Theory',type:'Video'},{title:'Relocation Theory',type:'Reading'},{title:'Reconciling the Maafa Through the Stars',type:'Video'},{title:'Final Integration Practice',type:'Exercise'}] }
+        ]
+    },
+    course3: { title: 'Ritual, Healing & Cultural Recovery in the Diaspora', num: '03', designation: 'The Healer',
+        modules: [
+            { title: 'Spiritual Technologies and Afrocentric Practice', lessons: [{title:'What Are Spiritual Technologies?',type:'Video'},{title:'Communicating with the Invisible World',type:'Reading'},{title:'The Artist as Healer',type:'Video'},{title:'Module 1 Reflection',type:'Exercise'}] },
+            { title: 'Dagara Rituals and Relationship Healing', lessons: [{title:"Sobonfu Somé's Teachings on Grief Rituals",type:'Video'},{title:'The Clearing of the Village',type:'Reading'},{title:'The Ash Circle and Conflict Resolution',type:'Live Session'},{title:'Module 2 Reflection',type:'Exercise'}] },
+            { title: 'Multiple Religious Allegiance and Contemporary Folkways', lessons: [{title:"Black Women's Religious Coexistence",type:'Video'},{title:"Queen Afua's Womb Circles",type:'Reading'},{title:'Building Your Own Sacred Practice',type:'Live Session'},{title:'Module 3 Reflection',type:'Exercise'}] },
+            { title: 'The Repatriation of Souls', lessons: [{title:'Masks and Sculptures as Ancestral Spirits',type:'Video'},{title:'Cultural Rehabilitation vs Traditional Museums',type:'Reading'},{title:'Reconnecting Through Ritual',type:'Live Session'},{title:'Final Integration Practice',type:'Exercise'}] }
+        ]
+    },
+    course4: { title: 'Introduction to Yoruba Religious Concepts — Ifá & Orisha', num: '04', designation: 'Omo Orisha',
+        modules: [
+            { title: 'The Yoruba Pantheon and Angelic Forces', lessons: [{title:'The Orisha as Emanations of Oludumare',type:'Video'},{title:'Deep Study — Obatala, Elegba, Ogun',type:'Reading'},{title:'Deep Study — Yemoja, Oshun, Shango, Oya',type:'Video'},{title:'Module 1 Reflection',type:'Exercise'}] },
+            { title: 'The Ifá Corpus and Esoteric Wisdom', lessons: [{title:'Orunmila and the Ifá Odu',type:'Video'},{title:'The 16 Major Odu and Their Ethical Codes',type:'Reading'},{title:'Proverbial Wisdom and Moral Teachings',type:'Video'},{title:'Module 2 Reflection',type:'Exercise'}] },
+            { title: 'Divination and Manifestation', lessons: [{title:'Ifá, Merindilogun, and Obi Abata',type:'Video'},{title:'Ashe — The Power and Manifestation Principle',type:'Reading'},{title:'Iwa-Pele — Balanced Character',type:'Live Session'},{title:'Module 3 Reflection',type:'Exercise'}] },
+            { title: 'Ritual Internalization and Personal Growth', lessons: [{title:'Mapping Orisha to Body and Consciousness',type:'Video'},{title:'Spiritual Baths and Prayers',type:'Reading'},{title:'Offerings and Elevation Practice',type:'Live Session'},{title:'Final Integration and Designation Ceremony',type:'Exercise'}] }
+        ]
+    }
+};
+
+let progressCache = {};
+
+async function loadProgress() {
+    const { data } = await sb.from('course_progress').select('*').eq('user_email', user.email);
+    if (data) {
+        data.forEach(row => {
+            if (!progressCache[row.course_id]) progressCache[row.course_id] = {};
+            if (!progressCache[row.course_id][row.module_idx]) progressCache[row.course_id][row.module_idx] = {};
+            progressCache[row.course_id][row.module_idx][row.lesson_idx] = row.completed;
+        });
+    }
+    renderCourses();
+}
+
+async function toggleLesson(courseId, moduleIdx, lessonIdx) {
+    const current = progressCache[courseId]?.[moduleIdx]?.[lessonIdx] || false;
+    const newVal = !current;
+    if (!progressCache[courseId]) progressCache[courseId] = {};
+    if (!progressCache[courseId][moduleIdx]) progressCache[courseId][moduleIdx] = {};
+    progressCache[courseId][moduleIdx][lessonIdx] = newVal;
+
+    await sb.from('course_progress').upsert({
+        user_email: user.email,
+        course_id: courseId,
+        module_idx: moduleIdx,
+        lesson_idx: lessonIdx,
+        completed: newVal,
+        updated_at: new Date().toISOString()
+    }, { onConflict: 'user_email,course_id,module_idx,lesson_idx' });
+
+    renderCourses();
+}
+
+function getCourseProgress(courseId) {
+    const course = COURSES[courseId];
+    let total = 0, done = 0;
+    course.modules.forEach((mod, mi) => {
+        mod.lessons.forEach((_, li) => {
+            total++;
+            if (progressCache[courseId]?.[mi]?.[li]) done++;
+        });
+    });
+    return { total, done, pct: total > 0 ? Math.round((done/total)*100) : 0 };
+}
+
+function renderCourses() {
+    const container = document.getElementById('courses-container');
+    const enrolledCourses = user.courses || [];
+
+    if (enrolledCourses.length === 0) {
+        container.innerHTML = `<div class="no-courses"><div class="no-courses-icon">📚</div><div class="no-courses-title">No Courses Yet</div><p class="no-courses-text">You haven't enrolled in any courses. Purchase a course and use your access code to get started.</p><a href="courses.html" class="enroll-link">Browse Courses</a></div>`;
+        return;
+    }
+
+    let html = '';
+    enrolledCourses.forEach(courseId => {
+        const course = COURSES[courseId];
+        if (!course) return;
+        const { total, done, pct } = getCourseProgress(courseId);
+        const isComplete = pct === 100;
+
+        html += `<div class="course-block">
+            <div class="course-block-header" onclick="toggleCourse('${courseId}')">
+                <div><div class="course-num">Course ${course.num}</div><div class="course-name-display">${course.title}</div><div class="course-designation">Designation: ${course.designation}</div></div>
+                <div class="course-header-right">
+                    <div class="course-progress-label">Progress</div>
+                    <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+                    <div class="progress-pct">${done}/${total} · ${pct}%</div>
+                    <div class="course-toggle" id="toggle-${courseId}">▼</div>
+                </div>
+            </div>
+            <div class="modules-wrap" id="modules-${courseId}">`;
+
+        course.modules.forEach((mod, mi) => {
+            const modDone = mod.lessons.filter((_, li) => progressCache[courseId]?.[mi]?.[li]).length;
+            const modComplete = modDone === mod.lessons.length;
+            html += `<div class="module-block">
+                <div class="module-header" onclick="toggleModule('${courseId}',${mi})">
+                    <div class="module-header-left">
+                        <div class="module-check ${modComplete?'complete':''}">${modComplete?'✦':''}</div>
+                        <div><div class="module-num-label">Module ${mi+1}</div><div class="module-title-text">${mod.title}</div></div>
+                    </div>
+                    <div class="module-toggle" id="mod-toggle-${courseId}-${mi}">▼</div>
+                </div>
+                <div class="lessons-wrap" id="lessons-${courseId}-${mi}">`;
+
+            mod.lessons.forEach((lesson, li) => {
+                const isDone = progressCache[courseId]?.[mi]?.[li];
+                html += `<div class="lesson-item">
+                    <div class="lesson-check ${isDone?'complete':''}">${isDone?'✓':''}</div>
+                    <div class="lesson-title ${isDone?'complete':''}">${lesson.title}</div>
+                    <div class="lesson-type">${lesson.type}</div>
+                    <button class="mark-btn" onclick="toggleLesson('${courseId}',${mi},${li})">${isDone?'Completed':'Mark Done'}</button>
+                </div>`;
+            });
+            html += `</div></div>`;
+        });
+
+        html += `<div class="certificate-wrap ${isComplete?'earned':''}" id="cert-${courseId}">
+            <div class="cert-icon">${isComplete?'📜':'🔒'}</div>
+            <div class="cert-title">${isComplete?'Designation Earned':'Certificate Locked'}</div>
+            <div class="cert-text">${isComplete?'Congratulations. You have completed all four modules and earned your designation.':`Complete all ${total} lessons to unlock your certificate.`}</div>
+            ${isComplete?`<div class="cert-designation">✦ &nbsp; ${course.designation} &nbsp; ✦</div>`:''}
+        </div>`;
+
+        html += `</div></div>`;
+    });
+
+    if (user.portal_tier) {
+        html += `<div style="text-align:center;margin-top:40px;padding:28px;border:1px solid rgba(201,168,76,0.15);background:rgba(201,168,76,0.03);">
+            <div style="font-family:'Cinzel Decorative',serif;font-size:0.75rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px;text-transform:uppercase;">✦ Root Portal Access</div>
+            <p style="font-style:italic;font-size:0.88rem;color:rgba(240,238,232,0.4);margin-bottom:16px;">You also have access to your personalized Root Portal profile.</p>
+            <a href="portal-member.html" style="display:inline-block;padding:10px 28px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;">Go to My Portal</a>
+        </div>`;
+    }
+
+    container.innerHTML = html;
+}
+
+function toggleCourse(courseId) {
+    const wrap = document.getElementById(`modules-${courseId}`);
+    const toggle = document.getElementById(`toggle-${courseId}`);
+    const isOpen = wrap.classList.contains('open');
+    wrap.classList.toggle('open');
+    toggle.textContent = isOpen ? '▼' : '▲';
+}
+
+function toggleModule(courseId, mi) {
+    const wrap = document.getElementById(`lessons-${courseId}-${mi}`);
+    const toggle = document.getElementById(`mod-toggle-${courseId}-${mi}`);
+    wrap.classList.toggle('open');
+    toggle.classList.toggle('open');
+}
+
+loadProgress();
+
+const container = document.getElementById('particles');
+const colors = ['rgba(74,158,255,0.7)','rgba(107,63,160,0.6)','rgba(201,168,76,0.5)','rgba(139,92,200,0.6)'];
+for(let i=0;i<40;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*4+1;p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 ${size*4}px ${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*12}s;`;container.appendChild(p);}
+</script>
+</body>
+</html>

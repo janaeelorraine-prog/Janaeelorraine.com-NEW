@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AstroOdu — NTAS98</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080d; --gold: #C9A84C; --gold-dim: rgba(201,168,76,0.25);
+  --gold-glow: rgba(201,168,76,0.08); --white: #f0eee8;
+  --muted: rgba(240,238,232,0.5); --border: rgba(201,168,76,0.12);
+  --indigo: #2a1e4a; --indigo-glow: rgba(96,71,180,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--white); font-family: 'Cormorant Garamond', serif; min-height: 100vh; }
+
+/* ─── NAV ─── (matches portal.html) */
+nav { position: fixed; top:0; left:0; right:0; z-index:100; display: flex; align-items:center; justify-content:space-between; padding: 16px 40px; background: rgba(6,8,13,0.96); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+.logo { font-family: 'Cinzel Decorative', serif; font-size: 16px; font-weight: 700; color: var(--gold); text-decoration:none; letter-spacing: 4px; }
+nav ul { list-style:none; display:flex; gap:28px; }
+nav ul li a { color: var(--white); text-decoration:none; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.6; transition: all 0.3s; }
+nav ul li a:hover, nav ul li a.active { opacity:1; color: var(--gold); }
+nav ul li a.login-nav-link { color: var(--gold); border: 1px solid var(--gold-dim); padding: 5px 14px; }
+
+/* ─── HERO ─── */
+.hero { padding: 160px 40px 80px; text-align: center; max-width: 1100px; margin: 0 auto; position: relative; }
+.hero::before {
+  content: ''; position: absolute; top: 100px; left: 50%; transform: translateX(-50%);
+  width: 380px; height: 380px; max-width: 80vw; max-height: 80vw;
+  background: radial-gradient(circle, rgba(201,168,76,0.10) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+.hero > * { position: relative; z-index: 1; }
+.hero-eyebrow { font-size: 11px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); opacity: 0.85; margin-bottom: 20px; }
+.hero-glyph { display: block; margin: 0 auto 18px; width: 56px; height: 56px; }
+.hero-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(44px, 7vw, 80px); letter-spacing: 4px; margin-bottom: 22px; line-height: 1.05; }
+.hero-title .accent { color: var(--gold); display: block; font-size: 0.7em; letter-spacing: 8px; opacity: 0.85; margin-top: 8px; }
+.hero-sub { font-size: clamp(17px, 2vw, 21px); color: var(--muted); font-style: italic; line-height: 1.55; max-width: 720px; margin: 0 auto 28px; }
+.hero-tagline { font-family: 'Cinzel Decorative', serif; font-size: 12px; letter-spacing: 5px; color: var(--gold); opacity: 0.8; text-transform: uppercase; }
+
+/* ─── PILLARS STRIP ─── */
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin: 60px auto 0; padding: 0 40px; }
+.pillar { text-align: center; padding: 28px 20px; border: 1px solid var(--border); background: rgba(255,255,255,0.012); }
+.pillar-glyph { font-family: 'Cinzel Decorative', serif; font-size: 22px; color: var(--gold); margin-bottom: 12px; opacity: 0.85; }
+.pillar-name { font-family: 'Cinzel Decorative', serif; font-size: 14px; letter-spacing: 3px; color: var(--gold); margin-bottom: 10px; }
+.pillar-desc { font-size: 14px; color: var(--muted); font-style: italic; line-height: 1.5; }
+@media (max-width: 720px) { .pillars { grid-template-columns: 1fr; gap: 14px; padding: 0 20px; } }
+
+/* ─── TWO-PATH SPLIT ─── */
+.split-section { padding: 100px 40px 80px; max-width: 1280px; margin: 0 auto; }
+.split-eyebrow { text-align: center; font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); opacity: 0.8; margin-bottom: 12px; }
+.split-title { text-align: center; font-family: 'Cinzel Decorative', serif; font-size: clamp(28px, 4vw, 38px); letter-spacing: 3px; margin-bottom: 12px; }
+.split-sub { text-align: center; color: var(--muted); font-style: italic; max-width: 680px; margin: 0 auto 56px; line-height: 1.55; font-size: 16px; }
+
+.paths { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: stretch; }
+@media (max-width: 920px) { .paths { grid-template-columns: 1fr; max-width: 540px; margin: 0 auto; } }
+
+.path-card { padding: 44px 36px 36px; border: 1px solid var(--border); background: rgba(255,255,255,0.015); display: flex; flex-direction: column; position: relative; transition: border-color 0.4s, background 0.4s; }
+.path-card:hover { border-color: var(--gold-dim); background: rgba(255,255,255,0.025); }
+.path-card.initiation { background: linear-gradient(180deg, var(--gold-glow) 0%, rgba(255,255,255,0.012) 65%); }
+.path-card.certification { background: linear-gradient(180deg, var(--indigo-glow) 0%, rgba(255,255,255,0.012) 65%); border-color: rgba(150,120,200,0.18); }
+
+.path-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); opacity: 0.75; margin-bottom: 10px; }
+.path-card.certification .path-eyebrow { color: #b8a4e0; }
+.path-glyph { font-family: 'Cinzel Decorative', serif; font-size: 30px; color: var(--gold); margin-bottom: 14px; opacity: 0.9; }
+.path-card.certification .path-glyph { color: #b8a4e0; }
+.path-title { font-family: 'Cinzel Decorative', serif; font-size: 32px; letter-spacing: 3px; margin-bottom: 8px; line-height: 1.1; }
+.path-tagline { font-size: 15px; color: var(--muted); font-style: italic; margin-bottom: 26px; line-height: 1.55; min-height: 48px; }
+.path-divider { height: 1px; background: var(--border); margin: 0 0 22px; }
+
+.path-meta { display: flex; flex-wrap: wrap; gap: 18px 28px; margin-bottom: 26px; font-size: 12px; }
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); opacity: 0.7; }
+.path-card.certification .meta-label { color: #b8a4e0; }
+.meta-value { color: var(--white); font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 1px; }
+
+.path-list { list-style: none; padding: 0; margin-bottom: 32px; flex: 1; }
+.path-list li { padding: 8px 0 8px 22px; position: relative; font-size: 14.5px; color: var(--white); line-height: 1.45; }
+.path-list li:before { content: '✦'; color: var(--gold); position: absolute; left: 0; top: 9px; opacity: 0.7; font-size: 11px; }
+.path-card.certification .path-list li:before { color: #b8a4e0; }
+
+.path-footnote { font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 22px; line-height: 1.5; padding: 14px 16px; border-left: 2px solid var(--gold-dim); background: rgba(0,0,0,0.18); }
+.path-card.certification .path-footnote { border-left-color: rgba(150,120,200,0.4); }
+
+.path-cta { display: block; padding: 16px; text-align: center; text-decoration: none; border: 1px solid var(--gold); color: var(--gold); font-family: 'Cinzel Decorative', serif; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; transition: all 0.3s; }
+.path-cta:hover { background: var(--gold-glow); }
+.path-cta.primary { background: var(--gold); color: var(--bg); }
+.path-cta.primary:hover { background: var(--white); }
+.path-card.certification .path-cta { border-color: #9c87d8; color: #c8b8f0; }
+.path-card.certification .path-cta:hover { background: rgba(150,120,200,0.10); }
+
+/* ─── FRAMEWORK SECTION ─── */
+.framework { padding: 80px 40px; background: rgba(255,255,255,0.012); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.framework-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+.framework p { font-size: 18px; line-height: 1.75; color: var(--white); opacity: 0.85; margin-bottom: 18px; }
+.framework p em { color: var(--gold); font-style: italic; opacity: 0.95; }
+.framework-meditative { font-size: 15px; color: var(--muted); font-style: italic; margin-top: 32px; }
+.framework-meditative a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold-dim); padding-bottom: 1px; }
+.framework-meditative a:hover { border-bottom-color: var(--gold); }
+
+/* ─── CTA STRIP ─── */
+.cta-strip { padding: 80px 40px; text-align: center; }
+.cta-strip h2 { font-family: 'Cinzel Decorative', serif; font-size: 28px; letter-spacing: 3px; margin-bottom: 14px; }
+.cta-strip p { color: var(--muted); font-style: italic; margin-bottom: 28px; font-size: 16px; }
+.cta-strip a { display: inline-block; padding: 14px 32px; border: 1px solid var(--gold); color: var(--gold); font-family: 'Cinzel Decorative', serif; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; text-decoration: none; transition: all 0.3s; }
+.cta-strip a:hover { background: var(--gold); color: var(--bg); }
+
+/* ─── FOOTER ─── */
+footer { padding: 50px 40px; text-align: center; border-top: 1px solid var(--border); }
+.fn { font-family: 'Cinzel Decorative', serif; color: var(--gold); font-size: 16px; letter-spacing: 4px; margin-bottom: 8px; }
+.ft { font-size: 12px; letter-spacing: 3px; color: var(--muted); margin-bottom: 12px; }
+.fc { font-size: 11px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  nav { padding: 14px 20px; } nav ul { display: none; }
+  .hero { padding: 120px 20px 50px; } .split-section { padding: 60px 20px; }
+  .path-card { padding: 32px 22px 28px; }
+  .framework, .cta-strip { padding: 56px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="logo">NTAS98</a>
+  <ul>
+    <li><a href="../courses.html">Ancestral Studies</a></li>
+    <li><a href="index.html" class="active">AstroOdu</a></li>
+    <li><a href="../portal.html">The Root Portal</a></li>
+    <li><a href="../shop.html">Shop</a></li>
+    <li><a href="../booking.html">Booking</a></li>
+    <li><a href="../login.html" class="login-nav-link">Member Login</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <svg class="hero-glyph" viewBox="-30 -38 60 76" aria-hidden="true">
+    <g stroke="#C9A84C" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.9">
+      <ellipse cx="0" cy="-15" rx="11" ry="13"/>
+      <line x1="-15" y1="3" x2="15" y2="3"/>
+      <line x1="0" y1="3" x2="0" y2="30"/>
+    </g>
+  </svg>
+  <div class="hero-eyebrow">A Proprietary Framework by Mama Janaee</div>
+  <h1 class="hero-title">AstroOdu<span class="accent">The Living Compass</span></h1>
+  <p class="hero-sub">Where Yoruba Ifá divination, Western astrology, and the chakra system braid into one cosmology — and one practice for the woman remembering who she has always been.</p>
+  <div class="hero-tagline">⊹ &nbsp; Three Pillars · Five Levels · One Lineage &nbsp; ⊹</div>
+</section>
+
+<!-- ═══════════════ PILLARS ═══════════════ -->
+<div class="pillars">
+  <div class="pillar">
+    <div class="pillar-glyph">⚹</div>
+    <div class="pillar-name">Ifá · The Odu</div>
+    <div class="pillar-desc">The 256 sacred verses that hold every human destiny — the spoken word of the universe.</div>
+  </div>
+  <div class="pillar">
+    <div class="pillar-glyph">☉</div>
+    <div class="pillar-name">Astrology · The Wheel</div>
+    <div class="pillar-desc">The cosmic clock — planets, houses, and the frozen moment of your first breath.</div>
+  </div>
+  <div class="pillar">
+    <div class="pillar-glyph">⚭</div>
+    <div class="pillar-name">Chakras · The Body</div>
+    <div class="pillar-desc">The seven energetic gates where the heavens land in living flesh — Orisha-mapped.</div>
+  </div>
+</div>
+
+<!-- ═══════════════ FRAMEWORK ═══════════════ -->
+<section class="framework">
+  <div class="framework-inner">
+    <p>AstroOdu is not eclecticism. It is <em>recognition</em> — that the same cosmology speaks through Yoruba lips, through Greek charts, through Vedic bodies, through the rivers of the diaspora.</p>
+    <p>Built over years of study, ceremony, and Divine confirmation, AstroOdu is the working framework Mama Janaee channels in her readings and now teaches as a complete path.</p>
+    <p class="framework-meditative">For the meditative, conceptual explanation of the framework itself, visit <a href="../trinity/astro-odu.html">the AstroOdu Trinity sanctuary →</a></p>
+  </div>
+</section>
+
+<!-- ═══════════════ TWO-PATH SPLIT ═══════════════ -->
+<section class="split-section">
+  <div class="split-eyebrow">Two Paths · One Lineage</div>
+  <h2 class="split-title">Choose Your Entry</h2>
+  <p class="split-sub">AstroOdu opens to you in one of two ways. Learn the framework as a student of self-knowledge, or walk the practitioner's road toward becoming a credentialed reader within the lineage.</p>
+
+  <div class="paths">
+
+    <!-- ─── INITIATION ─── -->
+    <div class="path-card initiation">
+      <div class="path-eyebrow">Layer Two · Curriculum</div>
+      <div class="path-glyph">✦</div>
+      <h3 class="path-title">AstroOdu Initiation</h3>
+      <p class="path-tagline">Learn the framework. Read your own life. Earn the Omo (Student) designation.</p>
+      <div class="path-divider"></div>
+
+      <div class="path-meta">
+        <div class="meta-item"><span class="meta-label">Format</span><span class="meta-value">Self-Paced</span></div>
+        <div class="meta-item"><span class="meta-label">Pillars</span><span class="meta-value">All Three</span></div>
+        <div class="meta-item"><span class="meta-label">Materials</span><span class="meta-value">Workbooks Included</span></div>
+        <div class="meta-item"><span class="meta-label">Designation</span><span class="meta-value">Omo · Student</span></div>
+      </div>
+
+      <ul class="path-list">
+        <li>The full AstroOdu framework taught in Mama Janaee's voice</li>
+        <li>Self-paced video lessons across all three pillars</li>
+        <li>Printable workbooks for chart casting + Odu reflection</li>
+        <li>Progression tracker + completion ceremony</li>
+        <li>Awards the <em>Omo</em> (Student) designation</li>
+        <li>No application required — open enrollment</li>
+      </ul>
+
+      <div class="path-footnote">Available as a one-time purchase, <strong style="color: var(--gold); font-style: normal;">or included free</strong> with the Elder tier of The Root Portal.</div>
+
+      <a href="initiation.html" class="path-cta primary">Enter The Initiation</a>
+    </div>
+
+    <!-- ─── CERTIFICATION ─── -->
+    <div class="path-card certification">
+      <div class="path-eyebrow">Layer Three · Practitioner Path</div>
+      <div class="path-glyph">⚜</div>
+      <h3 class="path-title">AstroOdu Certification</h3>
+      <p class="path-tagline">Become a credentialed practitioner within the lineage. Application required at every level.</p>
+      <div class="path-divider"></div>
+
+      <div class="path-meta">
+        <div class="meta-item"><span class="meta-label">Levels</span><span class="meta-value">Five Tiers</span></div>
+        <div class="meta-item"><span class="meta-label">Gating</span><span class="meta-value">Application + Approval</span></div>
+        <div class="meta-item"><span class="meta-label">Top Tier</span><span class="meta-value">By Divine Command</span></div>
+        <div class="meta-item"><span class="meta-label">Renewal</span><span class="meta-value">Annual (L3 + L4)</span></div>
+      </div>
+
+      <ul class="path-list">
+        <li><strong>Aborisa</strong> &nbsp;— Entry practitioner ($297–$497)</li>
+        <li><strong>Onisegun</strong> &nbsp;— Reverse Wheel reader ($997–$1,497)</li>
+        <li><strong>Oluko</strong> &nbsp;— Lineage teacher ($2,500–$3,500)</li>
+        <li>Annual renewal at Levels 3 and 4</li>
+        <li>Standalone investment — separate from Root Portal</li>
+        <li>Each level gates the next. No shortcuts.</li>
+      </ul>
+
+      <div class="path-footnote">Certification is not for sale. It is granted after application review, and at the highest level, only by direct Divine confirmation through Mama Janaee.</div>
+
+      <a href="certification.html" class="path-cta">View The Five Levels</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ CTA STRIP ═══════════════ -->
+<section class="cta-strip">
+  <h2>Not sure where to begin?</h2>
+  <p>Most students start with Ancestral Studies, deepen through Initiation, then apply to Certification when called.</p>
+  <a href="../courses.html">Begin with Ancestral Studies →</a>
+</section>
+
+<footer>
+  <div class="fn">NTAS98</div>
+  <div class="ft">Mama Janaee · AstroOdu · The Root Portal</div>
+  <div class="fc">© 2026 janaeelorraine.com · All rights reserved</div>
+</footer>
+
+<script src="../mobile-nav.js"></script>
+</body>
+</html>

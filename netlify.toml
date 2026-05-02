@@ -1,0 +1,29 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Pretty /api/* aliases for the Netlify functions
+[[redirects]]
+  from = "/api/trinity-astro-odu"
+  to = "/.netlify/functions/trinity-astro-odu"
+  status = 200
+
+[[redirects]]
+  from = "/api/trinity-numerology"
+  to = "/.netlify/functions/trinity-numerology"
+  status = 200
+
+[[redirects]]
+  from = "/api/trinity-human-design"
+  to = "/.netlify/functions/trinity-human-design"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[functions]
+  node_bundler = "esbuild"

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ancestral Studies | NTAS98</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root{--gold:#C9A84C;--gold-light:#e8c96a;--purple:#6B3FA0;--purple-dark:#3b1f6e;--purple-mid:#8B5CC8;--blue-dark:#0d1b3e;--blue-glow:#4a9eff;--black:#06080d;--white:#f0eee8;--white-dim:rgba(240,238,232,0.75);}
+        *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+        body{background-color:var(--black);color:var(--white);font-family:'Cormorant Garamond',serif;overflow-x:hidden;}
+        .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden;}
+        .particle{position:absolute;border-radius:50%;animation:drift linear infinite;opacity:0;}
+        @keyframes drift{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:0.6;}100%{transform:translateY(-20px) scale(1);opacity:0;}}
+        nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:22px 50px;background:linear-gradient(to bottom,rgba(6,8,13,0.9),transparent);border-bottom:1px solid rgba(201,168,76,0.2);backdrop-filter:blur(4px);}
+        .logo{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--gold);letter-spacing:5px;text-shadow:0 0 25px rgba(201,168,76,0.6),0 0 50px rgba(107,63,160,0.4);text-decoration:none;}
+        nav ul{list-style:none;display:flex;gap:45px;}
+        nav ul li a{color:var(--white);text-decoration:none;letter-spacing:3px;font-size:0.75rem;text-transform:uppercase;font-weight:300;transition:color 0.3s,text-shadow 0.3s;}
+        nav ul li a:hover{color:var(--gold);text-shadow:0 0 15px rgba(201,168,76,0.7);}
+        nav ul li a.active{color:var(--gold);}
+        .page-hero{position:relative;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 40px 80px;overflow:hidden;}
+        .page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(107,63,160,0.3) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(74,158,255,0.1) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(201,168,76,0.08) 0%,transparent 50%),linear-gradient(160deg,#0a0612 0%,#06080d 60%);}
+        .page-hero-fade{position:absolute;bottom:0;left:0;right:0;height:150px;background:linear-gradient(to bottom,transparent,var(--black));}
+        .page-hero-eyebrow{font-size:0.6rem;letter-spacing:10px;text-transform:uppercase;color:var(--blue-glow);margin-bottom:20px;text-shadow:0 0 20px rgba(74,158,255,0.8);position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.2s;opacity:0;}
+        .page-hero h1{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,6vw,4.5rem);color:var(--white);letter-spacing:4px;margin-bottom:16px;text-shadow:0 0 40px rgba(107,63,160,0.5),0 2px 8px rgba(0,0,0,0.9);position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.4s;opacity:0;}
+        .page-hero h1 em{color:var(--gold);font-style:normal;}
+        .page-hero-sub{font-size:clamp(0.95rem,2vw,1.2rem);font-style:italic;font-weight:300;color:var(--white-dim);max-width:560px;line-height:2;position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.6s;opacity:0;}
+        .gold-line{width:200px;height:1px;background:linear-gradient(to right,transparent,var(--gold),var(--purple-mid),transparent);margin:20px auto;position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.5s;opacity:0;}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(25px);}to{opacity:1;transform:translateY(0);}}
+        .intro-section{padding:70px 40px;text-align:center;border-bottom:1px solid rgba(201,168,76,0.1);background:linear-gradient(135deg,rgba(59,31,110,0.08),rgba(13,27,62,0.12));}
+        .intro-section p{font-size:clamp(1rem,2.2vw,1.35rem);font-style:italic;font-weight:300;color:var(--white-dim);max-width:700px;margin:0 auto;line-height:2.1;}
+        .intro-section p span{color:var(--gold);font-style:normal;}
+        .section-label{font-size:0.6rem;letter-spacing:8px;text-transform:uppercase;color:var(--purple-mid);text-align:center;margin-bottom:14px;text-shadow:0 0 15px rgba(139,92,200,0.8);}
+        .section-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3vw,1.8rem);color:var(--white);letter-spacing:3px;text-align:center;margin-bottom:10px;}
+        .section-title span{color:var(--gold);}
+        #earn{padding:80px 40px;background:var(--black);}
+        .earn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:rgba(107,63,160,0.08);max-width:1000px;margin:50px auto 0;border:1px solid rgba(107,63,160,0.08);}
+        .earn-item{background:var(--black);padding:40px 28px;text-align:center;transition:background 0.3s;}
+        .earn-item:hover{background:rgba(59,31,110,0.1);}
+        .earn-icon{font-size:1.8rem;margin-bottom:16px;filter:drop-shadow(0 0 8px rgba(201,168,76,0.5));}
+        .earn-title{font-family:'Cinzel Decorative',serif;font-size:0.7rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px;text-transform:uppercase;}
+        .earn-desc{font-size:0.85rem;color:rgba(240,238,232,0.4);line-height:1.9;font-style:italic;}
+        #courses{padding:80px 40px;background:linear-gradient(135deg,rgba(59,31,110,0.06),rgba(6,8,13,0.98));}
+        .course-card{max-width:960px;margin:0 auto 60px;border:1px solid rgba(107,63,160,0.25);background:linear-gradient(160deg,rgba(59,31,110,0.1),rgba(6,8,13,0.97));position:relative;transition:border-color 0.4s,box-shadow 0.4s;}
+        .course-card:hover{border-color:rgba(201,168,76,0.35);box-shadow:0 20px 60px rgba(107,63,160,0.15);}
+        .course-card:last-child{margin-bottom:0;}
+        .course-number{position:absolute;top:-1px;left:-1px;background:var(--gold);color:var(--black);font-family:'Cinzel Decorative',serif;font-size:0.6rem;letter-spacing:3px;padding:6px 18px;text-transform:uppercase;}
+        .course-body{padding:60px 50px 50px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+        .course-tag{font-size:0.55rem;letter-spacing:6px;text-transform:uppercase;color:var(--purple-mid);margin-bottom:12px;text-shadow:0 0 15px rgba(139,92,200,0.6);}
+        .course-name{font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,2.5vw,1.5rem);color:var(--white);line-height:1.3;margin-bottom:16px;letter-spacing:2px;}
+        .course-name span{color:var(--gold);}
+        .course-desc{font-style:italic;font-size:0.95rem;color:var(--white-dim);line-height:2;margin-bottom:24px;}
+        .course-meta{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:28px;}
+        .course-meta-item{font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:rgba(240,238,232,0.35);border:1px solid rgba(201,168,76,0.15);padding:5px 14px;}
+        .course-meta-item span{color:var(--gold);}
+        .course-price{font-family:'Cinzel Decorative',serif;font-size:2.4rem;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,0.4);margin-bottom:6px;display:block;}
+        .course-price-note{font-size:0.62rem;letter-spacing:3px;color:rgba(240,238,232,0.3);text-transform:uppercase;margin-bottom:28px;display:block;}
+        .course-btn{display:inline-block;padding:14px 40px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.68rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;}
+        .course-btn:hover{color:var(--white);border-color:var(--purple-mid);background:rgba(107,63,160,0.3);box-shadow:0 0 30px rgba(107,63,160,0.4);}
+        .course-right h3{font-family:'Cinzel Decorative',serif;font-size:0.68rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:20px;}
+        .module-list{list-style:none;padding:0;margin-bottom:28px;}
+        .module-list li{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;font-size:0.88rem;color:var(--white-dim);line-height:1.7;font-style:italic;padding-bottom:16px;border-bottom:1px solid rgba(201,168,76,0.07);}
+        .module-list li:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+        .module-num{font-family:'Cinzel Decorative',serif;font-size:0.6rem;color:var(--gold);flex-shrink:0;margin-top:3px;opacity:0.7;}
+        .designation-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(201,168,76,0.3);padding:12px 20px;background:rgba(201,168,76,0.04);margin-bottom:24px;}
+        .designation-badge .badge-icon{font-size:1rem;}
+        .designation-badge .badge-text{font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);line-height:1.5;}
+        .designation-badge .badge-text span{display:block;color:rgba(240,238,232,0.4);font-size:0.55rem;letter-spacing:2px;}
+        #portal-promo{padding:80px 40px;background:var(--black);border-top:1px solid rgba(201,168,76,0.1);}
+        .promo-inner{max-width:780px;margin:0 auto;border:1px solid rgba(201,168,76,0.2);padding:50px;text-align:center;background:linear-gradient(135deg,rgba(59,31,110,0.1),rgba(13,27,62,0.15),rgba(6,8,13,0.9));position:relative;}
+        .promo-inner::before{content:'';position:absolute;inset:6px;border:1px solid rgba(201,168,76,0.06);pointer-events:none;}
+        .promo-star{font-size:1.1rem;color:var(--gold);opacity:0.6;display:block;margin-bottom:16px;text-shadow:0 0 20px rgba(201,168,76,0.8);}
+        .promo-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,3vw,1.5rem);color:var(--white);margin-bottom:12px;}
+        .promo-desc{font-style:italic;font-size:0.95rem;color:rgba(240,238,232,0.45);line-height:2;margin-bottom:28px;max-width:520px;margin-left:auto;margin-right:auto;}
+        .promo-prices{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:32px;}
+        .promo-price-item{text-align:center;}
+        .promo-price-item .original{font-size:0.75rem;color:rgba(240,238,232,0.25);text-decoration:line-through;display:block;letter-spacing:2px;margin-bottom:4px;}
+        .promo-price-item .discounted{font-family:'Cinzel Decorative',serif;font-size:1.4rem;color:var(--gold);}
+        .promo-price-item .tier-label{font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--purple-mid);display:block;margin-top:4px;}
+        .promo-btn{display:inline-block;padding:14px 44px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.68rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;}
+        .promo-btn:hover{color:var(--white);border-color:var(--purple-mid);background:rgba(107,63,160,0.3);box-shadow:0 0 30px rgba(107,63,160,0.4);}
+        #cta-bottom{padding:80px 40px;text-align:center;background:linear-gradient(135deg,rgba(59,31,110,0.12),rgba(13,27,62,0.15));border-top:1px solid rgba(201,168,76,0.1);}
+        .cta-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,3vw,1.7rem);color:var(--white);margin-bottom:14px;letter-spacing:3px;}
+        .cta-desc{font-style:italic;font-size:clamp(0.9rem,2vw,1.1rem);color:rgba(240,238,232,0.45);line-height:2;max-width:480px;margin:0 auto 36px;}
+        .btn-outline{display:inline-block;padding:16px 50px;border:1px solid rgba(139,92,200,0.4);color:var(--purple-mid);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.72rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;margin:6px;}
+        .btn-outline:hover{border-color:var(--purple-mid);background:rgba(107,63,200,0.2);color:var(--white);}
+        footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.18);padding:50px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;}
+        .footer-logo{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold);letter-spacing:5px;text-shadow:0 0 20px rgba(201,168,76,0.4);}
+        .footer-contact{text-align:center;font-size:0.85rem;color:rgba(240,238,232,0.45);line-height:2.2;letter-spacing:1px;}
+        .footer-contact a{color:var(--purple-mid);text-decoration:none;transition:color 0.3s;}
+        .footer-contact a:hover{color:var(--gold);}
+        .footer-right{text-align:right;font-size:0.62rem;color:rgba(240,238,232,0.22);letter-spacing:2px;line-height:2;}
+        ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--black);}::-webkit-scrollbar-thumb{background:var(--purple-dark);}::-webkit-scrollbar-thumb:hover{background:var(--gold);}
+        @media(max-width:768px){nav{padding:18px 24px;}nav ul{gap:20px;}.course-body{grid-template-columns:1fr;gap:40px;}}
+        @media(max-width:500px){nav ul{gap:12px;}nav ul li a{font-size:0.65rem;letter-spacing:1px;}}
+    </style>
+    
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav>
+    <a href="index.html" class="logo">NTAS98</a>
+    <ul>
+        <li><a href="courses.html" class="active">Ancestral Studies</a></li>
+        <li><a href="portal.html">The Root Portal</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="booking.html">Booking</a></li>
+        <li><a href="login.html" class="login-nav-link">Member Login</a></li>
+    </ul>
+</nav>
+<section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-fade"></div>
+    <div class="page-hero-eyebrow">NTAS98 · Sacred Knowledge</div>
+    <h1>Ancestral <em>Studies</em></h1>
+    <div class="gold-line"></div>
+    <p class="page-hero-sub">This is not a classroom.<br>This is a reclamation. Come learn what was always yours.</p>
+</section>
+<div class="intro-section">
+    <p>These courses were built from <span>ancestral wisdom, lived experience, and sacred science</span>. Every module is a step deeper into yourself. Every completion is a designation earned — not given. You do not just finish a course here. You become something.</p>
+</div>
+<section id="earn">
+    <div class="section-label">✦ &nbsp; Every Course Includes &nbsp; ✦</div>
+    <div class="section-title">What You <span>Earn</span></div>
+    <div class="earn-grid">
+        <div class="earn-item"><div class="earn-icon">📜</div><div class="earn-title">Certificate</div><div class="earn-desc">A branded NTAS98 certificate of completion — yours to keep, share, and display with pride.</div></div>
+        <div class="earn-item"><div class="earn-icon">🏷️</div><div class="earn-title">Designation</div><div class="earn-desc">A sacred title earned through completion. Not a label — a recognition of the work you put in.</div></div>
+        <div class="earn-item"><div class="earn-icon">🌿</div><div class="earn-title">Root Portal Access</div><div class="earn-desc">Graduates receive discounted access to The Root Portal — your personalized cosmic profile membership.</div></div>
+        <div class="earn-item"><div class="earn-icon">🔥</div><div class="earn-title">Transformation</div><div class="earn-desc">You will not leave the same. Every course is designed to shift something real inside of you.</div></div>
+    </div>
+</section>
+<section id="courses">
+    <div class="section-label">✦ &nbsp; Current Offerings &nbsp; ✦</div>
+    <div class="section-title">Choose Your <span>Path</span></div>
+
+    <div class="course-card" style="margin-top:50px;">
+        <div class="course-number">Course 01</div>
+        <div class="course-body">
+            <div class="course-left">
+                <div class="course-tag">Foundations · Self Paced</div>
+                <div class="course-name">Foundations of <span>Africana</span> Spiritual Traditions</div>
+                <p class="course-desc">A comprehensive journey through indigenous African spiritual systems and their living presence in the Diaspora today. Explore cosmology, ancestral veneration, ritual, and what it means to exist as a spirit being in a physical world.</p>
+                <div class="course-meta">
+                    <div class="course-meta-item"><span>4</span> Modules</div>
+                    <div class="course-meta-item"><span>Self</span> Paced</div>
+                    <div class="course-meta-item"><span>Lifetime</span> Access</div>
+                </div>
+                <span class="course-price">$111</span>
+                <span class="course-price-note">One Time · Lifetime Access</span>
+                <div class="designation-badge"><span class="badge-icon">✦</span><div class="badge-text">Rooted in Spirit<span>Designation Earned</span></div></div>
+                <a href="https://www.paypal.com/ncp/payment/993P2E9Q8J6WU" target="_blank" class="course-btn">Enroll Now</a>
+            </div>
+            <div class="course-right">
+                <h3>Course Modules</h3>
+                <ul class="module-list">
+                    <li><span class="module-num">01</span>African Cosmology and the Nature of Existence — Spirit as a unifying life force, the Creator, and the cyclical nature of time.</li>
+                    <li><span class="module-num">02</span>The Spiritual Hierarchy and Ancestral Traditions — Orisha, Nkisi, Neteru, and the role of Ancestors as guardians and guides.</li>
+                    <li><span class="module-num">03</span>Human Nature, Destiny, and Purpose — The person as spirit, the concept of Ayanmo, and divination as alignment.</li>
+                    <li><span class="module-num">04</span>Forms of Veneration and Rituals for Living — Prayer, libation, offerings, and communal practice in modern life.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="course-card">
+        <div class="course-number">Course 02</div>
+        <div class="course-body">
+            <div class="course-left">
+                <div class="course-tag">Sacred Science · Self Paced</div>
+                <div class="course-name">African Sacred Sciences — <span>Kemetic</span> Myth, Astronomy & Astrology</div>
+                <p class="course-desc">Explore the ancient African origins of science. From the mathematical bones of our ancestors to the sophisticated astronomical systems of Kemet — this course reclaims the stars as African inheritance and astrology as a tool for liberation.</p>
+                <div class="course-meta">
+                    <div class="course-meta-item"><span>4</span> Modules</div>
+                    <div class="course-meta-item"><span>Self</span> Paced</div>
+                    <div class="course-meta-item"><span>Lifetime</span> Access</div>
+                </div>
+                <span class="course-price">$133</span>
+                <span class="course-price-note">One Time · Lifetime Access</span>
+                <div class="designation-badge"><span class="badge-icon">✦</span><div class="badge-text">Keeper of the Stars<span>Designation Earned</span></div></div>
+                <a href="https://www.paypal.com/ncp/payment/993P2E9Q8J6WU" target="_blank" class="course-btn">Enroll Now</a>
+            </div>
+            <div class="course-right">
+                <h3>Course Modules</h3>
+                <ul class="module-list">
+                    <li><span class="module-num">01</span>The Antiquity of African Science — The Lebombo and Ishango bones and Kemet's scientific legacy.</li>
+                    <li><span class="module-num">02</span>Kemetic Astronomy and the Great Year — Precession of the Equinoxes and the Galactic Center's impact on human destiny.</li>
+                    <li><span class="module-num">03</span>Cosmological Continuity — From Kemet to the Akan: time, myth, and the person across traditions.</li>
+                    <li><span class="module-num">04</span>Astrology as a Tool for Liberation — Relocation theory and returning to ancestral sciences after the Maafa.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="course-card">
+        <div class="course-number">Course 03</div>
+        <div class="course-body">
+            <div class="course-left">
+                <div class="course-tag">Healing · Self Paced + Live Sessions</div>
+                <div class="course-name">Ritual, Healing & Cultural Recovery <span>in the Diaspora</span></div>
+                <p class="course-desc">This course is medicine. Rooted in the practical application of African spiritual technologies for healing — personally and collectively. Learn grief rituals, conflict resolution, cultural reclamation, and how to build sacred space in your everyday life.</p>
+                <div class="course-meta">
+                    <div class="course-meta-item"><span>4</span> Modules</div>
+                    <div class="course-meta-item"><span>Live</span> Sessions</div>
+                    <div class="course-meta-item"><span>Lifetime</span> Access</div>
+                </div>
+                <span class="course-price">$144</span>
+                <span class="course-price-note">One Time · Includes Live Sessions</span>
+                <div class="designation-badge"><span class="badge-icon">✦</span><div class="badge-text">The Healer<span>Designation Earned</span></div></div>
+                <a href="https://www.paypal.com/ncp/payment/993P2E9Q8J6WU" target="_blank" class="course-btn">Enroll Now</a>
+            </div>
+            <div class="course-right">
+                <h3>Course Modules</h3>
+                <ul class="module-list">
+                    <li><span class="module-num">01</span>Spiritual Technologies and Afrocentric Practice — Communicating with the invisible world to improve material life.</li>
+                    <li><span class="module-num">02</span>Dagara Rituals and Relationship Healing — Grief rituals, the clearing of the village, and conflict resolution through ceremony.</li>
+                    <li><span class="module-num">03</span>Multiple Religious Allegiance and Contemporary Folkways — Black women's religious coexistence and DIY ritual spaces.</li>
+                    <li><span class="module-num">04</span>The Repatriation of Souls — Art, masks, and cultural recovery as spiritual practice.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="course-card">
+        <div class="course-number">Course 04</div>
+        <div class="course-body">
+            <div class="course-left">
+                <div class="course-tag">Yoruba · Self Paced + Live Sessions</div>
+                <div class="course-name">Introduction to <span>Yoruba</span> Religious Concepts — Ifá & Orisha</div>
+                <p class="course-desc">A deep and sacred dive into the philosophical and religious framework of the Yoruba people. Explore the Orisha, the Ifá corpus, divination, manifestation through Ashe, and the internalization of Orisha energy as a path to elevation.</p>
+                <div class="course-meta">
+                    <div class="course-meta-item"><span>4</span> Modules</div>
+                    <div class="course-meta-item"><span>Live</span> Sessions</div>
+                    <div class="course-meta-item"><span>Lifetime</span> Access</div>
+                </div>
+                <span class="course-price">$177</span>
+                <span class="course-price-note">One Time · Includes Live Sessions</span>
+                <div class="designation-badge"><span class="badge-icon">✦</span><div class="badge-text">Omo Orisha<span>Designation Earned</span></div></div>
+                <a href="https://www.paypal.com/ncp/payment/993P2E9Q8J6WU" target="_blank" class="course-btn">Enroll Now</a>
+            </div>
+            <div class="course-right">
+                <h3>Course Modules</h3>
+                <ul class="module-list">
+                    <li><span class="module-num">01</span>The Yoruba Pantheon and Angelic Forces — Obatala, Elegba, Ogun, Yemoja, Oshun, Shango, and Oya explored in depth.</li>
+                    <li><span class="module-num">02</span>The Ifá Corpus and Esoteric Wisdom — Orunmila, the 16 Major Odu, and the moral teachings within the sacred text.</li>
+                    <li><span class="module-num">03</span>Divination and Manifestation — Ifá, Merindilogun, and Obi Abata as tools for self-knowledge and Ashe activation.</li>
+                    <li><span class="module-num">04</span>Ritual Internalization and Personal Growth — Spiritual baths, prayers, offerings, and mapping Orisha to the body and consciousness.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div style="padding:0 40px 20px;max-width:960px;margin:0 auto;">
+    <div style="border:1px solid rgba(201,168,76,0.2);padding:40px;text-align:center;background:linear-gradient(135deg,rgba(59,31,110,0.08),rgba(6,8,13,0.95));">
+        <div style="font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--white);margin-bottom:8px;letter-spacing:3px;">Enroll in a Course</div>
+        <p style="font-style:italic;font-size:0.88rem;color:rgba(240,238,232,0.4);line-height:1.9;margin-bottom:8px;max-width:520px;margin-left:auto;margin-right:auto;">Select your course above, complete payment, and your access code will be emailed to you within 24 hours.</p>
+        <p style="font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(240,238,232,0.25);margin-bottom:20px;">Include course name in order notes</p>
+        
+        <script>
+            
+        </script>
+        <div style="font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(240,238,232,0.2);margin-top:16px;">Secure checkout · PayPal & Venmo accepted</div>
+    </div>
+</div>
+
+<div style="padding:0 40px 40px;max-width:960px;margin:0 auto;">
+    <div style="border:1px solid rgba(201,168,76,0.2);padding:40px;text-align:center;background:linear-gradient(135deg,rgba(59,31,110,0.08),rgba(6,8,13,0.95));">
+        <div style="font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--white);margin-bottom:8px;letter-spacing:3px;">Enroll in a Course</div>
+        <p style="font-style:italic;font-size:0.88rem;color:rgba(240,238,232,0.4);line-height:1.9;margin-bottom:8px;max-width:520px;margin-left:auto;margin-right:auto;">Select your course above, complete payment, and your access code will be emailed within 24 hours.</p>
+        <p style="font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(240,238,232,0.25);margin-bottom:24px;">Include course name in order notes</p>
+        <a href="https://www.paypal.com/ncp/payment/993P2E9Q8J6WU" target="_blank" style="display:inline-block;padding:16px 50px;background:var(--gold);color:var(--black);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.75rem;font-family:'Cormorant Garamond',serif;font-weight:700;transition:all 0.3s;border:none;cursor:pointer;" onmouseover="this.style.background='#e8c96a'" onmouseout="this.style.background='#C9A84C'">✦ &nbsp; Enroll Now &nbsp; ✦</a>
+        <div style="font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(240,238,232,0.2);margin-top:16px;">Secure checkout · PayPal & Venmo accepted</div>
+    </div>
+</div>
+
+<section id="portal-promo">
+    <div class="promo-inner">
+        <span class="promo-star">✦</span>
+        <div class="promo-title">Course Graduates Get Discounted Portal Access</div>
+        <p class="promo-desc">Complete any course and unlock discounted membership to The Root Portal — your personalized cosmic profile including numerology, astrology, Human Design, Carto Astrology, and blood type nutrition.</p>
+        <div class="promo-prices">
+            <div class="promo-price-item"><span class="original">$7.77</span><span class="discounted">$5.55</span><span class="tier-label">Seed Tier</span></div>
+            <div class="promo-price-item"><span class="original">$14.14</span><span class="discounted">$11.11</span><span class="tier-label">Root Tier</span></div>
+        </div>
+        <a href="portal.html" class="promo-btn">Explore The Root Portal</a>
+    </div>
+</section>
+
+<section id="cta-bottom">
+    <div class="section-label">✦ &nbsp; Not Sure Where to Start? &nbsp; ✦</div>
+    <div class="cta-title">Every Path Leads to the Root</div>
+    <p class="cta-desc">Start wherever you are called. There is no wrong door. Every course will take you deeper into who you already are.</p>
+    <a href="booking.html" class="course-btn" style="margin:6px;">Book a Session First</a>
+    <a href="index.html" class="btn-outline">← Back to The Sanctuary</a>
+</section>
+
+<footer>
+    <div class="footer-logo">NTAS98</div>
+    <div class="footer-contact">
+        <p>janaeelorraine.com</p>
+        <p><a href="mailto:contact@janaeelorraine.com">contact@janaeelorraine.com</a></p>
+        <p style="font-size:0.68rem;letter-spacing:2px;color:rgba(240,238,232,0.25);">Diviner · Author · Artist · Practitioner</p>
+    </div>
+    <div class="footer-right"><p>© 2026 Janaee Lorraine</p><p>All rights reserved.</p></div>
+</footer>
+<script>
+    const container=document.getElementById('particles');const colors=['rgba(74,158,255,0.7)','rgba(107,63,160,0.6)','rgba(201,168,76,0.5)','rgba(139,92,200,0.6)','rgba(74,255,180,0.35)'];for(let i=0;i<45;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*4+1;p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 ${size*4}px ${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*12}s;`;container.appendChild(p);}
+</script>
+
+<script>
+
+</body>
+</html>

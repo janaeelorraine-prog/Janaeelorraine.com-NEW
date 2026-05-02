@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking | NTAS98</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root{--gold:#C9A84C;--gold-light:#e8c96a;--purple:#6B3FA0;--purple-dark:#3b1f6e;--purple-mid:#8B5CC8;--blue-dark:#0d1b3e;--blue-glow:#4a9eff;--black:#06080d;--white:#f0eee8;--white-dim:rgba(240,238,232,0.75);}
+        *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+        body{background-color:var(--black);color:var(--white);font-family:'Cormorant Garamond',serif;overflow-x:hidden;}
+        .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden;}
+        .particle{position:absolute;border-radius:50%;animation:drift linear infinite;opacity:0;}
+        @keyframes drift{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:0.6;}100%{transform:translateY(-20px) scale(1);opacity:0;}}
+        nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:22px 50px;background:linear-gradient(to bottom,rgba(6,8,13,0.9),transparent);border-bottom:1px solid rgba(201,168,76,0.2);backdrop-filter:blur(4px);}
+        .logo{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--gold);letter-spacing:5px;text-shadow:0 0 25px rgba(201,168,76,0.6),0 0 50px rgba(107,63,160,0.4);text-decoration:none;}
+        nav ul{list-style:none;display:flex;gap:45px;}
+        nav ul li a{color:var(--white);text-decoration:none;letter-spacing:3px;font-size:0.75rem;text-transform:uppercase;font-weight:300;transition:color 0.3s,text-shadow 0.3s;}
+        nav ul li a:hover{color:var(--gold);text-shadow:0 0 15px rgba(201,168,76,0.7);}
+        nav ul li a.active{color:var(--gold);}
+        .page-hero{position:relative;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 40px 80px;overflow:hidden;}
+        .page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(107,63,160,0.3) 0%,transparent 60%),radial-gradient(ellipse at 20% 70%,rgba(74,158,255,0.1) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(201,168,76,0.08) 0%,transparent 50%),linear-gradient(160deg,#0a0612 0%,#06080d 60%);}
+        .page-hero-fade{position:absolute;bottom:0;left:0;right:0;height:150px;background:linear-gradient(to bottom,transparent,var(--black));}
+        .page-hero-eyebrow{font-size:0.6rem;letter-spacing:10px;text-transform:uppercase;color:var(--blue-glow);margin-bottom:20px;text-shadow:0 0 20px rgba(74,158,255,0.8);position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.2s;opacity:0;}
+        .page-hero h1{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,6vw,4.5rem);color:var(--white);letter-spacing:4px;margin-bottom:16px;text-shadow:0 0 40px rgba(107,63,160,0.5),0 2px 8px rgba(0,0,0,0.9);position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.4s;opacity:0;}
+        .page-hero h1 em{color:var(--gold);font-style:normal;}
+        .page-hero-sub{font-size:clamp(0.95rem,2vw,1.2rem);font-style:italic;font-weight:300;color:var(--white-dim);max-width:480px;line-height:2;position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.6s;opacity:0;}
+        .gold-line{width:200px;height:1px;background:linear-gradient(to right,transparent,var(--gold),var(--purple-mid),transparent);margin:20px auto;position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.5s;opacity:0;}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(25px);}to{opacity:1;transform:translateY(0);}}
+        .intro-quote{padding:60px 40px;text-align:center;border-bottom:1px solid rgba(201,168,76,0.1);background:linear-gradient(135deg,rgba(59,31,110,0.08),rgba(13,27,62,0.12));}
+        .intro-quote blockquote{font-size:clamp(1rem,2.2vw,1.4rem);font-style:italic;font-weight:300;color:var(--white-dim);max-width:680px;margin:0 auto 16px;line-height:2;}
+        .intro-quote cite{font-size:0.62rem;letter-spacing:5px;text-transform:uppercase;color:var(--purple-mid);font-style:normal;}
+        .section-label{font-size:0.6rem;letter-spacing:8px;text-transform:uppercase;color:var(--purple-mid);text-align:center;margin-bottom:14px;text-shadow:0 0 15px rgba(139,92,200,0.8);}
+        .section-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3vw,1.8rem);color:var(--white);letter-spacing:3px;text-align:center;margin-bottom:10px;}
+        .section-title span{color:var(--gold);}
+        #services{padding:80px 40px 60px;background:var(--black);}
+        .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:rgba(107,63,160,0.1);max-width:1100px;margin:50px auto 0;border:1px solid rgba(107,63,160,0.1);}
+        .service-card{background:var(--black);padding:44px 36px;transition:background 0.3s;position:relative;overflow:hidden;}
+        .service-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:0;background:linear-gradient(to bottom,var(--gold),var(--purple-mid));transition:height 0.4s ease;}
+        .service-card:hover{background:rgba(59,31,110,0.08);}
+        .service-card:hover::before{height:100%;}
+        .service-icon{font-size:1.8rem;margin-bottom:20px;filter:drop-shadow(0 0 8px rgba(201,168,76,0.5));}
+        .service-tag{font-size:0.55rem;letter-spacing:5px;text-transform:uppercase;color:var(--purple-mid);margin-bottom:10px;}
+        .service-name{font-family:'Cinzel Decorative',serif;font-size:clamp(0.9rem,2vw,1.15rem);color:var(--gold);margin-bottom:8px;line-height:1.3;letter-spacing:2px;}
+        .service-duration{font-size:0.72rem;letter-spacing:3px;color:rgba(240,238,232,0.35);text-transform:uppercase;margin-bottom:16px;}
+        .service-desc{font-size:0.92rem;color:var(--white-dim);line-height:1.9;font-style:italic;margin-bottom:28px;}
+        .service-price{font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:var(--gold);text-shadow:0 0 15px rgba(201,168,76,0.3);margin-bottom:24px;}
+        .book-btn{display:inline-block;padding:13px 36px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;letter-spacing:3px;text-transform:uppercase;font-size:0.65rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;}
+        .book-btn:hover{color:var(--white);border-color:var(--purple-mid);background:rgba(107,63,160,0.3);box-shadow:0 0 30px rgba(107,63,160,0.4);}
+        #coaching{padding:80px 40px;background:linear-gradient(135deg,rgba(59,31,110,0.12),rgba(13,27,62,0.18),rgba(6,8,13,0.95));border-top:1px solid rgba(201,168,76,0.12);border-bottom:1px solid rgba(107,63,160,0.15);}
+        .coaching-inner{max-width:960px;margin:50px auto 0;border:1px solid rgba(201,168,76,0.2);position:relative;background:linear-gradient(160deg,rgba(59,31,110,0.1),rgba(6,8,13,0.9));}
+        .coaching-inner::before{content:'';position:absolute;inset:6px;border:1px solid rgba(201,168,76,0.07);pointer-events:none;}
+        .coaching-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--black);border:1px solid var(--gold);padding:6px 24px;font-family:'Cinzel Decorative',serif;font-size:0.6rem;letter-spacing:5px;color:var(--gold);text-transform:uppercase;white-space:nowrap;}
+        .coaching-body{padding:60px 50px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+        .coaching-left .coaching-tag{font-size:0.58rem;letter-spacing:6px;text-transform:uppercase;color:var(--purple-mid);margin-bottom:14px;text-shadow:0 0 15px rgba(139,92,200,0.6);}
+        .coaching-name{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3vw,1.9rem);color:var(--white);line-height:1.3;margin-bottom:16px;}
+        .coaching-name span{color:var(--gold);}
+        .coaching-desc{font-style:italic;font-size:1rem;color:var(--white-dim);line-height:2;margin-bottom:28px;}
+        .coaching-price-wrap{margin-bottom:28px;}
+        .coaching-price{font-family:'Cinzel Decorative',serif;font-size:2.8rem;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,0.4);display:block;}
+        .coaching-price-note{font-size:0.65rem;letter-spacing:3px;color:rgba(240,238,232,0.3);text-transform:uppercase;}
+        .coaching-cta{display:inline-block;padding:16px 50px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.72rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;}
+        .coaching-cta:hover{color:var(--white);border-color:var(--purple-mid);background:rgba(107,63,160,0.3);box-shadow:0 0 40px rgba(107,63,160,0.5);}
+        .coaching-includes h3{font-family:'Cinzel Decorative',serif;font-size:0.75rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:24px;}
+        .coaching-list{list-style:none;padding:0;}
+        .coaching-list li{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;font-size:0.92rem;color:var(--white-dim);line-height:1.7;font-style:italic;}
+        .coaching-list li::before{content:'✦';color:var(--gold);font-style:normal;font-size:0.65rem;margin-top:4px;flex-shrink:0;text-shadow:0 0 10px rgba(201,168,76,0.6);}
+        #expect{padding:80px 40px;background:var(--black);}
+        .expect-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:rgba(107,63,160,0.08);max-width:1000px;margin:50px auto 0;border:1px solid rgba(107,63,160,0.08);}
+        .expect-item{background:var(--black);padding:36px 28px;text-align:center;}
+        .expect-icon{font-size:1.6rem;margin-bottom:16px;filter:drop-shadow(0 0 8px rgba(201,168,76,0.5));}
+        .expect-title{font-family:'Cinzel Decorative',serif;font-size:0.7rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px;text-transform:uppercase;}
+        .expect-desc{font-size:0.85rem;color:rgba(240,238,232,0.4);line-height:1.9;font-style:italic;}
+        #cta-bottom{padding:80px 40px;text-align:center;background:linear-gradient(135deg,rgba(59,31,110,0.12),rgba(13,27,62,0.15));border-top:1px solid rgba(201,168,76,0.1);}
+        .cta-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,3vw,1.7rem);color:var(--white);margin-bottom:14px;letter-spacing:3px;}
+        .cta-desc{font-style:italic;font-size:clamp(0.9rem,2vw,1.1rem);color:rgba(240,238,232,0.45);line-height:2;max-width:480px;margin:0 auto 36px;}
+        .btn-outline{display:inline-block;padding:16px 50px;border:1px solid rgba(139,92,200,0.4);color:var(--purple-mid);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.72rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;margin:6px;}
+        .btn-outline:hover{border-color:var(--purple-mid);background:rgba(107,63,160,0.2);color:var(--white);}
+        footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.18);padding:50px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;}
+        .footer-logo{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold);letter-spacing:5px;text-shadow:0 0 20px rgba(201,168,76,0.4);}
+        .footer-contact{text-align:center;font-size:0.85rem;color:rgba(240,238,232,0.45);line-height:2.2;letter-spacing:1px;}
+        .footer-contact a{color:var(--purple-mid);text-decoration:none;transition:color 0.3s;}
+        .footer-contact a:hover{color:var(--gold);}
+        .footer-right{text-align:right;font-size:0.62rem;color:rgba(240,238,232,0.22);letter-spacing:2px;line-height:2;}
+        ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--black);}::-webkit-scrollbar-thumb{background:var(--purple-dark);}::-webkit-scrollbar-thumb:hover{background:var(--gold);}
+        @media(max-width:768px){nav{padding:18px 24px;}nav ul{gap:20px;}.coaching-body{grid-template-columns:1fr;gap:40px;}}
+        @media(max-width:500px){nav ul{gap:12px;}nav ul li a{font-size:0.65rem;letter-spacing:1px;}}
+    </style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav>
+    <a href="index.html" class="logo">NTAS98</a>
+    <ul>
+        <li><a href="courses.html">Ancestral Studies</a></li>
+        <li><a href="portal.html">The Root Portal</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="booking.html" class="active">Booking</a></li>
+        <li><a href="login.html" class="login-nav-link">Member Login</a></li>
+    </ul>
+</nav>
+<section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-fade"></div>
+    <div class="page-hero-eyebrow">Janaee Lorraine · NTAS98</div>
+    <h1>Book a <em>Session</em></h1>
+    <div class="gold-line"></div>
+    <p class="page-hero-sub">Every session is a sacred space.<br>Come as you are. Leave knowing more.</p>
+</section>
+<div class="intro-quote">
+    <blockquote>"Your answers already exist. The ancestors are already speaking.<br>I am simply the bridge."</blockquote>
+    <cite>— Janaee Lorraine</cite>
+</div>
+<section id="services">
+    <div class="section-label">✦ &nbsp; Available Sessions &nbsp; ✦</div>
+    <div class="section-title">Choose Your <span>Reading</span></div>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-icon">🃏</div>
+            <div class="service-tag">Tarot Reading</div>
+            <div class="service-name">Tarot — Any Topic</div>
+            <div class="service-duration">30 Minutes</div>
+            <div class="service-desc">A focused reading on whatever is weighing on your heart. Clarity, guidance, and truth — delivered through the cards.</div>
+            <div class="service-price">$55</div>
+            <a href="https://www.paypal.com/ncp/payment/LLFRNZ84Q4CH6" target="_blank" class="book-btn">Book Now</a>
+        </div>
+        <div class="service-card">
+            <div class="service-icon">🔮</div>
+            <div class="service-tag">Tarot Reading</div>
+            <div class="service-name">Tarot — Deep Dive</div>
+            <div class="service-duration">1 Hour</div>
+            <div class="service-desc">A full hour to explore any topic with depth and detail. Relationships, purpose, finances, spiritual path — nothing is off limits.</div>
+            <div class="service-price">$77</div>
+            <a href="https://www.paypal.com/ncp/payment/LLFRNZ84Q4CH6" target="_blank" class="book-btn">Book Now</a>
+        </div>
+        <div class="service-card">
+            <div class="service-icon">🕯️</div>
+            <div class="service-tag">Mediumship</div>
+            <div class="service-name">Ancestral Connection</div>
+            <div class="service-duration">1 Hour 45 Minutes</div>
+            <div class="service-desc">Direct communication with your ancestors and loved ones who have crossed over. A healing experience rooted in love, truth, and spiritual confirmation.</div>
+            <div class="service-price">$157</div>
+            <a href="https://www.paypal.com/ncp/payment/LLFRNZ84Q4CH6" target="_blank" class="book-btn">Book Now</a>
+        </div>
+        <div class="service-card">
+            <div class="service-icon">🤍</div>
+            <div class="service-tag">Support Session</div>
+            <div class="service-name">I Need a Friend</div>
+            <div class="service-duration">15 Minutes</div>
+            <div class="service-desc">Sometimes you just need someone to talk to — someone grounded, real, and spiritually attuned. No judgment. Just presence. Just support.</div>
+            <div class="service-price">$7</div>
+            <a href="https://www.paypal.com/ncp/payment/LLFRNZ84Q4CH6" target="_blank" class="book-btn">Book Now</a>
+        </div>
+    </div>
+</section>
+<section id="coaching">
+    <div class="section-label">✦ &nbsp; Signature Program &nbsp; ✦</div>
+    <div class="section-title">The <span>Ancestral Coaching</span> Experience</div>
+    <div class="coaching-inner">
+        <div class="coaching-badge">✦ Featured Offering ✦</div>
+        <div class="coaching-body">
+            <div class="coaching-left">
+                <div class="coaching-tag">6 Month Immersive Program</div>
+                <div class="coaching-name">Rooted in the <span>Bloodline</span></div>
+                <p class="coaching-desc">This is not a course. This is a covenant. A six-month journey back to your lineage — back to who you were before the world told you who to be. We work with your DNA, your ancestors, and your living self to create lasting transformation from the root up.</p>
+                <div class="coaching-price-wrap">
+                    <span class="coaching-price">$555</span>
+                    <span class="coaching-price-note">Full Program · 6 Months</span>
+                </div>
+                <a href="https://www.paypal.com/ncp/payment/LLFRNZ84Q4CH6" target="_blank" class="coaching-cta">Apply to Work Together</a>
+            </div>
+            <div class="coaching-includes">
+                <h3>What's Included</h3>
+                <ul class="coaching-list">
+                    <li>Ancestry DNA analysis and ancestral lineage mapping to understand where you come from</li>
+                    <li>Opening mediumship session — direct connection with your ancestors at the start of the journey</li>
+                    <li>Closing mediumship session — sealing the work and receiving ancestral confirmation at completion</li>
+                    <li>Customized journaling app built specifically for your healing process and spiritual tracking</li>
+                    <li>Direct readings throughout the program — tarot, oracle, and intuitive guidance as needed</li>
+                    <li>Personalized offering schedule — rituals, ceremonies, and ancestral practices rooted in your lineage</li>
+                    <li>Ongoing support and direct access to Janaee for the full six months</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="expect">
+    <div class="section-label">✦ &nbsp; Before You Book &nbsp; ✦</div>
+    <div class="section-title">What to <span>Expect</span></div>
+    <div class="expect-grid">
+        <div class="expect-item">
+            <div class="expect-icon">🌿</div>
+            <div class="expect-title">Come Open</div>
+            <div class="expect-desc">No preparation needed. Just an open heart and the willingness to receive what comes through.</div>
+        </div>
+        <div class="expect-item">
+            <div class="expect-icon">🔒</div>
+            <div class="expect-title">Confidential</div>
+            <div class="expect-desc">Every session is a sacred space. What is shared in session stays in session — always.</div>
+        </div>
+        <div class="expect-item">
+            <div class="expect-icon">⏰</div>
+            <div class="expect-title">Be On Time</div>
+            <div class="expect-desc">Sessions begin and end on schedule. Late arrivals will receive the remaining time of their session.</div>
+        </div>
+        <div class="expect-item">
+            <div class="expect-icon">💫</div>
+            <div class="expect-title">Trust the Process</div>
+            <div class="expect-desc">The ancestors speak in their own way. Come with questions, but be open to receiving what you need — not just what you asked for.</div>
+        </div>
+    </div>
+</section>
+<section id="cta-bottom">
+    <div class="section-label">✦ &nbsp; Not Sure Where to Start? &nbsp; ✦</div>
+    <div class="cta-title">Let's Find the Right Session</div>
+    <p class="cta-desc">Send a message and Janaee will help you find the best fit for where you are right now.</p>
+    <a href="mailto:contact@janaeelorraine.com" class="coaching-cta">Send a Message</a>
+    <a href="index.html" class="btn-outline">← Back to The Sanctuary</a>
+</section>
+<footer>
+    <div class="footer-logo">NTAS98</div>
+    <div class="footer-contact">
+        <p>janaeelorraine.com</p>
+        <p><a href="mailto:contact@janaeelorraine.com">contact@janaeelorraine.com</a></p>
+        <p style="font-size:0.68rem;letter-spacing:2px;color:rgba(240,238,232,0.25);">Diviner · Author · Artist · Practitioner</p>
+    </div>
+    <div class="footer-right"><p>© 2026 Janaee Lorraine</p><p>All rights reserved.</p></div>
+</footer>
+<script>
+    const container = document.getElementById('particles');
+    const colors = ['rgba(74,158,255,0.7)','rgba(107,63,160,0.6)','rgba(201,168,76,0.5)','rgba(139,92,200,0.6)','rgba(74,255,180,0.35)'];
+    for(let i=0;i<45;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*4+1;p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 ${size*4}px ${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*12}s;`;container.appendChild(p);}
+</script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NTAS98 Backend — Delivery Package</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080d; --gold: #C9A84C; --gold-dim: rgba(201,168,76,0.25);
+  --gold-glow: rgba(201,168,76,0.08); --white: #f0eee8;
+  --muted: rgba(240,238,232,0.5); --border: rgba(201,168,76,0.12);
+  --card: rgba(255,255,255,0.025);
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--white); font-family: 'Cormorant Garamond', serif; }
+
+/* ── Top chrome ───────────────────────── */
+.topbar {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 28px; background:rgba(6,8,13,0.96);
+  border-bottom:1px solid var(--border); backdrop-filter:blur(12px);
+}
+.brand { font-family:'Cinzel Decorative',serif; font-size:14px; color:var(--gold); letter-spacing:4px; }
+.brand small { color:var(--muted); font-family:'Cormorant Garamond',serif; letter-spacing:2px; font-size:10px; margin-left:14px; }
+.tab-row { display:flex; gap:0; }
+.tab-btn {
+  background:none; border:1px solid var(--border); border-right:none;
+  color:var(--muted); padding:8px 18px;
+  font-family:'Cormorant Garamond',serif; font-size:11px;
+  letter-spacing:3px; text-transform:uppercase; cursor:pointer;
+  transition:all 0.2s;
+}
+.tab-btn:last-child { border-right:1px solid var(--border); }
+.tab-btn.active { color:var(--gold); background:var(--gold-glow); border-color:var(--gold-dim); }
+.tab-btn:hover:not(.active) { color:var(--white); }
+
+.wrap { padding:80px 40px 80px; max-width:1300px; margin:0 auto; }
+
+/* ── Intro tab ─────────────────────────── */
+.hero-eyebrow { font-size:11px; letter-spacing:6px; color:var(--gold); text-transform:uppercase; margin-bottom:14px; opacity:0.75; }
+.hero-title { font-family:'Cinzel Decorative',serif; font-size:clamp(30px,4.5vw,48px); letter-spacing:2px; margin-bottom:18px; line-height:1.15; }
+.hero-sub { font-size:18px; color:var(--muted); line-height:1.7; max-width:680px; font-style:italic; margin-bottom:48px; }
+
+.grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin-bottom:50px; }
+.deliverable {
+  border:1px solid var(--border); background:var(--card);
+  padding:28px 26px; position:relative;
+}
+.deliverable-num { font-family:'Cinzel Decorative',serif; color:var(--gold); font-size:22px; margin-bottom:10px; }
+.deliverable-name { font-family:'Cinzel Decorative',serif; font-size:16px; letter-spacing:2px; margin-bottom:10px; }
+.deliverable-desc { font-size:15px; color:var(--muted); line-height:1.7; margin-bottom:18px; }
+.file-chip { display:inline-block; font-family:var(--mono); font-size:11px; color:var(--gold); background:rgba(201,168,76,0.05); border:1px solid var(--gold-dim); padding:4px 10px; margin:2px 4px 2px 0; }
+
+.endpoints {
+  border:1px solid var(--border); background:var(--card);
+  padding:32px; margin-bottom:50px;
+}
+.endpoints h3 { font-family:'Cinzel Decorative',serif; font-size:16px; letter-spacing:3px; color:var(--gold); margin-bottom:22px; text-transform:uppercase; }
+.ep-row { display:grid; grid-template-columns:auto 1fr auto; gap:18px; align-items:center; padding:12px 0; border-bottom:1px solid rgba(201,168,76,0.06); }
+.ep-row:last-child { border-bottom:none; }
+.ep-method { font-family:var(--mono); font-size:11px; color:var(--gold); letter-spacing:1px; padding:3px 8px; border:1px solid var(--gold-dim); }
+.ep-path { font-family:var(--mono); font-size:13px; color:var(--white); }
+.ep-desc { color:var(--muted); font-size:14px; text-align:right; }
+
+.flow-diagram {
+  border:1px solid var(--border); background:var(--card);
+  padding:32px; font-family:var(--mono); font-size:12px; line-height:2;
+  color:var(--muted); white-space:pre; overflow-x:auto;
+}
+.flow-diagram b { color:var(--gold); font-weight:500; }
+.flow-diagram em { color:var(--white); font-style:normal; }
+
+/* ── Preview tabs (iframes) ────────────── */
+.preview-toolbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 18px; background:rgba(255,255,255,0.015);
+  border:1px solid var(--border); border-bottom:none;
+  font-family:var(--mono); font-size:11px; color:var(--muted);
+}
+.preview-toolbar .dots { display:flex; gap:6px; }
+.preview-toolbar .dots span { width:10px; height:10px; border-radius:50%; background:rgba(240,238,232,0.12); }
+.preview-toolbar .url { color:var(--gold); letter-spacing:1px; }
+.preview-toolbar .persona { color:var(--white); letter-spacing:1px; }
+.preview-frame {
+  width:100%; height:780px;
+  border:1px solid var(--border); background:var(--bg);
+}
+
+/* ── Persona switcher ──────────────────── */
+.persona-bar {
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  padding:16px 20px; margin-bottom:14px;
+  border:1px solid var(--border); background:var(--card);
+}
+.persona-bar span.label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); opacity:0.7; margin-right:8px; }
+.persona-btn {
+  padding:7px 14px; background:transparent; border:1px solid var(--border);
+  color:var(--muted); font-family:'Cormorant Garamond',serif; font-size:13px;
+  letter-spacing:1px; cursor:pointer; transition:all 0.2s;
+}
+.persona-btn.active { color:var(--gold); border-color:var(--gold-dim); background:var(--gold-glow); }
+.persona-btn:hover:not(.active) { color:var(--white); }
+.persona-hint { font-size:13px; color:var(--muted); font-style:italic; margin-left:auto; }
+
+/* ── Mock notice ───────────────────────── */
+.mock-notice {
+  padding:12px 18px; border:1px solid rgba(74,158,255,0.25);
+  background:rgba(74,158,255,0.04); color:#8ec3ff;
+  font-size:13px; line-height:1.6; margin-bottom:14px;
+}
+.mock-notice b { color:var(--white); font-weight:500; }
+
+.hide { display:none !important; }
+@media (max-width:720px) {
+  .wrap { padding:80px 20px 60px; }
+  .topbar { padding:12px 16px; flex-wrap:wrap; gap:10px; }
+  .tab-btn { padding:6px 10px; font-size:10px; letter-spacing:1.5px; }
+  .preview-frame { height:640px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">NTAS98<small>Backend Delivery Package</small></div>
+  <div class="tab-row">
+    <button class="tab-btn active" data-tab="intro">Overview</button>
+    <button class="tab-btn" data-tab="login">Login</button>
+    <button class="tab-btn" data-tab="portal">Member Portal</button>
+    <button class="tab-btn" data-tab="admin">Admin</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ═══════════ INTRO ═══════════ -->
+  <section id="tab-intro">
+    <div class="hero-eyebrow">Delivery · April 2026</div>
+    <h1 class="hero-title">Backend for The Root Portal</h1>
+    <p class="hero-sub">
+      Eight Netlify Functions, a full Supabase schema, an admin dashboard, and an updated member portal that treats the database as source of truth. Everything below works end-to-end once deployed. Use the tabs above to click through the flow.
+    </p>
+
+    <div class="grid-3">
+      <div class="deliverable">
+        <div class="deliverable-num">01</div>
+        <div class="deliverable-name">Database schema</div>
+        <div class="deliverable-desc">Four tables with constraints, triggers, RLS, and seeded access codes. One SQL file, run once.</div>
+        <span class="file-chip">supabase/schema.sql</span>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-num">02</div>
+        <div class="deliverable-name">Eight Netlify Functions</div>
+        <div class="deliverable-desc">Auth, blueprint generation, profile sync, course progress, and two admin endpoints — all gated properly.</div>
+        <span class="file-chip">netlify/functions/*.js</span>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-num">03</div>
+        <div class="deliverable-name">Admin dashboard</div>
+        <div class="deliverable-desc">Members, tiers, access codes, and a detail drawer showing each member's full blueprint.</div>
+        <span class="file-chip">admin.html</span>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-num">04</div>
+        <div class="deliverable-name">Updated member portal</div>
+        <div class="deliverable-desc">Supabase is now source of truth. Cached in localStorage for instant paint, but overridden by the DB on every load.</div>
+        <span class="file-chip">portal-member.html</span>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-num">05</div>
+        <div class="deliverable-name">Deployment README</div>
+        <div class="deliverable-desc">Step-by-step: Supabase setup, env vars, admin bootstrap, access code management, security notes.</div>
+        <span class="file-chip">README.md</span>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-num">06</div>
+        <div class="deliverable-name">This clickable preview</div>
+        <div class="deliverable-desc">A mocked version of the three main screens so you can feel the flow before deploying.</div>
+        <span class="file-chip">preview.html</span>
+      </div>
+    </div>
+
+    <div class="endpoints">
+      <h3>API surface</h3>
+      <div class="ep-row"><div class="ep-method">POST</div><div class="ep-path">/.netlify/functions/auth-register</div><div class="ep-desc">create account + validate access code</div></div>
+      <div class="ep-row"><div class="ep-method">POST</div><div class="ep-path">/.netlify/functions/auth-login</div><div class="ep-desc">email + password, returns user</div></div>
+      <div class="ep-row"><div class="ep-method">POST</div><div class="ep-path">/.netlify/functions/get-profile</div><div class="ep-desc">load saved cosmic profile from DB</div></div>
+      <div class="ep-row"><div class="ep-method">POST</div><div class="ep-path">/.netlify/functions/generate-blueprint</div><div class="ep-desc">Claude-generated reading, saved to Supabase</div></div>
+      <div class="ep-row"><div class="ep-method">POST</div><div class="ep-path">/.netlify/functions/course-progress</div><div class="ep-desc">load / save lesson completion</div></div>
+      <div class="ep-row"><div class="ep-method">POST</div><div class="ep-path">/.netlify/functions/admin-data</div><div class="ep-desc">members + codes list (admin-gated)</div></div>
+      <div class="ep-row"><div class="ep-method">POST</div><div class="ep-path">/.netlify/functions/admin-member-detail</div><div class="ep-desc">full blueprint for one member</div></div>
+    </div>
+
+    <h3 style="font-family:'Cinzel Decorative',serif; font-size:16px; letter-spacing:3px; color:var(--gold); margin:40px 0 16px; text-transform:uppercase;">Portal load flow</h3>
+    <div class="flow-diagram"><b>portal-member.html</b> loads
+  │
+  ├─ <em>1. Paint chrome from localStorage cache</em>         (instant)
+  ├─ <em>2. Show cached blueprint if present</em>             (optimistic)
+  └─ <em>3. fetch() → get-profile → Supabase</em>             (truth)
+         │
+         └─ if DB has a blueprint → <b>overwrite cache</b>, re-render
+         └─ if DB has nothing     → leave cached view as-is
+
+<b>User submits questionnaire</b>
+  │
+  └─ fetch() → generate-blueprint (with <b>userEmail</b>)
+         │
+         ├─ Claude generates in Janaee's voice
+         ├─ upsert into <b>profiles</b> table
+         └─ return JSON → render + cache locally
+</div>
+  </section>
+
+  <!-- ═══════════ LOGIN PREVIEW ═══════════ -->
+  <section id="tab-login" class="hide">
+    <div class="mock-notice">
+      <b>This is the real login UI</b> — wired to mock auth in the iframe below. Try <span style="font-family:var(--mono);color:var(--gold)">root@demo.com / password</span> or <span style="font-family:var(--mono);color:var(--gold)">seed@demo.com / password</span>, or register with code <span style="font-family:var(--mono);color:var(--gold)">SEED777</span> or <span style="font-family:var(--mono);color:var(--gold)">ROOT1414</span>.
+    </div>
+    <div class="preview-toolbar">
+      <span class="dots"><span></span><span></span><span></span></span>
+      <span class="url">janaeelorraine.com/login.html</span>
+      <span class="persona">mock backend</span>
+    </div>
+    <iframe class="preview-frame" src="mock-login.html"></iframe>
+  </section>
+
+  <!-- ═══════════ PORTAL PREVIEW ═══════════ -->
+  <section id="tab-portal" class="hide">
+    <div class="persona-bar">
+      <span class="label">View as</span>
+      <button class="persona-btn active" data-persona="root-generated">Root · blueprint ready</button>
+      <button class="persona-btn" data-persona="root-empty">Root · first time</button>
+      <button class="persona-btn" data-persona="seed-generated">Seed · blueprint ready</button>
+      <span class="persona-hint">Click a persona to swap — simulates what each member sees</span>
+    </div>
+    <div class="preview-toolbar">
+      <span class="dots"><span></span><span></span><span></span></span>
+      <span class="url">janaeelorraine.com/portal-member.html</span>
+      <span class="persona" id="portal-persona-label">root@demo.com</span>
+    </div>
+    <iframe class="preview-frame" id="portal-frame" src="mock-portal-member.html?persona=root-generated"></iframe>
+  </section>
+
+  <!-- ═══════════ ADMIN PREVIEW ═══════════ -->
+  <section id="tab-admin" class="hide">
+    <div class="mock-notice">
+      <b>Admin dashboard</b> — sign in with <span style="font-family:var(--mono);color:var(--gold)">admin@demo.com / password</span>. Click any member row to open the detail drawer with their full blueprint.
+    </div>
+    <div class="preview-toolbar">
+      <span class="dots"><span></span><span></span><span></span></span>
+      <span class="url">janaeelorraine.com/admin.html</span>
+      <span class="persona">admin session</span>
+    </div>
+    <iframe class="preview-frame" src="mock-admin.html"></iframe>
+  </section>
+
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    ['intro','login','portal','admin'].forEach(t => {
+      document.getElementById('tab-' + t).classList.toggle('hide', t !== tab);
+    });
+  });
+});
+
+// Persona switcher for portal tab
+document.querySelectorAll('.persona-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.persona-btn').forEach(b => b.classList.toggle('active', b === btn));
+    const persona = btn.dataset.persona;
+    document.getElementById('portal-frame').src = 'mock-portal-member.html?persona=' + persona;
+    const labels = {
+      'root-generated': 'root@demo.com · Root tier',
+      'root-empty':     'new-root@demo.com · Root · no blueprint',
+      'seed-generated': 'seed@demo.com · Seed tier'
+    };
+    document.getElementById('portal-persona-label').textContent = labels[persona] || persona;
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sacred Library | NTAS98</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root{--gold:#C9A84C;--gold-light:#e8c96a;--purple:#6B3FA0;--purple-dark:#3b1f6e;--purple-mid:#8B5CC8;--blue-dark:#0d1b3e;--blue-glow:#4a9eff;--black:#06080d;--white:#f0eee8;--white-dim:rgba(240,238,232,0.75);}
+        *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+        body{background-color:var(--black);color:var(--white);font-family:'Cormorant Garamond',serif;overflow-x:hidden;}
+        .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden;}
+        .particle{position:absolute;border-radius:50%;animation:drift linear infinite;opacity:0;}
+        @keyframes drift{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:0.6;}100%{transform:translateY(-20px) scale(1);opacity:0;}}
+        nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:22px 50px;background:linear-gradient(to bottom,rgba(6,8,13,0.9),transparent);border-bottom:1px solid rgba(201,168,76,0.2);backdrop-filter:blur(4px);}
+        .logo{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--gold);letter-spacing:5px;text-shadow:0 0 25px rgba(201,168,76,0.6),0 0 50px rgba(107,63,160,0.4);text-decoration:none;}
+        nav ul{list-style:none;display:flex;gap:45px;}
+        nav ul li a{color:var(--white);text-decoration:none;letter-spacing:3px;font-size:0.75rem;text-transform:uppercase;font-weight:300;transition:color 0.3s,text-shadow 0.3s;}
+        nav ul li a:hover{color:var(--gold);text-shadow:0 0 15px rgba(201,168,76,0.7);}
+        nav ul li a.active{color:var(--gold);}
+        .page-hero{position:relative;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 40px 80px;overflow:hidden;}
+        .page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(107,63,160,0.35) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(74,158,255,0.1) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(201,168,76,0.1) 0%,transparent 50%),linear-gradient(160deg,#0a0612 0%,#06080d 60%);}
+        .page-hero-fade{position:absolute;bottom:0;left:0;right:0;height:150px;background:linear-gradient(to bottom,transparent,var(--black));}
+        .page-hero-eyebrow{font-size:0.6rem;letter-spacing:10px;text-transform:uppercase;color:var(--blue-glow);margin-bottom:20px;text-shadow:0 0 20px rgba(74,158,255,0.8);position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.2s;opacity:0;}
+        .page-hero h1{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,6vw,4.5rem);color:var(--white);letter-spacing:4px;margin-bottom:16px;text-shadow:0 0 40px rgba(107,63,160,0.5),0 2px 8px rgba(0,0,0,0.9);position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.4s;opacity:0;}
+        .page-hero h1 em{color:var(--gold);font-style:normal;}
+        .page-hero-sub{font-size:clamp(0.95rem,2vw,1.2rem);font-style:italic;font-weight:300;color:var(--white-dim);max-width:560px;line-height:2;position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.6s;opacity:0;}
+        .gold-line{width:200px;height:1px;background:linear-gradient(to right,transparent,var(--gold),var(--purple-mid),transparent);margin:20px auto;position:relative;z-index:2;animation:fadeUp 1s ease forwards 0.5s;opacity:0;}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(25px);}to{opacity:1;transform:translateY(0);}}
+        .intro-section{padding:60px 40px;text-align:center;border-bottom:1px solid rgba(201,168,76,0.1);background:linear-gradient(135deg,rgba(59,31,110,0.08),rgba(13,27,62,0.12));}
+        .intro-section p{font-size:clamp(1rem,2.2vw,1.3rem);font-style:italic;font-weight:300;color:var(--white-dim);max-width:680px;margin:0 auto;line-height:2.1;}
+        .intro-section p span{color:var(--gold);font-style:normal;}
+        .section-label{font-size:0.6rem;letter-spacing:8px;text-transform:uppercase;color:var(--purple-mid);text-align:center;margin-bottom:14px;text-shadow:0 0 15px rgba(139,92,200,0.8);}
+        .section-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,3vw,1.8rem);color:var(--white);letter-spacing:3px;text-align:center;margin-bottom:10px;}
+        .section-title span{color:var(--gold);}
+
+        /* PERSONALIZED BOOKS */
+        #personalized{padding:80px 40px;background:var(--black);}
+        .book-card{max-width:960px;margin:0 auto 60px;border:1px solid rgba(107,63,160,0.25);background:linear-gradient(160deg,rgba(59,31,110,0.1),rgba(6,8,13,0.97));position:relative;transition:border-color 0.4s,box-shadow 0.4s;}
+        .book-card:hover{border-color:rgba(201,168,76,0.35);box-shadow:0 20px 60px rgba(107,63,160,0.15);}
+        .book-card:last-of-type{margin-bottom:0;}
+        .book-type-tag{position:absolute;top:-1px;left:-1px;background:var(--gold);color:var(--black);font-family:'Cinzel Decorative',serif;font-size:0.6rem;letter-spacing:3px;padding:6px 18px;text-transform:uppercase;}
+        .book-body{padding:60px 50px 50px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+        .book-tag{font-size:0.55rem;letter-spacing:6px;text-transform:uppercase;color:var(--purple-mid);margin-bottom:12px;text-shadow:0 0 15px rgba(139,92,200,0.6);}
+        .book-name{font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,2.5vw,1.6rem);color:var(--white);line-height:1.3;margin-bottom:8px;letter-spacing:2px;}
+        .book-name span{color:var(--gold);}
+        .book-subtitle{font-style:italic;font-size:0.9rem;color:rgba(240,238,232,0.4);margin-bottom:20px;letter-spacing:2px;}
+        .book-desc{font-style:italic;font-size:0.95rem;color:var(--white-dim);line-height:2;margin-bottom:24px;}
+        .book-price{font-family:'Cinzel Decorative',serif;font-size:2.4rem;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,0.4);margin-bottom:6px;display:block;}
+        .book-turnaround{font-size:0.62rem;letter-spacing:3px;color:rgba(240,238,232,0.3);text-transform:uppercase;margin-bottom:28px;display:block;}
+        .book-btn{display:inline-block;padding:14px 40px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.68rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;}
+        .book-btn:hover{color:var(--white);border-color:var(--purple-mid);background:rgba(107,63,160,0.3);box-shadow:0 0 30px rgba(107,63,160,0.4);}
+        .book-right h3{font-family:'Cinzel Decorative',serif;font-size:0.68rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:20px;}
+        .info-list{list-style:none;padding:0;margin-bottom:28px;}
+        .info-list li{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;font-size:0.88rem;color:var(--white-dim);line-height:1.7;font-style:italic;padding-bottom:14px;border-bottom:1px solid rgba(201,168,76,0.07);}
+        .info-list li:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+        .info-list li::before{content:'✦';color:var(--gold);font-style:normal;font-size:0.6rem;margin-top:3px;flex-shrink:0;text-shadow:0 0 8px rgba(201,168,76,0.6);}
+        .info-needed{border:1px solid rgba(201,168,76,0.2);padding:20px 24px;background:rgba(201,168,76,0.03);margin-top:20px;}
+        .info-needed-title{font-family:'Cinzel Decorative',serif;font-size:0.6rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
+        .info-needed p{font-size:0.82rem;color:rgba(240,238,232,0.4);line-height:1.9;font-style:italic;}
+
+        /* INSTANT DOWNLOAD */
+        #downloads{padding:80px 40px;background:linear-gradient(135deg,rgba(59,31,110,0.08),rgba(13,27,62,0.12));border-top:1px solid rgba(201,168,76,0.1);}
+        .downloads-grid{display:flex;justify-content:center;flex-wrap:wrap;gap:28px;max-width:1100px;margin:50px auto 0;}
+        .download-card{width:320px;border:1px solid rgba(107,63,160,0.25);background:linear-gradient(160deg,rgba(59,31,110,0.12),rgba(6,8,13,0.97));transition:transform 0.4s,box-shadow 0.4s,border-color 0.4s;position:relative;}
+        .download-card:hover{transform:translateY(-10px);box-shadow:0 25px 60px rgba(107,63,160,0.25);border-color:rgba(201,168,76,0.4);}
+        .download-badge{position:absolute;top:14px;right:14px;font-size:0.5rem;letter-spacing:3px;text-transform:uppercase;padding:5px 12px;border:1px solid rgba(74,158,255,0.5);background:rgba(6,8,13,0.75);color:var(--blue-glow);backdrop-filter:blur(4px);}
+        .download-img{height:220px;background:linear-gradient(135deg,rgba(59,31,110,0.3),rgba(13,27,62,0.4));display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(107,63,160,0.2);position:relative;overflow:hidden;}
+        .download-img-icon{font-size:4rem;filter:drop-shadow(0 0 20px rgba(201,168,76,0.6));}
+        .download-img-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(107,63,160,0.2) 0%,transparent 70%);}
+        .download-body{padding:28px 26px 32px;}
+        .download-tag{font-size:0.55rem;letter-spacing:5px;text-transform:uppercase;color:var(--purple-mid);margin-bottom:8px;}
+        .download-name{font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--gold);letter-spacing:2px;margin-bottom:6px;line-height:1.3;}
+        .download-type{font-style:italic;font-size:0.82rem;color:rgba(240,238,232,0.35);margin-bottom:14px;}
+        .download-desc{font-size:0.88rem;color:var(--white-dim);line-height:1.9;font-style:italic;margin-bottom:20px;}
+        .download-price{font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:var(--gold);text-shadow:0 0 15px rgba(201,168,76,0.3);margin-bottom:20px;display:block;}
+        .download-btn{display:block;width:100%;padding:13px 20px;text-align:center;border:1px solid var(--gold);color:var(--gold);text-decoration:none;letter-spacing:3px;text-transform:uppercase;font-size:0.65rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;}
+        .download-btn:hover{color:var(--white);border-color:var(--purple-mid);background:rgba(107,63,160,0.3);box-shadow:0 0 25px rgba(107,63,160,0.4);}
+
+        /* COMING SOON */
+        .coming-soon-wrap{max-width:780px;margin:60px auto 0;border:1px solid rgba(107,63,160,0.2);padding:40px;text-align:center;background:rgba(59,31,110,0.05);}
+        .coming-soon-title{font-family:'Cinzel Decorative',serif;font-size:clamp(0.9rem,2vw,1.2rem);color:rgba(240,238,232,0.4);letter-spacing:3px;margin-bottom:10px;}
+        .coming-soon-desc{font-style:italic;font-size:0.88rem;color:rgba(240,238,232,0.25);line-height:1.9;}
+
+        /* CTA */
+        #cta-bottom{padding:80px 40px;text-align:center;background:var(--black);border-top:1px solid rgba(201,168,76,0.1);}
+        .cta-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,3vw,1.7rem);color:var(--white);margin-bottom:14px;letter-spacing:3px;}
+        .cta-desc{font-style:italic;font-size:clamp(0.9rem,2vw,1.1rem);color:rgba(240,238,232,0.45);line-height:2;max-width:480px;margin:0 auto 36px;}
+        .btn-gold{display:inline-block;padding:16px 50px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.72rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;margin:6px;}
+        .btn-gold:hover{color:var(--white);border-color:var(--purple-mid);background:rgba(107,63,160,0.3);box-shadow:0 0 40px rgba(107,63,160,0.5);}
+        .btn-outline{display:inline-block;padding:16px 50px;border:1px solid rgba(139,92,200,0.4);color:var(--purple-mid);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.72rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;margin:6px;}
+        .btn-outline:hover{border-color:var(--purple-mid);background:rgba(107,63,160,0.2);color:var(--white);}
+        footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.18);padding:50px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;}
+        .footer-logo{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold);letter-spacing:5px;text-shadow:0 0 20px rgba(201,168,76,0.4);}
+        .footer-contact{text-align:center;font-size:0.85rem;color:rgba(240,238,232,0.45);line-height:2.2;letter-spacing:1px;}
+        .footer-contact a{color:var(--purple-mid);text-decoration:none;transition:color 0.3s;}
+        .footer-contact a:hover{color:var(--gold);}
+        .footer-right{text-align:right;font-size:0.62rem;color:rgba(240,238,232,0.22);letter-spacing:2px;line-height:2;}
+        ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--black);}::-webkit-scrollbar-thumb{background:var(--purple-dark);}::-webkit-scrollbar-thumb:hover{background:var(--gold);}
+        @media(max-width:768px){nav{padding:18px 24px;}nav ul{gap:20px;}.book-body{grid-template-columns:1fr;gap:40px;}}
+        @media(max-width:500px){nav ul{gap:12px;}nav ul li a{font-size:0.65rem;letter-spacing:1px;}}
+    </style>
+    
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav>
+    <a href="index.html" class="logo">NTAS98</a>
+    <ul>
+        <li><a href="courses.html">Ancestral Studies</a></li>
+        <li><a href="portal.html">The Root Portal</a></li>
+        <li><a href="shop.html" class="active">Shop</a></li>
+        <li><a href="booking.html">Booking</a></li>
+        <li><a href="login.html" class="login-nav-link">Member Login</a></li>
+    </ul>
+</nav>
+
+<section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-fade"></div>
+    <div class="page-hero-eyebrow">NTAS98 · Digital Products</div>
+    <h1>The Sacred <em>Library</em></h1>
+    <div class="gold-line"></div>
+    <p class="page-hero-sub">Knowledge rooted in your numbers, your stars, and your story.<br>Built for you. Delivered to you.</p>
+</section>
+
+<div class="intro-section">
+    <p>Every product in this library is rooted in <span>real science, ancestral wisdom, and your specific energy</span>. Nothing here is generic. Everything is made with you in mind — your numbers, your chart, your path.</p>
+</div>
+
+<!-- PERSONALIZED BOOKS -->
+<section id="personalized">
+    <div class="section-label">✦ &nbsp; Made For You &nbsp; ✦</div>
+    <div class="section-title">Personalized <span>Sacred Books</span></div>
+
+    <!-- THE NATAL SCROLL -->
+    <div class="book-card" style="margin-top:50px;">
+        <div class="book-type-tag">Astrology</div>
+        <div class="book-body">
+            <div class="book-left">
+                <div class="book-tag">Personalized · Astrology Book</div>
+                <div class="book-name">The Natal <span>Scroll</span></div>
+                <div class="book-subtitle">your birth chart decoded</div>
+                <p class="book-desc">A fully personalized astrology book built from your exact birth chart. Every planet, every aspect, every placement broken down in a way that actually makes sense for your real life. This is not a generic sun sign reading — this is your full celestial story, written for you.</p>
+                <p class="book-desc">Covers your Sun, Moon, Rising, inner and outer planets, major and minor aspects, light and shadow traits, and how it all connects to who you are and why you do what you do.</p>
+                <span class="book-price">$55.55</span>
+                <span class="book-turnaround">Custom Made · 2 Week Turnaround · Delivered as PDF</span>
+                <a href="https://www.paypal.com/ncp/payment/LLFRNZ84Q4CH6" target="_blank" class="book-btn">Order Your Scroll</a>
+            </div>
+            <div class="book-right">
+                <h3>What's Inside</h3>
+                <ul class="info-list">
+                    <li>Full natal chart breakdown — every planet and what it means for you personally</li>
+                    <li>Inner planets decoded — Sun, Moon, Mercury, Venus, Mars and your core personality</li>
+                    <li>Outer planets and generational influences on your chart</li>
+                    <li>Major and minor aspects — trines, squares, oppositions, conjunctions and more</li>
+                    <li>Light and shadow traits for each of your placements</li>
+                    <li>Written conversationally — clear, real, and made for you to actually use</li>
+                </ul>
+                <div class="info-needed">
+                    <div class="info-needed-title">✦ &nbsp; Info Needed to Order</div>
+                    <p>Send your full birthdate, exact birth time, and city/state or country of birth to contact@janaeelorraine.com with subject line "The Natal Scroll Order."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ROOTED IN THE STARS & NUMBERS -->
+    <div class="book-card">
+        <div class="book-type-tag">Numerology</div>
+        <div class="book-body">
+            <div class="book-left">
+                <div class="book-tag">Personalized · Numerology Book</div>
+                <div class="book-name">Rooted in the <span>Stars & Numbers</span></div>
+                <div class="book-subtitle">your numerology decoded</div>
+                <p class="book-desc">Your numbers are not random. Every digit in your birthdate and name carries a vibrational energy that shapes who you are, what you're here to do, and the patterns you keep repeating. This book decodes all of it — and hands you the blueprint.</p>
+                <p class="book-desc">A fully personalized numerology guide covering every major number in your chart — from your Life Path to your Karmic Debt — written clearly and conversationally so you can actually use what you learn.</p>
+                <span class="book-price">$44.44</span>
+                <span class="book-turnaround">Custom Made · 2 Week Turnaround · Delivered as PDF</span>
+                <a href="https://www.paypal.com/ncp/payment/LLFRNZ84Q4CH6" target="_blank" class="book-btn">Order Your Book</a>
+            </div>
+            <div class="book-right">
+                <h3>What's Inside</h3>
+                <ul class="info-list">
+                    <li>Birthday Number — the gifts and lessons your soul chose for this life</li>
+                    <li>Life Path Number — your core self, purpose, and shadow side</li>
+                    <li>Destiny Number — your highest potential and what you're working toward</li>
+                    <li>Soul Number — your heart's desire and private inner motivations</li>
+                    <li>Personality Number — the first impression you make on the world</li>
+                    <li>Karmic Debt & Karmic Lessons — patterns from past lives showing up now</li>
+                    <li>Attitude, Concords, and Maturity Number — the full picture of who you are</li>
+                    <li>Birth Chart and Name Chart — visual breakdowns of your numbers</li>
+                </ul>
+                <div class="info-needed">
+                    <div class="info-needed-title">✦ &nbsp; Info Needed to Order</div>
+                    <p>Send your full birthdate, birth time, city of birth, and full legal name to contact@janaeelorraine.com with subject line "Rooted in the Stars and Numbers Order."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- INSTANT DOWNLOADS -->
+<section id="downloads">
+    <div class="section-label">✦ &nbsp; Instant Access &nbsp; ✦</div>
+    <div class="section-title">Digital <span>Downloads</span></div>
+
+    <div class="downloads-grid">
+        <div class="download-card">
+            <div class="download-badge">Instant Download</div>
+            <div class="download-img">
+                <div class="download-img-bg"></div>
+                <div class="download-img-icon">📓</div>
+            </div>
+            <div class="download-body">
+                <div class="download-tag">Printable Journal</div>
+                <div class="download-name">ALL ABOUT Me</div>
+                <div class="download-type">Personal Journal & Planner · Printable PDF</div>
+                <p class="download-desc">A beautiful printable journal built for self-discovery and intentional living. Includes vision board pages, goal setting across financial, spiritual, physical, and mental categories, weekly habit tracking, and space to express who you are and who you're becoming.</p>
+                <span class="download-price">$8.88</span>
+                                
+                <script>
+                    
+                </script>
+                <div style="font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;color:rgba(240,238,232,0.2);margin-top:10px;text-align:center;">Instant download after payment</div>
+            </div>
+        </div>
+
+        <!-- COMING SOON CARD -->
+        <div class="download-card" style="opacity:0.5;pointer-events:none;">
+            <div class="download-badge" style="border-color:rgba(240,238,232,0.2);color:rgba(240,238,232,0.3);">Coming Soon</div>
+            <div class="download-img">
+                <div class="download-img-bg"></div>
+                <div class="download-img-icon" style="opacity:0.3;">📖</div>
+            </div>
+            <div class="download-body">
+                <div class="download-tag" style="color:rgba(240,238,232,0.2);">Digital Download</div>
+                <div class="download-name" style="color:rgba(240,238,232,0.25);">The Journey Called Healing</div>
+                <div class="download-type">Coming Soon</div>
+                <p class="download-desc" style="color:rgba(240,238,232,0.2);">More sacred tools are on the way. Check back soon.</p>
+                <span class="download-price" style="color:rgba(240,238,232,0.2);">— —</span>
+                <a href="#" class="download-btn" style="border-color:rgba(240,238,232,0.15);color:rgba(240,238,232,0.2);">Coming Soon</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="cta-bottom">
+    <div class="section-label">✦ &nbsp; Need Something Custom? &nbsp; ✦</div>
+    <div class="cta-title">Let's Build It Together</div>
+    <p class="cta-desc">Have a question about an order or want something specific? Reach out directly and Janaee will take care of you.</p>
+    <a href="mailto:contact@janaeelorraine.com" class="btn-gold">Send a Message</a>
+    <a href="shop.html" class="btn-outline">← Back to Shop</a>
+</section>
+
+<footer>
+    <div class="footer-logo">NTAS98</div>
+    <div class="footer-contact">
+        <p>janaeelorraine.com</p>
+        <p><a href="mailto:contact@janaeelorraine.com">contact@janaeelorraine.com</a></p>
+        <p style="font-size:0.68rem;letter-spacing:2px;color:rgba(240,238,232,0.25);">Diviner · Author · Artist · Practitioner</p>
+    </div>
+    <div class="footer-right"><p>© 2026 Janaee Lorraine</p><p>All rights reserved.</p></div>
+</footer>
+
+<script>
+    const container=document.getElementById('particles');const colors=['rgba(74,158,255,0.7)','rgba(107,63,160,0.6)','rgba(201,168,76,0.5)','rgba(139,92,200,0.6)','rgba(74,255,180,0.35)'];for(let i=0;i<45;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*4+1;p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 ${size*4}px ${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*12}s;`;container.appendChild(p);}
+</script>
+
+<script>
+
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Root Portal — NTAS98</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080d; --gold: #C9A84C; --gold-dim: rgba(201,168,76,0.25);
+  --gold-glow: rgba(201,168,76,0.08); --white: #f0eee8;
+  --muted: rgba(240,238,232,0.5); --border: rgba(201,168,76,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--white); font-family: 'Cormorant Garamond', serif; }
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 16px 40px; background: rgba(6,8,13,0.96);
+  border-bottom: 1px solid var(--border); backdrop-filter: blur(12px);
+}
+.logo { font-family: 'Cinzel Decorative', serif; font-size: 16px; font-weight: 700; color: var(--gold); text-decoration:none; letter-spacing: 4px; }
+nav ul { list-style:none; display:flex; gap:28px; }
+nav ul li a { color: var(--white); text-decoration:none; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.6; transition: all 0.3s; }
+nav ul li a:hover, nav ul li a.active { opacity:1; color: var(--gold); }
+nav ul li a.login-nav-link { color: var(--gold); border: 1px solid var(--gold-dim); padding: 5px 14px; }
+.page-hero { padding: 140px 40px 60px; text-align: center; max-width: 800px; margin: 0 auto; }
+.page-eyebrow { font-size: 11px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); opacity: 0.8; margin-bottom: 16px; }
+.page-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(36px, 6vw, 56px); letter-spacing: 3px; margin-bottom: 20px; }
+.page-sub { font-size: 18px; color: var(--muted); font-style: italic; line-height: 1.6; }
+footer { padding: 50px 40px; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
+.fn { font-family: 'Cinzel Decorative', serif; color: var(--gold); font-size: 16px; letter-spacing: 4px; margin-bottom: 8px; }
+.ft { font-size: 12px; letter-spacing: 3px; color: var(--muted); margin-bottom: 12px; }
+.fc { font-size: 11px; color: var(--muted); }
+@media (max-width: 640px) { nav { padding: 14px 20px; } nav ul { display: none; } .page-hero { padding: 110px 20px 40px; } }
+
+.content { padding: 60px 40px 100px; }
+.content-inner { max-width: 1280px; margin: 0 auto; }
+
+/* ─── TIER GRID ─────────────────────────────────────────── */
+.tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 80px; align-items: stretch; }
+@media (max-width: 920px) { .tier-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; } }
+
+.tier-card { border: 1px solid var(--border); padding: 40px 30px 32px; background: rgba(255,255,255,0.015); position: relative; display: flex; flex-direction: column; }
+.tier-card.featured { border-color: var(--gold); background: var(--gold-glow); box-shadow: 0 0 60px rgba(201,168,76,0.08); transform: translateY(-8px); }
+@media (max-width: 920px) { .tier-card.featured { transform: none; } }
+.tier-card.elder { border-color: rgba(201,168,76,0.5); background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, rgba(255,255,255,0.01) 100%); }
+
+.tier-tag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--bg); padding: 5px 16px; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; font-family: 'Cinzel Decorative', serif; white-space: nowrap; }
+.tier-card.elder .tier-tag { background: var(--bg); color: var(--gold); border: 1px solid var(--gold); }
+
+.tier-eyebrow { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 10px; }
+.tier-glyph { font-family: 'Cinzel Decorative', serif; font-size: 28px; color: var(--gold); margin-bottom: 10px; opacity: 0.9; }
+.tier-name { font-family: 'Cinzel Decorative', serif; font-size: 30px; letter-spacing: 3px; margin-bottom: 6px; }
+.tier-tagline { font-size: 13px; color: var(--muted); font-style: italic; line-height: 1.5; margin-bottom: 22px; min-height: 38px; }
+.tier-price { font-family: 'Cinzel Decorative', serif; font-size: 42px; color: var(--gold); margin-bottom: 4px; line-height: 1; }
+.tier-price span { font-size: 13px; color: var(--muted); margin-left: 4px; font-family: 'Cormorant Garamond', serif; letter-spacing: 1px; }
+.tier-price-annual { font-size: 12px; color: var(--muted); margin-bottom: 22px; letter-spacing: 1px; }
+.tier-price-annual strong { color: var(--gold); font-weight: 500; }
+
+.tier-divider { height: 1px; background: var(--border); margin: 0 0 18px; }
+.tier-list { list-style: none; padding: 0; margin-bottom: 28px; flex: 1; }
+.tier-list li { padding: 9px 0; padding-left: 22px; position: relative; font-size: 14px; color: var(--white); line-height: 1.45; }
+.tier-list li:before { content: '✦'; color: var(--gold); position: absolute; left: 0; top: 9px; opacity: 0.7; font-size: 11px; }
+.tier-list li.heading { color: var(--gold); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; padding-left: 0; padding-top: 14px; padding-bottom: 6px; opacity: 0.7; }
+.tier-list li.heading:before { content: ''; }
+.tier-list li.heading:first-child { padding-top: 0; }
+
+.tier-cta { display: block; padding: 14px; text-align: center; text-decoration: none; border: 1px solid var(--gold); color: var(--gold); font-family: 'Cinzel Decorative', serif; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; transition: all 0.3s; margin-bottom: 10px; }
+.tier-cta:hover { background: var(--gold-glow); }
+.tier-cta.primary { background: var(--gold); color: var(--bg); }
+.tier-cta.primary:hover { background: var(--white); }
+.tier-note { text-align: center; font-size: 12px; color: var(--muted); font-style: italic; }
+.tier-note strong { color: var(--gold); font-style: normal; letter-spacing: 2px; font-family: 'Cinzel', serif; font-weight: 500; }
+
+/* ─── COMPARE TABLE ─────────────────────────────────────── */
+.compare { margin: 90px 0; }
+.compare-title { font-family: 'Cinzel Decorative', serif; font-size: 28px; letter-spacing: 3px; text-align: center; margin-bottom: 12px; }
+.compare-sub { text-align: center; color: var(--muted); font-style: italic; margin-bottom: 36px; }
+.compare-table { width: 100%; border-collapse: collapse; max-width: 900px; margin: 0 auto; }
+.compare-table th, .compare-table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+.compare-table th { font-family: 'Cinzel Decorative', serif; font-size: 11px; letter-spacing: 3px; color: var(--gold); font-weight: 400; text-transform: uppercase; text-align: center; }
+.compare-table th.feature-col { text-align: left; }
+.compare-table td { color: var(--white); }
+.compare-table td.center { text-align: center; color: var(--gold); font-size: 18px; }
+.compare-table td.center.no { color: rgba(240,238,232,0.18); }
+.compare-table tr.section-row td { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; padding-top: 26px; padding-bottom: 8px; border-bottom: none; }
+@media (max-width: 720px) { .compare { display: none; } }
+
+/* ─── HOW IT WORKS ─────────────────────────────────────── */
+.how-it-works { text-align: center; }
+.section-eyebrow { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); opacity: 0.8; margin-bottom: 12px; }
+.section-title { font-family: 'Cinzel Decorative', serif; font-size: 32px; letter-spacing: 3px; margin-bottom: 8px; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-top: 40px; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 28px 20px; border: 1px solid var(--border); }
+.step-num { font-family: 'Cinzel Decorative', serif; font-size: 28px; color: var(--gold); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold-dim); border-radius: 50%; }
+.step-text { color: var(--muted); font-size: 15px; line-height: 1.5; }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">NTAS98</a>
+  <ul>
+    <li><a href="courses.html">Ancestral Studies</a></li>
+    <li><a href="portal.html" class="active">The Root Portal</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="booking.html">Booking</a></li>
+    <li><a href="login.html" class="login-nav-link">Member Login</a></li>
+  </ul>
+</nav>
+
+<section class="page-hero">
+  <div class="page-eyebrow">Membership · Three Tiers · One Path</div>
+  <h1 class="page-title">The Root Portal</h1>
+  <p class="page-sub">A sovereign sanctuary where your cosmic blueprint and the full Africana spiritual curriculum live as one experience.</p>
+</section>
+
+
+<section class="content">
+  <div class="content-inner">
+
+    <div class="tier-grid">
+
+      <!-- ─── SEED ─────────────────────────────────────── -->
+      <div class="tier-card">
+        <div class="tier-eyebrow">Tier One</div>
+        <div class="tier-glyph">✦</div>
+        <h3 class="tier-name">Seed</h3>
+        <p class="tier-tagline">For the woman beginning to remember.</p>
+        <div class="tier-price">$33<span>/month</span></div>
+        <div class="tier-price-annual">or <strong>$333/year</strong> · save 2 months</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-list">
+          <li class="heading">Cosmic Profile</li>
+          <li>Sun Sign + Life Path reading</li>
+          <li>Blood Type energetic profile</li>
+          <li>Monthly channeled new-moon transmission</li>
+          <li class="heading">Ancestral Studies</li>
+          <li>Sacred Center 3D entry</li>
+          <li>Module I — Cosmology (intro, unlocked)</li>
+          <li>Modules II–VII previewed (locked)</li>
+        </ul>
+        <a href="login.html" class="tier-cta">Enter The Seed</a>
+        <div class="tier-note">Use access code <strong>SEED777</strong></div>
+      </div>
+
+      <!-- ─── ROOT (featured) ──────────────────────────── -->
+      <div class="tier-card featured">
+        <div class="tier-tag">Most Chosen</div>
+        <div class="tier-eyebrow">Tier Two</div>
+        <div class="tier-glyph">✦ ✦</div>
+        <h3 class="tier-name">Root</h3>
+        <p class="tier-tagline">For the woman ready to walk the full ancestral curriculum.</p>
+        <div class="tier-price">$77<span>/month</span></div>
+        <div class="tier-price-annual">or <strong>$777/year</strong> · save 2 months</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-list">
+          <li class="heading">Everything in Seed, plus</li>
+          <li class="heading">Full Cosmic Profile</li>
+          <li>Human Design reading unlocked</li>
+          <li>Astrocartography insight</li>
+          <li>Spiritual archetype overlay</li>
+          <li class="heading">Ancestral Studies — Full Access</li>
+          <li>All 7 modules + 35 lessons</li>
+          <li>Sacred objects, journal, progress wheel</li>
+          <li>Priority booking access</li>
+        </ul>
+        <a href="login.html" class="tier-cta primary">Enter The Root</a>
+        <div class="tier-note">Use access code <strong>ROOT1414</strong></div>
+      </div>
+
+      <!-- ─── ELDER ────────────────────────────────────── -->
+      <div class="tier-card elder">
+        <div class="tier-tag">By Invitation</div>
+        <div class="tier-eyebrow">Tier Three</div>
+        <div class="tier-glyph">✦ ✦ ✦</div>
+        <h3 class="tier-name">Elder</h3>
+        <p class="tier-tagline">For the woman walking with Mama Janaee directly.</p>
+        <div class="tier-price">$222<span>/month</span></div>
+        <div class="tier-price-annual">or <strong>$2,222/year</strong> · save 2 months</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-list">
+          <li class="heading">Everything in Root, plus</li>
+          <li>Quarterly 1:1 reading or rootwork session</li>
+          <li>Personalized remediation rituals</li>
+          <li>Direct messaging access to Mama Janaee</li>
+          <li>Monthly Elder office hours (live)</li>
+          <li>Council Chamber — private 8th room in the Sacred Center</li>
+          <li>Early access to new modules</li>
+          <li>Quarterly altar care package shipped</li>
+        </ul>
+        <a href="login.html" class="tier-cta">Enter The Elder Council</a>
+        <div class="tier-note">Use access code <strong>ELDER2222</strong></div>
+      </div>
+
+    </div>
+
+    <!-- ─── COMPARE TABLE ──────────────────────────────── -->
+    <div class="compare">
+      <h2 class="compare-title">What's Inside Each Tier</h2>
+      <p class="compare-sub">One membership. Three depths of remembering.</p>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="feature-col">Feature</th>
+            <th>Seed</th>
+            <th>Root</th>
+            <th>Elder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-row"><td colspan="4">Cosmic Profile</td></tr>
+          <tr><td>Sun, Life Path, Blood Type reading</td><td class="center">✦</td><td class="center">✦</td><td class="center">✦</td></tr>
+          <tr><td>Human Design reading</td><td class="center no">—</td><td class="center">✦</td><td class="center">✦</td></tr>
+          <tr><td>Astrocartography</td><td class="center no">—</td><td class="center">✦</td><td class="center">✦</td></tr>
+
+          <tr class="section-row"><td colspan="4">Ancestral Studies</td></tr>
+          <tr><td>Sacred Center 3D entry</td><td class="center">✦</td><td class="center">✦</td><td class="center">✦</td></tr>
+          <tr><td>Module I — Cosmology (intro)</td><td class="center">✦</td><td class="center">✦</td><td class="center">✦</td></tr>
+          <tr><td>Modules II–VII (Ancestry → Diaspora)</td><td class="center no">—</td><td class="center">✦</td><td class="center">✦</td></tr>
+          <tr><td>Council Chamber (8th room)</td><td class="center no">—</td><td class="center no">—</td><td class="center">✦</td></tr>
+
+          <tr class="section-row"><td colspan="4">Practitioner Access</td></tr>
+          <tr><td>Monthly channeled transmission</td><td class="center">✦</td><td class="center">✦</td><td class="center">✦</td></tr>
+          <tr><td>Priority booking</td><td class="center no">—</td><td class="center">✦</td><td class="center">✦</td></tr>
+          <tr><td>Quarterly 1:1 session with Mama Janaee</td><td class="center no">—</td><td class="center no">—</td><td class="center">✦</td></tr>
+          <tr><td>Direct messaging</td><td class="center no">—</td><td class="center no">—</td><td class="center">✦</td></tr>
+          <tr><td>Quarterly altar care package</td><td class="center no">—</td><td class="center no">—</td><td class="center">✦</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ─── HOW IT WORKS ───────────────────────────────── -->
+    <div class="how-it-works">
+      <div class="section-eyebrow">How It Works</div>
+      <h2 class="section-title">Your Path In</h2>
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><div class="step-text">Choose your tier and receive your access code</div></div>
+        <div class="step"><span class="step-num">2</span><div class="step-text">Register and enter your birth information</div></div>
+        <div class="step"><span class="step-num">3</span><div class="step-text">Your Cosmic Profile is read back to you in Janaee's voice</div></div>
+        <div class="step"><span class="step-num">4</span><div class="step-text">Step into the Sacred Center and walk your modules</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<footer>
+  <div class="fn">NTAS98</div>
+  <div class="ft">Nature · Trap · Soul · 1998</div>
+  <div class="fc">© 2026 Janaee Lorraine Sharp. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
