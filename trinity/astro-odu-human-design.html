@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astro-Odu Human Design — NTAS98</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    background: #1a0e2e;
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    z-index: -3; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 60%, rgba(240,198,104,0.32) 0%, transparent 55%),
+      radial-gradient(ellipse 90% 60% at 50% 100%, rgba(232,122,93,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 30% 20%, rgba(74,31,71,0.6) 0%, transparent 65%),
+      radial-gradient(ellipse 80% 60% at 80% 30%, rgba(181,51,137,0.25) 0%, transparent 60%),
+      linear-gradient(180deg, #1a0e2e 0%, #2a0f3d 40%, #1a0e2e 100%);
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -120px; left: -80px;
+    width: 320px; height: 320px;
+    z-index: -2; pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #9be0c4 0%, #6fc9a8 50%, #2d7d83 100%);
+    box-shadow:
+      inset -30px -30px 60px rgba(0,0,0,0.5),
+      inset 20px 20px 40px rgba(255,255,255,0.12),
+      0 0 80px rgba(155,224,196,0.3),
+      0 0 160px rgba(111,201,168,0.18);
+    opacity: 0.7;
+    animation: trinityPlanetDrift 100s ease-in-out infinite;
+  }
+  @keyframes trinityPlanetDrift {
+    0%, 100% { transform: translate(0,0); }
+    50% { transform: translate(20px,-15px); }
+  }
+  .trinity-cosmos {
+    position: fixed; inset: 0;
+    z-index: -1; pointer-events: none;
+    background-image:
+      radial-gradient(2px 2px at 20% 18%, rgba(240,198,104,0.85), transparent),
+      radial-gradient(1.5px 1.5px at 32% 32%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(2px 2px at 42% 22%, rgba(240,198,104,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 52% 12%, rgba(255,255,255,0.75), transparent),
+      radial-gradient(2.5px 2.5px at 50% 50%, rgba(240,198,104,0.95), transparent),
+      radial-gradient(1.5px 1.5px at 62% 38%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(2px 2px at 70% 28%, rgba(240,198,104,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 78% 52%, rgba(255,255,255,0.65), transparent),
+      radial-gradient(2px 2px at 82% 18%, rgba(240,198,104,0.7), transparent),
+      radial-gradient(1.5px 1.5px at 28% 62%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 48% 72%, rgba(240,198,104,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 65% 82%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 38% 88%, rgba(240,198,104,0.65), transparent),
+      radial-gradient(1.5px 1.5px at 75% 92%, rgba(255,255,255,0.55), transparent),
+      radial-gradient(2px 2px at 12% 8%, rgba(240,198,104,0.55), transparent),
+      radial-gradient(1.5px 1.5px at 88% 8%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(2px 2px at 8% 48%, rgba(240,198,104,0.6), transparent),
+      radial-gradient(1.5px 1.5px at 92% 68%, rgba(255,255,255,0.55), transparent);
+    animation: trinityTwinkle 10s ease-in-out infinite;
+  }
+  @keyframes trinityTwinkle { 0%,100%{opacity:0.75;} 50%{opacity:1;} }
+  .trinity-vignette {
+    position: fixed; inset: 0;
+    z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(26,14,46,0.5) 100%);
+  }
+
+  .font-serif { font-family: 'Cormorant Garamond', serif; }
+  .font-display { font-family: 'Cinzel', serif; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 1s ease-out forwards; }
+  @media print {
+    body { background: white !important; color: black !important; }
+    body::before, body::after, .trinity-cosmos, .trinity-vignette { display: none !important; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="trinity-cosmos"></div>
+<div class="trinity-vignette"></div>
+<div id="root"></div>
+
+<script>
+// Auth gate — bounce unauthenticated users to login
+(function(){
+  var u = (localStorage.getItem('ntas98_user') || '').toLowerCase();
+  if (!u) { window.location.href = '../login.html'; return; }
+  var raw = localStorage.getItem('ntas98_userdata_' + u);
+  if (raw) {
+    try {
+      var d = JSON.parse(raw);
+      var tier = d.portal_tier || d.tier || 'seed';
+      if (tier === 'seed' && !d.is_admin) { window.location.href = '../portal.html'; return; }
+    } catch(e){}
+  }
+})();
+</script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const API_ENDPOINT = "/api/trinity-human-design";
+
+const ODU_ORDER = ['Ogbe','Oyeku','Iwori','Odi','Irosun','Owonrin','Obara','Okanran','Ogunda','Osa','Ika','Oturupon','Otura','Irete','Oshe','Ofun'];
+const ELEMENT_ORDER = ['Fire','Earth','Air','Water'];
+
+const HD_WHEEL_ORDER = [41,19,13,49,30,55,37,63,22,36,25,17,21,51,42,3,27,24,2,23,8,20,16,35,45,12,15,52,39,53,62,56,31,33,7,4,29,59,40,64,47,6,46,18,48,57,32,50,28,44,1,43,14,34,9,5,26,11,10,58,38,54,61,60];
+const HD_WHEEL_START = 302;
+
+const CENTERS = [
+  { name: 'Head', orisha: 'Eshu / Elegua', shape: 'triangleDown', cx: 200, cy: 60, size: 70, gates: [64, 61, 63] },
+  { name: 'Ajna', orisha: 'Oya', shape: 'triangleUp', cx: 200, cy: 145, size: 70, gates: [47, 24, 4, 17, 43, 11] },
+  { name: 'Throat', orisha: 'Obatala', shape: 'square', cx: 200, cy: 220, w: 90, h: 50, gates: [62, 23, 56, 35, 12, 45, 33, 8, 31, 20, 16] },
+  { name: 'G', orisha: 'The Ori', shape: 'diamond', cx: 200, cy: 320, size: 50, gates: [7, 1, 13, 25, 46, 2, 15, 10] },
+  { name: 'Heart', orisha: 'Shango', shape: 'triangleLeft', cx: 290, cy: 320, size: 50, gates: [21, 26, 51, 40] },
+  { name: 'SP', orisha: 'Yemoja', shape: 'triangleLeft', cx: 320, cy: 420, size: 60, gates: [36, 22, 37, 6, 49, 55, 30] },
+  { name: 'Sacral', orisha: 'Oshun', shape: 'square', cx: 200, cy: 425, w: 90, h: 50, gates: [5, 14, 29, 59, 9, 3, 42, 27, 34] },
+  { name: 'Spleen', orisha: 'Osoosi', shape: 'triangleRight', cx: 80, cy: 420, size: 60, gates: [48, 57, 44, 50, 32, 28, 18] },
+  { name: 'Root', orisha: 'Ogun', shape: 'square', cx: 200, cy: 530, w: 90, h: 50, gates: [53, 60, 52, 19, 39, 41, 58, 38, 54] }
+];
+
+const CHANNELS = [
+  { gates: [64, 47], centers: ['Head', 'Ajna'], name: 'Abstraction' },
+  { gates: [61, 24], centers: ['Head', 'Ajna'], name: 'Awareness' },
+  { gates: [63, 4], centers: ['Head', 'Ajna'], name: 'Logic' },
+  { gates: [17, 62], centers: ['Ajna', 'Throat'], name: 'Acceptance' },
+  { gates: [43, 23], centers: ['Ajna', 'Throat'], name: 'Structuring' },
+  { gates: [11, 56], centers: ['Ajna', 'Throat'], name: 'Curiosity' },
+  { gates: [16, 48], centers: ['Throat', 'Spleen'], name: 'Talent' },
+  { gates: [20, 57], centers: ['Throat', 'Spleen'], name: 'Brainwave' },
+  { gates: [20, 34], centers: ['Throat', 'Sacral'], name: 'Charisma' },
+  { gates: [20, 10], centers: ['Throat', 'G'], name: 'Awakening' },
+  { gates: [12, 22], centers: ['Throat', 'SP'], name: 'Openness' },
+  { gates: [45, 21], centers: ['Throat', 'Heart'], name: 'Money' },
+  { gates: [35, 36], centers: ['Throat', 'SP'], name: 'Transitoriness' },
+  { gates: [33, 13], centers: ['Throat', 'G'], name: 'The Prodigal' },
+  { gates: [8, 1], centers: ['Throat', 'G'], name: 'Inspiration' },
+  { gates: [31, 7], centers: ['Throat', 'G'], name: 'The Alpha' },
+  { gates: [25, 51], centers: ['G', 'Heart'], name: 'Initiation' },
+  { gates: [46, 29], centers: ['G', 'Sacral'], name: 'Discovery' },
+  { gates: [2, 14], centers: ['G', 'Sacral'], name: 'The Beat' },
+  { gates: [15, 5], centers: ['G', 'Sacral'], name: 'Rhythm' },
+  { gates: [10, 34], centers: ['G', 'Sacral'], name: 'Exploration' },
+  { gates: [10, 57], centers: ['G', 'Spleen'], name: 'Perfected Form' },
+  { gates: [26, 44], centers: ['Heart', 'Spleen'], name: 'Surrender' },
+  { gates: [40, 37], centers: ['Heart', 'SP'], name: 'Community' },
+  { gates: [6, 59], centers: ['SP', 'Sacral'], name: 'Mating' },
+  { gates: [49, 19], centers: ['SP', 'Root'], name: 'Synthesis' },
+  { gates: [55, 39], centers: ['SP', 'Root'], name: 'Emoting' },
+  { gates: [30, 41], centers: ['SP', 'Root'], name: 'Recognition' },
+  { gates: [9, 52], centers: ['Sacral', 'Root'], name: 'Concentration' },
+  { gates: [3, 60], centers: ['Sacral', 'Root'], name: 'Mutation' },
+  { gates: [42, 53], centers: ['Sacral', 'Root'], name: 'Maturation' },
+  { gates: [27, 50], centers: ['Sacral', 'Spleen'], name: 'Preservation' },
+  { gates: [34, 57], centers: ['Sacral', 'Spleen'], name: 'Power' },
+  { gates: [32, 54], centers: ['Spleen', 'Root'], name: 'Transformation' },
+  { gates: [28, 38], centers: ['Spleen', 'Root'], name: 'Struggle' },
+  { gates: [18, 58], centers: ['Spleen', 'Root'], name: 'Judgment' }
+];
+
+const TYPE_TO_ORISHA = {
+  'Manifestor': { orisha: 'Eshu', strategy: 'Inform before acting', notSelf: 'Anger', signature: 'Peace' },
+  'Generator': { orisha: 'Ogun', strategy: 'Wait to respond', notSelf: 'Frustration', signature: 'Satisfaction' },
+  'Manifesting Generator': { orisha: 'Ogun-Eshu', strategy: 'Wait to respond, then inform', notSelf: 'Frustration & Anger', signature: 'Satisfaction & Peace' },
+  'Projector': { orisha: 'Obatala', strategy: 'Wait for the invitation', notSelf: 'Bitterness', signature: 'Success' },
+  'Reflector': { orisha: 'Yemoja', strategy: 'Wait a lunar cycle (28 days)', notSelf: 'Disappointment', signature: 'Surprise' }
+};
+
+const AUTHORITY_TO_ORISHA = {
+  'Emotional': { orisha: 'Yemoja' },
+  'Sacral': { orisha: 'Oshun' },
+  'Splenic': { orisha: 'Osoosi' },
+  'Ego': { orisha: 'Shango' },
+  'G Self-Projected': { orisha: 'The Ori' },
+  'Mental': { orisha: 'Eshu' },
+  'Lunar': { orisha: 'Yemoja (master)' }
+};
+
+const LINES = [
+  { num: 1, name: 'The Investigator' },
+  { num: 2, name: 'The Hermit' },
+  { num: 3, name: 'The Martyr' },
+  { num: 4, name: 'The Opportunist' },
+  { num: 5, name: 'The Heretic' },
+  { num: 6, name: 'The Role Model' }
+];
+
+const COMMON_CITIES = [
+  { name: 'Columbus, OH', lat: 39.9612, lng: -83.0007, tz: -5 },
+  { name: 'Atlanta, GA', lat: 33.7490, lng: -84.3880, tz: -5 },
+  { name: 'New York, NY', lat: 40.7128, lng: -74.0060, tz: -5 },
+  { name: 'Chicago, IL', lat: 41.8781, lng: -87.6298, tz: -6 },
+  { name: 'Houston, TX', lat: 29.7604, lng: -95.3698, tz: -6 },
+  { name: 'Los Angeles, CA', lat: 34.0522, lng: -118.2437, tz: -8 },
+  { name: 'Jackson, MS', lat: 32.2988, lng: -90.1848, tz: -6 },
+  { name: 'Hattiesburg, MS', lat: 31.3271, lng: -89.2903, tz: -6 },
+  { name: 'New Orleans, LA', lat: 29.9511, lng: -90.0715, tz: -6 },
+  { name: 'Detroit, MI', lat: 42.3314, lng: -83.0458, tz: -5 },
+  { name: 'Miami, FL', lat: 25.7617, lng: -80.1918, tz: -5 },
+  { name: 'Washington, DC', lat: 38.9072, lng: -77.0369, tz: -5 }
+];
+
+const PI = Math.PI, RAD = PI / 180, DEG = 180 / PI;
+const rev = a => ((a % 360) + 360) % 360;
+const sind = a => Math.sin(a * RAD);
+const cosd = a => Math.cos(a * RAD);
+const atan2d = (y, x) => Math.atan2(y, x) * DEG;
+
+function julianDay(year, month, day, hour, minute, tzOffset) {
+  const utHour = hour + minute / 60 - tzOffset;
+  let y = year, m = month;
+  if (m <= 2) { y -= 1; m += 12; }
+  const a = Math.floor(y / 100);
+  const b = 2 - a + Math.floor(a / 4);
+  return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day + b - 1524.5 + utHour / 24;
+}
+
+function solveKepler(M, e) {
+  let E = M + e * DEG * sind(M) * (1 + e * cosd(M));
+  for (let i = 0; i < 8; i++) {
+    const dE = (E - e * DEG * sind(E) - M) / (1 - e * cosd(E));
+    E -= dE;
+    if (Math.abs(dE) < 0.0001) break;
+  }
+  return E;
+}
+
+function sunPosition(d) {
+  const w = 282.9404 + 4.70935e-5 * d;
+  const e = 0.016709 - 1.151e-9 * d;
+  const M = rev(356.0470 + 0.9856002585 * d);
+  const E = solveKepler(M, e);
+  const xv = cosd(E) - e;
+  const yv = Math.sqrt(1 - e * e) * sind(E);
+  return { lon: rev(atan2d(yv, xv) + w), r: Math.sqrt(xv * xv + yv * yv) };
+}
+
+function moonPosition(d) {
+  const N = rev(125.1228 - 0.0529538083 * d);
+  const i = 5.1454, w = rev(318.0634 + 0.1643573223 * d);
+  const a = 60.2666, e = 0.054900;
+  const M = rev(115.3654 + 13.0649929509 * d);
+  const E = solveKepler(M, e);
+  const xv = a * (cosd(E) - e);
+  const yv = a * Math.sqrt(1 - e * e) * sind(E);
+  const v = atan2d(yv, xv);
+  const xh = (cosd(N) * cosd(v + w) - sind(N) * sind(v + w) * cosd(i));
+  const yh = (sind(N) * cosd(v + w) + cosd(N) * sind(v + w) * cosd(i));
+  let lon = rev(atan2d(yh, xh));
+  const Ms = rev(356.0470 + 0.9856002585 * d);
+  const ws = 282.9404 + 4.70935e-5 * d;
+  const Ls = rev(Ms + ws);
+  const Lm = rev(M + w + N);
+  const D = rev(Lm - Ls);
+  lon += -1.274 * sind(M - 2 * D) + 0.658 * sind(2 * D) - 0.186 * sind(Ms)
+    - 0.059 * sind(2 * M - 2 * D) - 0.057 * sind(M - 2 * D + Ms)
+    + 0.053 * sind(M + 2 * D) + 0.046 * sind(2 * D - Ms)
+    + 0.041 * sind(M - Ms) - 0.035 * sind(D) - 0.031 * sind(M + Ms);
+  return rev(lon);
+}
+
+function planetPosition(planet, d) {
+  if (planet === 'Pluto') {
+    const P = (238.95 + 0.003968789 * d);
+    return rev(238.9508 + 0.00400703 * d
+      - 19.799 * sind(P) + 19.848 * cosd(P)
+      + 0.897 * sind(2*P) - 4.956 * cosd(2*P)
+      + 0.610 * sind(3*P) + 1.211 * cosd(3*P)
+      - 0.341 * sind(4*P) - 0.190 * cosd(4*P)
+      + 0.128 * sind(5*P) - 0.034 * cosd(5*P)
+      - 0.038 * sind(6*P) + 0.031 * cosd(6*P));
+  }
+  const elements = {
+    Mercury: { N: 48.3313 + 3.24587e-5 * d, i: 7.0047, w: 29.1241 + 1.01444e-5 * d, a: 0.387098, e: 0.205635, M: rev(168.6562 + 4.0923344368 * d) },
+    Venus: { N: 76.6799 + 2.46590e-5 * d, i: 3.3946, w: 54.8910 + 1.38374e-5 * d, a: 0.723330, e: 0.006773, M: rev(48.0052 + 1.6021302244 * d) },
+    Mars: { N: 49.5574 + 2.11081e-5 * d, i: 1.8497, w: 286.5016 + 2.92961e-5 * d, a: 1.523688, e: 0.093405, M: rev(18.6021 + 0.5240207766 * d) },
+    Jupiter: { N: 100.4542 + 2.76854e-5 * d, i: 1.3030, w: 273.8777 + 1.64505e-5 * d, a: 5.20256, e: 0.048498, M: rev(19.8950 + 0.0830853001 * d) },
+    Saturn: { N: 113.6634 + 2.38980e-5 * d, i: 2.4886, w: 339.3939 + 2.97661e-5 * d, a: 9.55475, e: 0.055546, M: rev(316.9670 + 0.0334442282 * d) },
+    Uranus: { N: 74.0005 + 1.3978e-5 * d, i: 0.7733, w: 96.6612 + 3.0565e-5 * d, a: 19.18171, e: 0.047318, M: rev(142.5905 + 0.011725806 * d) },
+    Neptune: { N: 131.7806 + 3.0173e-5 * d, i: 1.7700, w: 272.8461, a: 30.05826, e: 0.008606, M: rev(260.2471 + 0.005995147 * d) }
+  };
+  const el = elements[planet];
+  if (!el) return 0;
+  const E = solveKepler(el.M, el.e);
+  const xv = el.a * (cosd(E) - el.e);
+  const yv = el.a * Math.sqrt(1 - el.e * el.e) * sind(E);
+  const v = atan2d(yv, xv);
+  const r = Math.sqrt(xv * xv + yv * yv);
+  const xh = r * (cosd(el.N) * cosd(v + el.w) - sind(el.N) * sind(v + el.w) * cosd(el.i));
+  const yh = r * (sind(el.N) * cosd(v + el.w) + cosd(el.N) * sind(v + el.w) * cosd(el.i));
+  const sun = sunPosition(d);
+  return rev(atan2d(yh + sun.r * sind(sun.lon), xh + sun.r * cosd(sun.lon)));
+}
+
+function meanNodePosition(d) { return rev(125.0445550 - 0.05295377 * d); }
+
+function gateAndLineFromLongitude(lon) {
+  const offset = ((lon - HD_WHEEL_START) % 360 + 360) % 360;
+  const wheelPos = Math.floor(offset / 5.625);
+  const hdGate = HD_WHEEL_ORDER[wheelPos];
+  const lineFloat = (offset % 5.625) / (5.625 / 6);
+  const line = Math.min(6, Math.floor(lineFloat) + 1);
+  const odIdx = Math.floor(lon / 5.625);
+  const odu = ODU_ORDER[Math.floor(odIdx / 4)];
+  const element = ELEMENT_ORDER[odIdx % 4];
+  return { hdGate, line, astroGate: `${odu}-${element}`, odu, element, longitude: lon };
+}
+
+function computeAllActivations(jd) {
+  const d = jd - 2451543.5;
+  const sun = sunPosition(d);
+  const moonLon = moonPosition(d);
+  const earth = rev(sun.lon + 180);
+  const nodeLon = meanNodePosition(d);
+  const southNodeLon = rev(nodeLon + 180);
+  const positions = {
+    Sun: sun.lon, Earth: earth, Moon: moonLon,
+    NorthNode: nodeLon, SouthNode: southNodeLon,
+    Mercury: planetPosition('Mercury', d), Venus: planetPosition('Venus', d),
+    Mars: planetPosition('Mars', d), Jupiter: planetPosition('Jupiter', d),
+    Saturn: planetPosition('Saturn', d), Uranus: planetPosition('Uranus', d),
+    Neptune: planetPosition('Neptune', d), Pluto: planetPosition('Pluto', d)
+  };
+  const result = {};
+  for (const [name, lon] of Object.entries(positions)) result[name] = { ...gateAndLineFromLongitude(lon) };
+  return result;
+}
+
+function findDesignJD(birthJD) {
+  const birthD = birthJD - 2451543.5;
+  const birthSunLon = sunPosition(birthD).lon;
+  const targetSunLon = rev(birthSunLon - 88);
+  let designJD = birthJD - 88 / 0.9856;
+  for (let i = 0; i < 10; i++) {
+    const d = designJD - 2451543.5;
+    const sunLon = sunPosition(d).lon;
+    let diff = ((targetSunLon - sunLon + 540) % 360) - 180;
+    designJD += diff / 0.9856;
+    if (Math.abs(diff) < 0.0005) break;
+  }
+  return designJD;
+}
+
+function gateToCenter(gate) {
+  for (const c of CENTERS) if (c.gates.includes(gate)) return c.name;
+  return null;
+}
+
+function analyzeChart(personality, design) {
+  const activeGates = new Set();
+  const gateActivations = {};
+  const allActivations = [];
+  for (const [src, act] of Object.entries(personality)) {
+    activeGates.add(act.hdGate);
+    if (!gateActivations[act.hdGate]) gateActivations[act.hdGate] = [];
+    gateActivations[act.hdGate].push({ side: 'Personality', source: src, line: act.line, astroGate: act.astroGate });
+    allActivations.push({ side: 'Personality', source: src, ...act });
+  }
+  for (const [src, act] of Object.entries(design)) {
+    activeGates.add(act.hdGate);
+    if (!gateActivations[act.hdGate]) gateActivations[act.hdGate] = [];
+    gateActivations[act.hdGate].push({ side: 'Design', source: src, line: act.line, astroGate: act.astroGate });
+    allActivations.push({ side: 'Design', source: src, ...act });
+  }
+
+  const definedChannels = CHANNELS.filter(c => activeGates.has(c.gates[0]) && activeGates.has(c.gates[1]));
+  const partialChannels = CHANNELS.filter(c =>
+    (activeGates.has(c.gates[0]) || activeGates.has(c.gates[1])) &&
+    !(activeGates.has(c.gates[0]) && activeGates.has(c.gates[1]))
+  );
+
+  const definedCenters = new Set();
+  for (const ch of definedChannels) { definedCenters.add(ch.centers[0]); definedCenters.add(ch.centers[1]); }
+
+  const sacralDefined = definedCenters.has('Sacral');
+  const motors = ['Sacral', 'Heart', 'SP', 'Root'];
+  function reachable(start) {
+    const visited = new Set([start]);
+    const queue = [start];
+    while (queue.length) {
+      const cur = queue.shift();
+      for (const ch of definedChannels) {
+        if (ch.centers.includes(cur)) {
+          const other = ch.centers[0] === cur ? ch.centers[1] : ch.centers[0];
+          if (!visited.has(other)) { visited.add(other); queue.push(other); }
+        }
+      }
+    }
+    return visited;
+  }
+  const throatReach = definedCenters.has('Throat') ? reachable('Throat') : new Set();
+  const throatToMotor = motors.some(m => throatReach.has(m));
+
+  let type;
+  if (definedCenters.size === 0) type = 'Reflector';
+  else if (sacralDefined && throatToMotor) type = 'Manifesting Generator';
+  else if (sacralDefined) type = 'Generator';
+  else if (throatToMotor) type = 'Manifestor';
+  else type = 'Projector';
+
+  let authority;
+  if (type === 'Reflector') authority = 'Lunar';
+  else if (definedCenters.has('SP')) authority = 'Emotional';
+  else if (sacralDefined && (type === 'Generator' || type === 'Manifesting Generator')) authority = 'Sacral';
+  else if (definedCenters.has('Spleen')) authority = 'Splenic';
+  else if (definedCenters.has('Heart')) authority = 'Ego';
+  else if (type === 'Projector' && definedCenters.has('G')) authority = 'G Self-Projected';
+  else authority = 'Mental';
+
+  const profile = `${personality.Sun.line}/${design.Sun.line}`;
+  const profileNames = { 1: LINES[0].name, 2: LINES[1].name, 3: LINES[2].name, 4: LINES[3].name, 5: LINES[4].name, 6: LINES[5].name };
+
+  function countGroups() {
+    const visited = new Set();
+    let groups = 0;
+    for (const c of definedCenters) {
+      if (visited.has(c)) continue;
+      groups++;
+      const queue = [c];
+      while (queue.length) {
+        const cur = queue.shift();
+        if (visited.has(cur)) continue;
+        visited.add(cur);
+        for (const ch of definedChannels) {
+          if (ch.centers.includes(cur)) {
+            const other = ch.centers[0] === cur ? ch.centers[1] : ch.centers[0];
+            if (!visited.has(other)) queue.push(other);
+          }
+        }
+      }
+    }
+    return groups;
+  }
+  const groupCount = countGroups();
+  const definitionNames = ['No Definition', 'Single Definition', 'Split Definition', 'Triple Split', 'Quadruple Split'];
+  const definition = definitionNames[Math.min(groupCount, 4)];
+
+  const incarnationCross = {
+    personalitySun: personality.Sun, personalityEarth: personality.Earth,
+    designSun: design.Sun, designEarth: design.Earth
+  };
+
+  return {
+    activeGates, gateActivations, allActivations,
+    definedChannels, partialChannels, definedCenters,
+    type, authority, profile,
+    profileLines: { conscious: personality.Sun.line, unconscious: design.Sun.line },
+    profileNames: { conscious: profileNames[personality.Sun.line], unconscious: profileNames[design.Sun.line] },
+    definition, groupCount, incarnationCross, sect: null
+  };
+}
+
+function calculateChart(birthData) {
+  const { year, month, day, hour, minute, tz } = birthData;
+  const birthJD = julianDay(year, month, day, hour, minute, tz);
+  const designJD = findDesignJD(birthJD);
+  const personality = computeAllActivations(birthJD);
+  const design = computeAllActivations(designJD);
+  const analysis = analyzeChart(personality, design);
+  const hourOfDay = hour + minute / 60;
+  const sect = (hourOfDay >= 6 && hourOfDay < 18) ? 'Day' : 'Night';
+  return { birthData, birthJD, designJD, personality, design, ...analysis, sect, designDate: julianDateToCalendar(designJD) };
+}
+
+function julianDateToCalendar(jd) {
+  const J = jd + 0.5;
+  const Z = Math.floor(J);
+  const F = J - Z;
+  let A = Z;
+  if (Z >= 2299161) {
+    const alpha = Math.floor((Z - 1867216.25) / 36524.25);
+    A = Z + 1 + alpha - Math.floor(alpha / 4);
+  }
+  const B = A + 1524;
+  const C = Math.floor((B - 122.1) / 365.25);
+  const D = Math.floor(365.25 * C);
+  const E = Math.floor((B - D) / 30.6001);
+  const day = B - D - Math.floor(30.6001 * E) + F;
+  const month = E < 14 ? E - 1 : E - 13;
+  const year = month > 2 ? C - 4716 : C - 4715;
+  return { year, month, day: Math.floor(day) };
+}
+
+async function callBackend(chart, part) {
+  const userEmail = (window.localStorage.getItem('ntas98_user') || '').toLowerCase();
+  // Serialize the chart for backend (Set/Map need conversion)
+  const serializable = {
+    ...chart,
+    activeGates: [...chart.activeGates],
+    definedCenters: [...chart.definedCenters]
+  };
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userEmail, chart: serializable, part })
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || `API returned ${response.status}`);
+  }
+  return await response.json();
+}
+
+function CenterShape({ center, defined, partial }) {
+  const fill = defined ? 'url(#hdGoldGrad)' : '#0a0908';
+  const stroke = defined ? '#f4d03f' : (partial ? '#a8852a' : '#5a4a28');
+  const strokeWidth = defined ? 2.2 : (partial ? 1.2 : 0.8);
+  const filter = defined ? 'url(#hdGlow)' : '';
+  const { cx, cy } = center;
+  switch (center.shape) {
+    case 'triangleDown': { const s = center.size / 2; return <polygon points={`${cx},${cy + s} ${cx - s},${cy - s} ${cx + s},${cy - s}`} fill={fill} stroke={stroke} strokeWidth={strokeWidth} filter={filter} />; }
+    case 'triangleUp': { const s = center.size / 2; return <polygon points={`${cx},${cy - s} ${cx - s},${cy + s} ${cx + s},${cy + s}`} fill={fill} stroke={stroke} strokeWidth={strokeWidth} filter={filter} />; }
+    case 'triangleLeft': { const s = center.size / 2; return <polygon points={`${cx - s},${cy} ${cx + s},${cy - s} ${cx + s},${cy + s}`} fill={fill} stroke={stroke} strokeWidth={strokeWidth} filter={filter} />; }
+    case 'triangleRight': { const s = center.size / 2; return <polygon points={`${cx + s},${cy} ${cx - s},${cy - s} ${cx - s},${cy + s}`} fill={fill} stroke={stroke} strokeWidth={strokeWidth} filter={filter} />; }
+    case 'square': return <rect x={cx - center.w / 2} y={cy - center.h / 2} width={center.w} height={center.h} fill={fill} stroke={stroke} strokeWidth={strokeWidth} filter={filter} />;
+    case 'diamond': { const s = center.size; return <polygon points={`${cx},${cy - s} ${cx + s},${cy} ${cx},${cy + s} ${cx - s},${cy}`} fill={fill} stroke={stroke} strokeWidth={strokeWidth} filter={filter} />; }
+  }
+}
+
+function BodyGraph({ chart }) {
+  const cx = 200;
+  const partialCenters = new Set();
+  for (const ch of chart.partialChannels) { partialCenters.add(ch.centers[0]); partialCenters.add(ch.centers[1]); }
+  return (
+    <svg viewBox="0 0 400 720" className="w-full max-w-md mx-auto">
+      <defs>
+        <linearGradient id="hdGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#a8852a" /><stop offset="50%" stopColor="#f4d03f" /><stop offset="100%" stopColor="#a8852a" />
+        </linearGradient>
+        <linearGradient id="hdChannelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#d4af37" stopOpacity="0.5" /><stop offset="50%" stopColor="#f4d03f" stopOpacity="1" /><stop offset="100%" stopColor="#d4af37" stopOpacity="0.5" />
+        </linearGradient>
+        <filter id="hdGlow"><feGaussianBlur stdDeviation="2" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+      </defs>
+      <rect width="400" height="720" fill="#050403" />
+      <text x={cx} y="22" textAnchor="middle" fill="#d4af37" fontSize="11" fontFamily="serif" letterSpacing="6">BODY GRAPH</text>
+      {CHANNELS.filter(ch => !chart.definedChannels.includes(ch) && !chart.partialChannels.includes(ch)).map((ch, i) => {
+        const c1 = CENTERS.find(c => c.name === ch.centers[0]);
+        const c2 = CENTERS.find(c => c.name === ch.centers[1]);
+        return <line key={`inactive-${i}`} x1={c1.cx} y1={c1.cy} x2={c2.cx} y2={c2.cy} stroke="#3a2f1c" strokeWidth="0.4" opacity="0.4" />;
+      })}
+      {chart.partialChannels.map((ch, i) => {
+        const c1 = CENTERS.find(c => c.name === ch.centers[0]);
+        const c2 = CENTERS.find(c => c.name === ch.centers[1]);
+        return <line key={`partial-${i}`} x1={c1.cx} y1={c1.cy} x2={c2.cx} y2={c2.cy} stroke="#a8852a" strokeWidth="1.3" opacity="0.55" strokeDasharray="3 3" />;
+      })}
+      {chart.definedChannels.map((ch, i) => {
+        const c1 = CENTERS.find(c => c.name === ch.centers[0]);
+        const c2 = CENTERS.find(c => c.name === ch.centers[1]);
+        return <line key={`def-${i}`} x1={c1.cx} y1={c1.cy} x2={c2.cx} y2={c2.cy} stroke="url(#hdChannelGrad)" strokeWidth="3.2" filter="url(#hdGlow)" />;
+      })}
+      {CENTERS.map(center => (<g key={center.name}><CenterShape center={center} defined={chart.definedCenters.has(center.name)} partial={partialCenters.has(center.name) && !chart.definedCenters.has(center.name)} /></g>))}
+      {CENTERS.map(center => {
+        const labelOffsets = {
+          Head: { dx: 0, dy: -54 }, Ajna: { dx: 0, dy: 50 }, Throat: { dx: -70, dy: 0 },
+          G: { dx: -65, dy: 5 }, Heart: { dx: 0, dy: 38 }, SP: { dx: 0, dy: 50 },
+          Sacral: { dx: -75, dy: 5 }, Spleen: { dx: 0, dy: 50 }, Root: { dx: 0, dy: 40 }
+        };
+        const off = labelOffsets[center.name] || { dx: 0, dy: -45 };
+        const isDefined = chart.definedCenters.has(center.name);
+        return (
+          <text key={`label-${center.name}`} x={center.cx + off.dx} y={center.cy + off.dy} textAnchor="middle" dominantBaseline="middle"
+            fill={isDefined ? '#f4d03f' : '#8a7340'} fontSize="10" fontFamily="serif" fontStyle="italic" opacity={isDefined ? 1 : 0.6}>
+            {center.orisha.split('/')[0]}
+          </text>
+        );
+      })}
+      <g>
+        <line x1="80" y1="650" x2="320" y2="650" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
+        <text x={cx} y="645" textAnchor="middle" fill="#d4af37" fontSize="11" fontFamily="serif" letterSpacing="5">{chart.type.toUpperCase()} · {chart.profile}</text>
+        <text x={cx} y="668" textAnchor="middle" fill="#8a7340" fontSize="9" fontFamily="serif" letterSpacing="4" fontStyle="italic">⊹  S A C R E D   D E S I G N  ⊹</text>
+      </g>
+    </svg>
+  );
+}
+
+function HDForm({ onSubmit, prefill }) {
+  const [name, setName] = useState(prefill?.full_name || '');
+  const [date, setDate] = useState(prefill?.dob || '');
+  const [time, setTime] = useState(prefill?.birth_time || '12:00');
+  const initialCity = prefill?.birth_location && COMMON_CITIES.find(c => c.name === prefill.birth_location)
+    ? prefill.birth_location : 'Columbus, OH';
+  const [city, setCity] = useState(initialCity);
+  const [customMode, setCustomMode] = useState(false);
+  const [lat, setLat] = useState(''), [lng, setLng] = useState(''), [tz, setTz] = useState('-5');
+
+  useEffect(() => {
+    if (prefill?.full_name && !name) setName(prefill.full_name);
+    if (prefill?.dob && !date) setDate(prefill.dob);
+    if (prefill?.birth_time && time === '12:00') setTime(prefill.birth_time);
+    if (prefill?.birth_location && COMMON_CITIES.find(c => c.name === prefill.birth_location)) {
+      setCity(prefill.birth_location);
+    }
+  }, [prefill]);
+
+  const handleSubmit = () => {
+    if (!date) return;
+    const [yStr, mStr, dStr] = date.split('-');
+    const [hStr, minStr] = time.split(':');
+    let coords;
+    if (customMode) {
+      if (!lat || !lng) return;
+      coords = { lat: parseFloat(lat), lng: parseFloat(lng), tz: parseFloat(tz) };
+    } else {
+      const c = COMMON_CITIES.find(c => c.name === city);
+      coords = { lat: c.lat, lng: c.lng, tz: c.tz };
+    }
+    onSubmit({ full_name: name, year: parseInt(yStr), month: parseInt(mStr), day: parseInt(dStr), hour: parseInt(hStr), minute: parseInt(minStr), ...coords });
+  };
+  return (
+    <div className="max-w-lg mx-auto px-6 py-12">
+      <div className="text-center mb-10">
+        <svg viewBox="-30 -40 60 80" className="w-12 h-16 mx-auto mb-4">
+          <g stroke="#d4af37" strokeWidth="2.2" fill="none" strokeLinecap="round">
+            <ellipse cx="0" cy="-15" rx="11" ry="13" /><line x1="-15" y1="3" x2="15" y2="3" /><line x1="0" y1="3" x2="0" y2="30" />
+          </g>
+        </svg>
+        <div className="text-amber-400 text-xs tracking-[0.5em] mb-3 font-display">NTAS98 · HUMAN DESIGN</div>
+        <div className="h-px w-16 bg-amber-400 mx-auto opacity-60 mb-6"></div>
+        <h1 className="text-5xl font-serif text-stone-100 mb-3 tracking-wide italic">Astro-Odu</h1>
+        <p className="text-amber-200/70 italic font-serif text-lg">The body's sacred design</p>
+        <p className="text-amber-200/50 italic font-serif text-sm mt-1">64 Gates · 16 Odu × 4 Elements · 9 Orisha Centers</p>
+      </div>
+      <div className="space-y-6">
+        <div>
+          <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">FULL NAME</label>
+          <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif" />
+        </div>
+        <div>
+          <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">BIRTH DATE</label>
+          <input type="date" value={date} onChange={e => setDate(e.target.value)} className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif" />
+        </div>
+        <div>
+          <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">BIRTH TIME (24-hour)</label>
+          <input type="time" value={time} onChange={e => setTime(e.target.value)} className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif" />
+          <p className="text-amber-200/40 text-xs mt-1 italic">Exact time critical — Profile and Authority depend on it</p>
+        </div>
+        {!customMode ? (
+          <div>
+            <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">BIRTH CITY</label>
+            <select value={city} onChange={e => setCity(e.target.value)} className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif">
+              {COMMON_CITIES.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+            </select>
+            <button onClick={() => setCustomMode(true)} className="text-amber-300/60 text-xs mt-2 italic hover:text-amber-300 transition">City not listed? Enter coordinates →</button>
+          </div>
+        ) : (
+          <div className="space-y-3 border border-amber-700/30 rounded p-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-amber-300/90 text-sm tracking-widest font-serif">CUSTOM COORDINATES</span>
+              <button onClick={() => setCustomMode(false)} className="text-amber-300/60 text-xs italic hover:text-amber-300">← Use city list</button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div><label className="block text-amber-200/60 text-xs mb-1">Latitude</label><input value={lat} onChange={e => setLat(e.target.value)} placeholder="39.96" className="w-full bg-black/60 border border-amber-700/40 rounded px-3 py-2 text-stone-100 focus:border-amber-400 focus:outline-none" /></div>
+              <div><label className="block text-amber-200/60 text-xs mb-1">Longitude</label><input value={lng} onChange={e => setLng(e.target.value)} placeholder="-83.00" className="w-full bg-black/60 border border-amber-700/40 rounded px-3 py-2 text-stone-100 focus:border-amber-400 focus:outline-none" /></div>
+            </div>
+            <div><label className="block text-amber-200/60 text-xs mb-1">Timezone offset from UTC</label><input value={tz} onChange={e => setTz(e.target.value)} className="w-full bg-black/60 border border-amber-700/40 rounded px-3 py-2 text-stone-100 focus:border-amber-400 focus:outline-none" /></div>
+          </div>
+        )}
+        <button onClick={handleSubmit} className="w-full mt-8 bg-gradient-to-r from-amber-700 via-amber-500 to-amber-700 text-black font-display tracking-[0.3em] py-4 rounded hover:from-amber-600 hover:to-amber-600 transition shadow-lg shadow-amber-900/40">READ THE BODY</button>
+      </div>
+    </div>
+  );
+}
+
+function LoadingRitual({ stage }) {
+  const messages = ["Reading the body's frozen moment...", 'Computing the Design from 88 days before...', 'Mapping the Orisha to the centers...', "Channeling the body's wisdom..."];
+  const [msgIdx, setMsgIdx] = useState(0);
+  useEffect(() => { const t = setInterval(() => setMsgIdx(i => (i + 1) % messages.length), 1800); return () => clearInterval(t); }, []);
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[60vh] py-12">
+      <div className="relative w-32 h-32 mb-8">
+        <div className="absolute inset-0 rounded-full border-2 border-amber-700/30"></div>
+        <div className="absolute inset-0 rounded-full border-t-2 border-amber-400 animate-spin" style={{animationDuration: '3s'}}></div>
+        <div className="absolute inset-2 rounded-full border-b-2 border-amber-300/50 animate-spin" style={{animationDuration: '5s', animationDirection: 'reverse'}}></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg viewBox="-20 -28 40 56" className="w-10 h-14">
+            <g stroke="#d4af37" strokeWidth="2" fill="none" strokeLinecap="round">
+              <ellipse cx="0" cy="-10" rx="8" ry="10" /><line x1="-11" y1="2" x2="11" y2="2" /><line x1="0" y1="2" x2="0" y2="22" />
+            </g>
+          </svg>
+        </div>
+      </div>
+      <p className="text-amber-200/80 italic font-serif text-lg">{messages[msgIdx]}</p>
+      {stage && <p className="text-amber-300/50 text-xs tracking-widest mt-3 font-serif">{stage}</p>}
+    </div>
+  );
+}
+
+function CoreFacts({ chart }) {
+  const Item = ({ label, value, sub }) => (
+    <div className="bg-black/40 border border-amber-700/30 rounded p-3">
+      <div className="text-amber-300/70 text-[10px] tracking-widest font-display">{label}</div>
+      <div className="text-stone-100 text-lg font-serif mt-1">{value}</div>
+      {sub && <div className="text-amber-200/60 text-xs italic font-serif mt-0.5">{sub}</div>}
+    </div>
+  );
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <Item label="TYPE" value={chart.type} sub={TYPE_TO_ORISHA[chart.type].orisha} />
+      <Item label="STRATEGY" value={TYPE_TO_ORISHA[chart.type].strategy} />
+      <Item label="AUTHORITY" value={chart.authority} sub={AUTHORITY_TO_ORISHA[chart.authority].orisha} />
+      <Item label="PROFILE" value={chart.profile} sub={`${chart.profileNames.conscious} / ${chart.profileNames.unconscious}`} />
+      <Item label="DEFINITION" value={chart.definition} />
+      <Item label="SIGNATURE" value={TYPE_TO_ORISHA[chart.type].signature} sub={`Not-self: ${TYPE_TO_ORISHA[chart.type].notSelf}`} />
+    </div>
+  );
+}
+
+function CentersPanel({ chart }) {
+  return (
+    <div className="bg-black/40 border border-amber-700/30 rounded p-5">
+      <div className="text-amber-300/80 text-xs font-display tracking-widest mb-3">9 CENTERS · INTERNAL ENGINE</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm font-serif">
+        {CENTERS.map(c => {
+          const defined = chart.definedCenters.has(c.name);
+          return (
+            <div key={c.name} className={`px-3 py-2 rounded border ${defined ? 'bg-amber-950/30 border-amber-500/50' : 'bg-stone-900/30 border-stone-700/50 opacity-70'}`}>
+              <div className="flex items-baseline justify-between">
+                <span className={defined ? 'text-amber-200' : 'text-stone-400'}>{c.name}</span>
+                <span className={`text-[10px] font-display tracking-wider ${defined ? 'text-amber-400' : 'text-stone-500'}`}>{defined ? '⊹ DEFINED' : 'OPEN'}</span>
+              </div>
+              <div className={`text-xs italic ${defined ? 'text-amber-300/80' : 'text-stone-500'}`}>{c.orisha}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ActiveGatesPanel({ chart }) {
+  const grouped = {};
+  for (const gate of chart.activeGates) {
+    const center = gateToCenter(gate);
+    if (!grouped[center]) grouped[center] = [];
+    const acts = chart.gateActivations[gate];
+    grouped[center].push({ hd: gate, ...acts[0], allActs: acts });
+  }
+  return (
+    <div className="bg-black/40 border border-amber-700/30 rounded p-5">
+      <div className="text-amber-300/80 text-xs font-display tracking-widest mb-3">ACTIVE GATES · ODU-ELEMENT</div>
+      <div className="space-y-3 text-sm font-serif">
+        {CENTERS.filter(c => grouped[c.name]).map(c => {
+          const isDefined = chart.definedCenters.has(c.name);
+          return (
+            <div key={c.name}>
+              <div className="text-amber-300 text-xs tracking-widest font-display mb-1">{c.name.toUpperCase()} · {c.orisha}</div>
+              <div className="grid grid-cols-1 gap-1">
+                {grouped[c.name].map((g, i) => {
+                  const persAct = g.allActs.find(a => a.side === 'Personality');
+                  const desAct = g.allActs.find(a => a.side === 'Design');
+                  return (
+                    <div key={i} className={`text-xs ${isDefined ? 'text-stone-200' : 'text-stone-400'}`}>
+                      <span className="text-amber-400 mr-1">{g.astroGate}</span>
+                      <span className="text-stone-500">· HD {g.hd}.{g.line}</span>
+                      <span className="ml-2 text-[10px] text-amber-200/60">
+                        {persAct && <span className="bg-amber-700/30 px-1.5 py-0.5 rounded mr-1">P: {persAct.source}</span>}
+                        {desAct && <span className="bg-stone-800 px-1.5 py-0.5 rounded">D: {desAct.source}</span>}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function IncarnationCrossPanel({ chart }) {
+  const ic = chart.incarnationCross;
+  const Card = ({ label, gate }) => (
+    <div className="bg-amber-950/20 border border-amber-700/40 rounded p-3">
+      <div className="text-amber-400 text-[10px] tracking-widest font-display">{label}</div>
+      <div className="text-stone-100 font-serif text-lg mt-1">{gate.astroGate}</div>
+      <div className="text-amber-200/60 text-xs italic font-serif">HD {gate.hdGate}.{gate.line}</div>
+    </div>
+  );
+  return (
+    <div className="bg-black/40 border border-amber-500/40 rounded p-5">
+      <div className="text-amber-300/80 text-xs font-display tracking-widest mb-3">⊹ INCARNATION CROSS · 4-GATE SOUL MISSION ⊹</div>
+      <div className="grid grid-cols-2 gap-3">
+        <Card label="PERSONALITY SUN" gate={ic.personalitySun} />
+        <Card label="PERSONALITY EARTH" gate={ic.personalityEarth} />
+        <Card label="DESIGN SUN" gate={ic.designSun} />
+        <Card label="DESIGN EARTH" gate={ic.designEarth} />
+      </div>
+    </div>
+  );
+}
+
+function Section({ number, title, children }) {
+  return (
+    <div className="mb-12">
+      <div className="flex items-center mb-5"><div className="text-amber-400 text-xs tracking-[0.4em] font-display mr-3">{number}</div><div className="h-px flex-1 bg-amber-700/40"></div></div>
+      <h2 className="text-3xl font-serif text-amber-300 mb-4 tracking-wide italic">{title}</h2>
+      <div className="text-stone-200 font-serif leading-relaxed text-base space-y-3">{children}</div>
+    </div>
+  );
+}
+
+function AstroOduHumanDesign() {
+  const [view, setView] = useState('form');
+  const [chart, setChart] = useState(null);
+  const [r1, setR1] = useState(null), [r2, setR2] = useState(null), [r3, setR3] = useState(null), [r4, setR4] = useState(null);
+  const [error, setError] = useState(null);
+  const [stage, setStage] = useState('');
+  const [prefill, setPrefill] = useState(null);
+
+  useEffect(() => {
+    const u = (localStorage.getItem('ntas98_user') || '').toLowerCase();
+    if (!u) return;
+    try {
+      const raw = localStorage.getItem('ntas98_profile_' + u);
+      if (raw) {
+        const p = JSON.parse(raw);
+        setPrefill({ full_name: p.full_name, dob: p.dob, birth_time: p.birth_time, birth_location: p.birth_location });
+      } else {
+        const ud = localStorage.getItem('ntas98_userdata_' + u);
+        if (ud) {
+          const d = JSON.parse(ud);
+          if (d.full_name || d.name) setPrefill({ full_name: d.full_name || d.name });
+        }
+      }
+    } catch(e) {}
+    (async () => {
+      try {
+        const res = await fetch('/.netlify/functions/get-profile', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userEmail: u })
+        });
+        const data = await res.json();
+        if (data && data.success && data.profile) {
+          const p = data.profile;
+          setPrefill({
+            full_name: p.full_name || null,
+            dob: p.dob || null,
+            birth_time: p.birth_time || null,
+            birth_location: p.birth_location || null
+          });
+          try { localStorage.setItem('ntas98_profile_' + u, JSON.stringify(p)); } catch(e) {}
+        }
+      } catch(e) {}
+    })();
+  }, []);
+
+  const handleSubmit = async (birthData) => {
+    setError(null); setView('calculating'); setStage('Computing Personality and Design');
+    setR1(null); setR2(null); setR3(null); setR4(null);
+    try {
+      const calculatedChart = calculateChart(birthData);
+      setChart(calculatedChart);
+      await new Promise(r => setTimeout(r, 800));
+      setView('reading');
+      setStage('Channeling — I of IV: Type & Authority'); setR1(await callBackend(calculatedChart, 1));
+      setStage('Channeling — II of IV: Profile & Centers'); setR2(await callBackend(calculatedChart, 2));
+      setStage('Channeling — III of IV: Channels & Gates'); setR3(await callBackend(calculatedChart, 3));
+      setStage('Channeling — IV of IV: Cross & Sankofa'); setR4(await callBackend(calculatedChart, 4));
+      setStage('');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'The channel has been disturbed. Try again.');
+      setStage('');
+    }
+  };
+
+  const reset = () => { setView('form'); setChart(null); setR1(null); setR2(null); setR3(null); setR4(null); setError(null); };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-black via-stone-950 to-black text-stone-100">
+      {view === 'form' && <HDForm onSubmit={handleSubmit} prefill={prefill} />}
+      {view === 'calculating' && <LoadingRitual stage={stage} />}
+      {view === 'reading' && chart && (
+        <div className="max-w-3xl mx-auto px-6 py-10">
+          <div className="text-center mb-10 fade-up">
+            <div className="text-amber-400 text-xs tracking-[0.5em] mb-3 font-display">NTAS98 · ASTRO-ODU HUMAN DESIGN</div>
+            <div className="h-px w-24 bg-amber-400 mx-auto opacity-60 mb-6"></div>
+            <h1 className="text-4xl font-serif text-stone-100 italic">Your Body's Sacred Design</h1>
+          </div>
+          <div className="mb-10 fade-up"><BodyGraph chart={chart} /></div>
+          <div className="mb-6"><CoreFacts chart={chart} /></div>
+          <div className="grid md:grid-cols-2 gap-4 mb-6"><CentersPanel chart={chart} /><ActiveGatesPanel chart={chart} /></div>
+          <div className="mb-10"><IncarnationCrossPanel chart={chart} /></div>
+          {stage && (
+            <div className="text-center py-6 mb-6">
+              <div className="inline-flex items-center gap-3">
+                <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                <span className="text-amber-300/80 italic font-serif text-sm tracking-widest">{stage}</span>
+              </div>
+            </div>
+          )}
+          {error && (
+            <div className="bg-red-900/20 border border-red-800/40 rounded p-4 text-red-300 mb-6">
+              {error}<button onClick={reset} className="block mt-3 text-amber-300 underline">Begin again</button>
+            </div>
+          )}
+          {r1 && (
+            <div className="fade-up">
+              <Section number="I" title="The Body Speaks"><p>{r1.body_speaks}</p></Section>
+              <Section number="II" title={`Type & Strategy — ${chart.type}`}><p>{r1.type_and_strategy}</p></Section>
+              <Section number="III" title={`Authority — ${chart.authority}`}><p>{r1.authority}</p></Section>
+            </div>
+          )}
+          {r2 && (
+            <div className="fade-up">
+              <Section number="IV" title={`Profile — ${chart.profile}`}><p>{r2.profile}</p></Section>
+              <Section number="V" title="The Defined Centers — Calibrated Orisha"><p>{r2.defined_centers}</p></Section>
+              <Section number="VI" title="The Open Centers — Wisdom Portals"><p>{r2.open_centers}</p></Section>
+            </div>
+          )}
+          {r3 && (
+            <div className="fade-up">
+              <Section number="VII" title="The Channels — Active Currents">
+                <p>{r3.channels}</p>
+                {chart.definedChannels.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-5 text-sm">
+                    {chart.definedChannels.map((ch, i) => (
+                      <div key={i} className="border border-amber-700/30 rounded px-3 py-2 bg-black/30">
+                        <div className="text-amber-400 font-serif">{ch.name}</div>
+                        <div className="text-stone-300 text-xs italic">{ch.centers[0]} ↔ {ch.centers[1]}</div>
+                        <div className="text-amber-200/40 text-[10px] font-display tracking-widest">HD {ch.gates[0]}-{ch.gates[1]}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Section>
+              <Section number="VIII" title="The Active Gates — Odu-Element"><p>{r3.active_gates}</p></Section>
+              <Section number="IX" title={`Definition — ${chart.definition}`}><p>{r3.definition}</p></Section>
+            </div>
+          )}
+          {r4 && (
+            <div className="fade-up">
+              <Section number="X" title="The Incarnation Cross — Soul's Mission"><p>{r4.incarnation_cross}</p></Section>
+              <Section number="XI" title="Living Your Design"><p>{r4.living_your_design}</p></Section>
+              <Section number="XII" title="Sankofa — Reach Back"><p>{r4.sankofa}</p></Section>
+              <div className="text-center mt-16 mb-8 no-print">
+                <div className="h-px w-24 bg-amber-400/60 mx-auto mb-6"></div>
+                <button onClick={() => window.print()} className="mr-4 bg-amber-700/30 border border-amber-500/60 text-amber-200 font-display tracking-widest px-6 py-3 rounded hover:bg-amber-700/50 transition">SAVE AS PDF</button>
+                <button onClick={reset} className="bg-transparent border border-amber-500/60 text-amber-200 font-display tracking-widest px-6 py-3 rounded hover:bg-amber-700/30 transition">CAST ANOTHER</button>
+              </div>
+              <div className="text-center text-amber-700/50 font-serif italic text-sm pb-12">⊹  NTAS98 · Nature · Trap · Soul · 1998  ⊹</div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AstroOduHumanDesign />);
+</script>
+</body>
+</html>

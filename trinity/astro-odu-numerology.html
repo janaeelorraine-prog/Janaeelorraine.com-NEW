@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astro-Odu Numerology — NTAS98</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    background: #1a0e2e;
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    z-index: -3; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 60%, rgba(240,198,104,0.32) 0%, transparent 55%),
+      radial-gradient(ellipse 90% 60% at 50% 100%, rgba(232,122,93,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 30% 20%, rgba(74,31,71,0.6) 0%, transparent 65%),
+      radial-gradient(ellipse 80% 60% at 80% 30%, rgba(181,51,137,0.25) 0%, transparent 60%),
+      linear-gradient(180deg, #1a0e2e 0%, #2a0f3d 40%, #1a0e2e 100%);
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -120px; left: -80px;
+    width: 320px; height: 320px;
+    z-index: -2; pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #9be0c4 0%, #6fc9a8 50%, #2d7d83 100%);
+    box-shadow:
+      inset -30px -30px 60px rgba(0,0,0,0.5),
+      inset 20px 20px 40px rgba(255,255,255,0.12),
+      0 0 80px rgba(155,224,196,0.3),
+      0 0 160px rgba(111,201,168,0.18);
+    opacity: 0.7;
+    animation: trinityPlanetDrift 100s ease-in-out infinite;
+  }
+  @keyframes trinityPlanetDrift {
+    0%, 100% { transform: translate(0,0); }
+    50% { transform: translate(20px,-15px); }
+  }
+  .trinity-cosmos {
+    position: fixed; inset: 0;
+    z-index: -1; pointer-events: none;
+    background-image:
+      radial-gradient(2px 2px at 20% 18%, rgba(240,198,104,0.85), transparent),
+      radial-gradient(1.5px 1.5px at 32% 32%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(2px 2px at 42% 22%, rgba(240,198,104,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 52% 12%, rgba(255,255,255,0.75), transparent),
+      radial-gradient(2.5px 2.5px at 50% 50%, rgba(240,198,104,0.95), transparent),
+      radial-gradient(1.5px 1.5px at 62% 38%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(2px 2px at 70% 28%, rgba(240,198,104,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 78% 52%, rgba(255,255,255,0.65), transparent),
+      radial-gradient(2px 2px at 82% 18%, rgba(240,198,104,0.7), transparent),
+      radial-gradient(1.5px 1.5px at 28% 62%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 48% 72%, rgba(240,198,104,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 65% 82%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 38% 88%, rgba(240,198,104,0.65), transparent),
+      radial-gradient(1.5px 1.5px at 75% 92%, rgba(255,255,255,0.55), transparent),
+      radial-gradient(2px 2px at 12% 8%, rgba(240,198,104,0.55), transparent),
+      radial-gradient(1.5px 1.5px at 88% 8%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(2px 2px at 8% 48%, rgba(240,198,104,0.6), transparent),
+      radial-gradient(1.5px 1.5px at 92% 68%, rgba(255,255,255,0.55), transparent);
+    animation: trinityTwinkle 10s ease-in-out infinite;
+  }
+  @keyframes trinityTwinkle { 0%,100%{opacity:0.75;} 50%{opacity:1;} }
+  .trinity-vignette {
+    position: fixed; inset: 0;
+    z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(26,14,46,0.5) 100%);
+  }
+
+  .font-serif { font-family: 'Cormorant Garamond', serif; }
+  .font-display { font-family: 'Cinzel', serif; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 1s ease-out forwards; }
+  @media print {
+    body { background: white !important; color: black !important; }
+    body::before, body::after, .trinity-cosmos, .trinity-vignette { display: none !important; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="trinity-cosmos"></div>
+<div class="trinity-vignette"></div>
+<div id="root"></div>
+
+<script>
+// Auth gate — bounce unauthenticated users to login
+(function(){
+  var u = (localStorage.getItem('ntas98_user') || '').toLowerCase();
+  if (!u) { window.location.href = '../login.html'; return; }
+  var raw = localStorage.getItem('ntas98_userdata_' + u);
+  if (raw) {
+    try {
+      var d = JSON.parse(raw);
+      var tier = d.portal_tier || d.tier || 'seed';
+      if (tier === 'seed' && !d.is_admin) { window.location.href = '../portal.html'; return; }
+    } catch(e){}
+  }
+})();
+</script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const API_ENDPOINT = "/api/trinity-numerology";
+
+const CHALDEAN_VALUES = {
+  A:1, I:1, J:1, Q:1, Y:1, B:2, K:2, R:2, C:3, G:3, L:3, S:3,
+  D:4, M:4, T:4, E:5, H:5, N:5, X:5, U:6, V:6, W:6, O:7, Z:7, F:8, P:8
+};
+const VOWELS = new Set(['A','E','I','O','U','Y']);
+
+const ORISHA_NUMBERS = [
+  { num: 1, orisha: 'Eshu-Elegba', archetype: 'Gateway · Catalyst', domain: 'The initial spark, opening, communication, Ashe', glyph: '◉' },
+  { num: 2, orisha: 'Ibeji', archetype: 'Duality · Partnership', domain: 'The twin force, balance, dual aspect of the cosmos', glyph: '⊞' },
+  { num: 3, orisha: 'Ogun', archetype: 'Pathmaker · Builder', domain: 'Iron, technology, clearing the path, civilization', glyph: '⚒' },
+  { num: 4, orisha: 'Osoosi', archetype: 'Tracker · Stability', domain: 'The hunter, focused direction, foundation of the pyramid', glyph: '⫯' },
+  { num: 5, orisha: 'Oshun', archetype: 'Diplomat · Sensualist', domain: 'Sensuality, fine arts, love, money, the senses', glyph: '✦' },
+  { num: 6, orisha: 'Shango', archetype: 'King · Transformer', domain: 'Royal harmony, justice, transmuting base into pure', glyph: '⚡' },
+  { num: 7, orisha: 'Yemoja', archetype: 'Cosmic Mother · Mystic', domain: 'Ocean depths, mother of all, amniotic universe', glyph: '◯' },
+  { num: 8, orisha: 'Obatala', archetype: 'Architect · Law', domain: "Iwa-pele, ethical purity, ritual whiteness, moulder of form", glyph: '◈' },
+  { num: 9, orisha: 'Oya', archetype: 'Tempest · Transition', domain: 'Storms, cemetery, end of cycle, rebirth', glyph: '❋' }
+];
+
+const MASTER_NUMBERS = {
+  11: { name: 'Ancestral Channel', orisha: 'Eshu (deeper)', meaning: 'You are a vessel — the ancestors speak through your tongue. The veil thins around you. Test: do not be possessed by the message; remain the vessel, not the voice.' },
+  22: { name: "Master Builder of Ma'at", orisha: 'Obatala (master)', meaning: 'Architect of order on Earth. The temple is yours to raise. Build sanctuaries, build systems that hold across generations.' },
+  33: { name: 'Master Healer-Sanctuary', orisha: 'Yemoja (master)', meaning: "The rarest channel. Healer of souls, sanctuary in the body. Yemoja's deep waters move through you. Tend yourself first, or you cannot tend others." }
+};
+
+const KARMIC_NUMBERS = {
+  13: { name: 'Karmic — Upheaval', meaning: 'Power through transformation. What dies makes way for what is true. Misused authority in another life requires labor in this one.' },
+  14: { name: 'Karmic — Temptation', meaning: 'Constant change. Guard against moral compromise, sensual excess, broken promises. Past freedoms misused.' },
+  16: { name: 'Karmic — The Tower', meaning: 'Sudden fall as teaching. Build only on truth, never on illusion. Past pride or false structures must collapse.' },
+  19: { name: 'Karmic — Sun Through Cloud', meaning: 'Success carries ancestral debt. Honor the lineage openly. Past abuse of power requires service in this incarnation.' },
+  26: { name: 'Karmic — Partnership Warning', meaning: 'Beware false allies and hidden agendas. Past betrayal, in either direction, asks for discernment now.' }
+};
+
+const COMPOUND_MEANINGS = {
+  10: { name: 'Wheel of Fortune', meaning: "Honor, faith, destiny — the wheel turns in your favor when aligned with Ma'at" },
+  11: { name: 'Master Channel', meaning: 'Ancestral voice; tested through hidden trials' },
+  12: { name: 'The Sacrifice', meaning: 'Willingness to suffer for higher truth' },
+  13: { name: 'Karmic Upheaval', meaning: 'Power through transformation; what dies makes way' },
+  14: { name: 'Karmic Movement', meaning: 'Change and temptation; guard against compromise' },
+  15: { name: 'The Magician', meaning: 'Magnetism, material gain through charm — wield with Iwa-pele' },
+  16: { name: 'Karmic Tower', meaning: 'Sudden fall as teaching; build only on truth' },
+  17: { name: 'The Star', meaning: 'Spiritual victory; immortality through legacy' },
+  18: { name: 'The Moon', meaning: 'Conflict and illusion; loyalty will be tested' },
+  19: { name: 'The Sun (karmic root)', meaning: 'Success carrying ancestral debt' },
+  20: { name: 'Awakening', meaning: 'The summons — spiritual judgment day calls you to rise' },
+  21: { name: 'The Crown', meaning: 'Earned success; honor after long labor' },
+  22: { name: 'Master Builder', meaning: 'Sanctuary architect; the temple is yours to raise' },
+  23: { name: 'Royal Star of the Lion', meaning: 'Strength, divine protection, success through courage' },
+  24: { name: 'Magnetic Love', meaning: 'Harmony and gain through partnership' },
+  25: { name: 'Wisdom from Trial', meaning: 'Analytical depth gained through experience' },
+  26: { name: 'Karmic Partnership', meaning: 'Beware false allies and hidden agendas' },
+  27: { name: 'The Scepter', meaning: 'Authority earned, command granted' },
+  28: { name: 'The Paradox', meaning: 'Promises broken if vigilance fails — trust slowly' },
+  29: { name: 'Karmic Trials of Grief', meaning: 'Disappointments forge a deeper soul' },
+  30: { name: 'Reflection', meaning: 'Mental superiority through contemplation' },
+  31: { name: 'Solitary Wisdom', meaning: 'Genius cultivated alone' },
+  32: { name: "Communication's Star", meaning: 'Eloquence brings fortune' },
+  33: { name: 'Master Healer', meaning: 'Healer-sanctuary, spiritual physician' },
+  34: { name: "Solitude's Strength", meaning: "The priest's walk; wisdom alone" },
+  35: { name: 'The Vacillation', meaning: 'Mixed energies; commit fully to one path' },
+  36: { name: 'Spiritual Responsibility', meaning: 'Heart-led leadership; teach by example' },
+  37: { name: "Friendship's Star", meaning: 'Beautiful relationships, love and harmony' },
+  38: { name: 'The Divided Path', meaning: 'Partnership risk; choose with discernment' },
+  39: { name: 'Honor', meaning: 'Service rewarded with recognition' },
+  40: { name: "Disappointment's Lesson", meaning: 'Test of will against discouragement' },
+  41: { name: 'Honored Wisdom', meaning: 'Fortune through clear speech' },
+  43: { name: 'Karmic Revolution', meaning: 'Strife and sudden upheaval' }
+};
+
+function reduceWithCompound(sum) {
+  if (sum === 0) return { final: 0, compound: null, karmic: false, master: false };
+  if (sum === 11 || sum === 22 || sum === 33) return { final: sum, compound: null, karmic: false, master: true };
+  if (sum <= 9) return { final: sum, compound: null, karmic: false, master: false };
+  const isKarmic = [13, 14, 16, 19, 26].includes(sum);
+  const compound = sum;
+  let n = sum;
+  while (n > 9) {
+    if (n === 11 || n === 22 || n === 33) return { final: n, compound: sum > n ? sum : null, karmic: isKarmic, master: true };
+    n = String(n).split('').map(Number).reduce((a, b) => a + b, 0);
+  }
+  return { final: n, compound, karmic: isKarmic, master: false };
+}
+
+function nameValues(name) {
+  const words = (name || '').toUpperCase().trim().split(/\s+/).filter(Boolean);
+  const wordData = words.map(w => {
+    const cleaned = w.replace(/[^A-Z]/g, '');
+    return cleaned.split('').map(ch => ({ letter: ch, value: CHALDEAN_VALUES[ch] || 0, isVowel: VOWELS.has(ch) }));
+  });
+  const flat = wordData.flat();
+  const vowelSum = flat.filter(l => l.isVowel).reduce((a, l) => a + l.value, 0);
+  const consonantSum = flat.filter(l => !l.isVowel).reduce((a, l) => a + l.value, 0);
+  return {
+    name: words.join(' '), words: wordData,
+    soulUrge: reduceWithCompound(vowelSum),
+    personality: reduceWithCompound(consonantSum),
+    expression: reduceWithCompound(vowelSum + consonantSum)
+  };
+}
+
+function calcLifePath(year, month, day) {
+  const sum = `${month}${day}${year}`.split('').map(Number).reduce((a, b) => a + b, 0);
+  return reduceWithCompound(sum);
+}
+function calcBirthday(day) { return reduceWithCompound(day); }
+function reduceSimple(n) {
+  while (n > 9 && n !== 11 && n !== 22 && n !== 33) n = String(n).split('').map(Number).reduce((a, b) => a + b, 0);
+  return n;
+}
+function calcPersonalYear(month, day, currentYear = new Date().getFullYear()) {
+  const sum = `${month}${day}${currentYear}`.split('').map(Number).reduce((a, b) => a + b, 0);
+  return { ...reduceWithCompound(sum), forYear: currentYear };
+}
+
+function calcPinnaclesChallenges(year, month, day, lifePathFinal) {
+  const m = reduceSimple(month), dr = reduceSimple(day), yr = reduceSimple(year);
+  const p1 = reduceWithCompound(m + dr);
+  const p2 = reduceWithCompound(dr + yr);
+  const p3 = reduceWithCompound((p1.master ? p1.final : reduceSimple(p1.final)) + (p2.master ? p2.final : reduceSimple(p2.final)));
+  const p4 = reduceWithCompound(m + yr);
+  const c1 = Math.abs(m - dr), c2 = Math.abs(dr - yr), c3 = Math.abs(c1 - c2), c4 = Math.abs(m - yr);
+  const lpRed = lifePathFinal > 9 ? reduceSimple(lifePathFinal) : lifePathFinal;
+  const firstAge = 36 - lpRed;
+  return {
+    pinnacles: [
+      { ...p1, ageStart: 0, ageEnd: firstAge, name: 'First Pinnacle' },
+      { ...p2, ageStart: firstAge + 1, ageEnd: firstAge + 9, name: 'Second Pinnacle' },
+      { ...p3, ageStart: firstAge + 10, ageEnd: firstAge + 18, name: 'Third Pinnacle' },
+      { ...p4, ageStart: firstAge + 19, ageEnd: 99, name: 'Fourth Pinnacle' }
+    ],
+    challenges: [
+      { value: c1, name: 'First Challenge' },
+      { value: c2, name: 'Second Challenge' },
+      { value: c3, name: 'Third Challenge' },
+      { value: c4, name: 'Fourth Challenge' }
+    ]
+  };
+}
+
+function calculateProfile(birthName, chosenName, birthDate) {
+  const [yStr, mStr, dStr] = birthDate.split('-');
+  const year = parseInt(yStr), month = parseInt(mStr), day = parseInt(dStr);
+  const birthCalc = nameValues(birthName);
+  const sameAsBirth = !chosenName || chosenName.trim().toUpperCase() === birthName.trim().toUpperCase();
+  const chosenCalc = sameAsBirth ? null : nameValues(chosenName);
+  const lifePath = calcLifePath(year, month, day);
+  const birthday = calcBirthday(day);
+  const personalYear = calcPersonalYear(month, day);
+  const cycles = calcPinnaclesChallenges(year, month, day, lifePath.final);
+  const activeNumbers = [
+    lifePath.final,
+    (chosenCalc || birthCalc).soulUrge.final,
+    (chosenCalc || birthCalc).personality.final,
+    (chosenCalc || birthCalc).expression.final,
+    birthday.final
+  ];
+  const compounds = [];
+  const collect = (calc, label) => { if (calc.compound && COMPOUND_MEANINGS[calc.compound]) compounds.push({ value: calc.compound, source: label }); };
+  collect(lifePath, 'Life Path');
+  collect(birthCalc.soulUrge, 'Soul Urge (birth)');
+  collect(birthCalc.personality, 'Personality (birth)');
+  collect(birthCalc.expression, 'Expression (birth)');
+  if (chosenCalc) {
+    collect(chosenCalc.soulUrge, 'Soul Urge (active)');
+    collect(chosenCalc.personality, 'Personality (active)');
+    collect(chosenCalc.expression, 'Expression (active)');
+  }
+  collect(personalYear, 'Personal Year');
+  const karmics = [], masters = [];
+  const noteCalc = (calc, label) => {
+    if (calc.karmic) karmics.push({ value: calc.compound, source: label, info: KARMIC_NUMBERS[calc.compound] });
+    if (calc.master) masters.push({ value: calc.final, source: label, info: MASTER_NUMBERS[calc.final] });
+  };
+  noteCalc(lifePath, 'Life Path');
+  noteCalc(birthCalc.soulUrge, 'Soul Urge (birth)');
+  noteCalc(birthCalc.personality, 'Personality (birth)');
+  noteCalc(birthCalc.expression, 'Expression (birth)');
+  if (chosenCalc) {
+    noteCalc(chosenCalc.soulUrge, 'Soul Urge (active)');
+    noteCalc(chosenCalc.personality, 'Personality (active)');
+    noteCalc(chosenCalc.expression, 'Expression (active)');
+  }
+  noteCalc(birthday, 'Birthday');
+  noteCalc(personalYear, `Personal Year ${personalYear.forYear}`);
+  return {
+    birthName: birthCalc.name,
+    chosenName: chosenCalc ? chosenCalc.name : null,
+    sameAsBirth,
+    birthDate: { year, month, day },
+    birthCalc, chosenCalc,
+    lifePath, birthday, personalYear,
+    cycles, compounds, karmics, masters, activeNumbers
+  };
+}
+
+async function callBackend(profile, part) {
+  const userEmail = (window.localStorage.getItem('ntas98_user') || '').toLowerCase();
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userEmail, chart: profile, part })
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || `API returned ${response.status}`);
+  }
+  return await response.json();
+}
+
+function NumerologicalSigil({ profile }) {
+  const cx = 250, cy = 250;
+  const R_OUTER = 235, R_NUMBERS = 195, R_SIGIL = 168, R_CENTER = 50;
+  const numAngle = num => 270 + (num - 1) * 40;
+  const polar = (r, ang) => ({ x: cx + r * Math.cos(ang * Math.PI / 180), y: cy + r * Math.sin(ang * Math.PI / 180) });
+  const visualNum = n => { if (n === 11) return 2; if (n === 22) return 4; if (n === 33) return 6; if (n === 0) return 1; return n; };
+  const activeSet = new Set(profile.activeNumbers.map(visualNum));
+  const activeNumbers = profile.activeNumbers.map(visualNum);
+  const activePoints = activeNumbers.map(n => polar(R_SIGIL, numAngle(n)));
+  const activePath = activePoints.length > 0
+    ? `M ${activePoints[0].x} ${activePoints[0].y} ${activePoints.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')} Z`
+    : '';
+
+  let birthPath = '', birthSet = new Set();
+  if (profile.chosenCalc) {
+    const birthNumbers = [profile.lifePath.final, profile.birthCalc.soulUrge.final, profile.birthCalc.personality.final, profile.birthCalc.expression.final, profile.birthday.final].map(visualNum);
+    birthSet = new Set(birthNumbers);
+    const birthPoints = birthNumbers.map(n => polar(R_SIGIL, numAngle(n)));
+    birthPath = `M ${birthPoints[0].x} ${birthPoints[0].y} ${birthPoints.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')} Z`;
+  }
+
+  const ticks = [];
+  for (let i = 0; i < 72; i++) {
+    const ang = i * 5;
+    ticks.push({ p1: polar(R_OUTER + 6, ang), p2: polar(R_OUTER + (i % 9 === 0 ? 12 : 10), ang), big: i % 9 === 0 });
+  }
+
+  return (
+    <svg viewBox="0 0 500 580" className="w-full max-w-md mx-auto">
+      <defs>
+        <radialGradient id="numBg" cx="50%" cy="50%">
+          <stop offset="0%" stopColor="#1a1612" /><stop offset="60%" stopColor="#0e0c0a" /><stop offset="100%" stopColor="#050403" />
+        </radialGradient>
+        <linearGradient id="numGold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#a8852a" /><stop offset="50%" stopColor="#f4d03f" /><stop offset="100%" stopColor="#a8852a" />
+        </linearGradient>
+        <linearGradient id="sigilFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#d4af37" stopOpacity="0.4" /><stop offset="50%" stopColor="#f4d03f" stopOpacity="0.95" /><stop offset="100%" stopColor="#d4af37" stopOpacity="0.4" />
+        </linearGradient>
+        <filter id="numGlow"><feGaussianBlur stdDeviation="1.8" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+      </defs>
+      <rect width="500" height="580" fill="#050403" />
+      <circle cx={cx} cy={cy} r={R_OUTER + 14} fill="url(#numBg)" />
+      {ticks.map((t, i) => (<line key={`t-${i}`} x1={t.p1.x} y1={t.p1.y} x2={t.p2.x} y2={t.p2.y} stroke="#d4af37" strokeWidth={t.big ? 1 : 0.4} opacity={t.big ? 0.85 : 0.4} />))}
+      <circle cx={cx} cy={cy} r={R_OUTER} fill="none" stroke="url(#numGold)" strokeWidth="2" filter="url(#numGlow)" />
+      <circle cx={cx} cy={cy} r={R_OUTER + 6} fill="none" stroke="#d4af37" strokeWidth="0.4" opacity="0.5" />
+      <circle cx={cx} cy={cy} r={R_SIGIL + 8} fill="none" stroke="#d4af37" strokeWidth="0.5" opacity="0.4" />
+      <g opacity="0.13">
+        {ORISHA_NUMBERS.map((o, i) => {
+          const a1 = numAngle(o.num);
+          const a2 = numAngle(((o.num + 4 - 1) % 9) + 1);
+          const p1 = polar(R_SIGIL, a1), p2 = polar(R_SIGIL, a2);
+          return <line key={`star-${i}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#d4af37" strokeWidth="0.4" />;
+        })}
+      </g>
+      {birthPath && (<path d={birthPath} fill="none" stroke="#a8852a" strokeWidth="1" strokeDasharray="4 3" opacity="0.55" />)}
+      {activePath && (<path d={activePath} fill="rgba(212, 175, 55, 0.06)" stroke="url(#sigilFlow)" strokeWidth="1.8" filter="url(#numGlow)" />)}
+      {ORISHA_NUMBERS.map(o => {
+        const ang = numAngle(o.num);
+        const pos = polar(R_NUMBERS, ang);
+        const isActive = activeSet.has(o.num);
+        const isBirthOnly = birthSet.has(o.num) && !isActive;
+        return (
+          <g key={`n-${o.num}`}>
+            <circle cx={pos.x} cy={pos.y} r="22" fill="#0a0908"
+              stroke={isActive ? '#f4d03f' : (isBirthOnly ? '#a8852a' : '#5a4a28')}
+              strokeWidth={isActive ? 2 : 0.8}
+              filter={isActive ? 'url(#numGlow)' : ''} />
+            <text x={pos.x} y={pos.y - 4} textAnchor="middle" dominantBaseline="middle"
+              fill={isActive ? '#f4d03f' : (isBirthOnly ? '#d4af37' : '#8a7340')}
+              fontSize="17" fontFamily="serif" fontWeight={isActive ? '600' : '400'}>{o.num}</text>
+            <text x={pos.x} y={pos.y + 10} textAnchor="middle" dominantBaseline="middle"
+              fill="#d4af37" fontSize="9" fontFamily="serif" opacity={isActive ? 0.95 : 0.5}>{o.glyph}</text>
+          </g>
+        );
+      })}
+      {ORISHA_NUMBERS.map(o => {
+        const ang = numAngle(o.num);
+        const labelPos = polar(R_OUTER - 16, ang);
+        const isActive = activeSet.has(o.num);
+        return (
+          <text key={`name-${o.num}`} x={labelPos.x} y={labelPos.y} textAnchor="middle" dominantBaseline="middle"
+            fill={isActive ? '#f4d03f' : '#a8852a'} fontSize="9" fontFamily="serif" opacity={isActive ? 1 : 0.55} fontStyle="italic">
+            {o.orisha.split('-')[0]}
+          </text>
+        );
+      })}
+      <circle cx={cx} cy={cy} r={R_CENTER} fill="#050403" stroke="#d4af37" strokeWidth="1" />
+      <circle cx={cx} cy={cy} r={R_CENTER + 6} fill="none" stroke="#d4af37" strokeWidth="0.4" opacity="0.5" />
+      <g transform={`translate(${cx},${cy})`} stroke="url(#numGold)" strokeWidth="2.2" fill="none" strokeLinecap="round" filter="url(#numGlow)">
+        <ellipse cx="0" cy="-13" rx="9" ry="11" />
+        <line x1="-13" y1="3" x2="13" y2="3" />
+        <line x1="0" y1="3" x2="0" y2="22" />
+      </g>
+      <g>
+        <line x1="120" y1="540" x2="380" y2="540" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
+        <text x={cx} y="535" textAnchor="middle" fill="#d4af37" fontSize="11" fontFamily="serif" letterSpacing="6">NUMEROLOGICAL SIGIL</text>
+        <text x={cx} y="558" textAnchor="middle" fill="#8a7340" fontSize="9" fontFamily="serif" letterSpacing="4" fontStyle="italic">⊹  L P · S U · P · E · B  ⊹</text>
+      </g>
+    </svg>
+  );
+}
+
+function NamePlate({ name, calc, label }) {
+  return (
+    <div className="bg-black/40 border border-amber-700/30 rounded p-5">
+      <div className="text-xs tracking-[0.3em] font-display mb-3 text-amber-400">{label}</div>
+      <div className="font-serif text-xl text-stone-100 italic mb-4">{name}</div>
+      <div className="space-y-2 mb-4">
+        {calc.words.map((word, wi) => (
+          <div key={wi} className="flex flex-wrap gap-1.5">
+            {word.map((l, i) => (
+              <div key={i} className="text-center">
+                <div className={`w-7 h-8 flex items-center justify-center rounded text-sm font-serif ${l.isVowel ? 'bg-amber-700/30 text-amber-100 border border-amber-500/50' : 'bg-stone-900 text-stone-300 border border-stone-700'}`}>{l.letter}</div>
+                <div className="text-amber-400/80 text-[10px] mt-0.5 font-serif">{l.value}</div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-amber-700/20 text-xs font-serif">
+        <div><div className="text-amber-200/50">Soul Urge</div><div className="text-stone-100 text-lg font-semibold">{calc.soulUrge.final}{calc.soulUrge.compound && <span className="text-amber-300/60 text-xs ml-1">/{calc.soulUrge.compound}</span>}</div></div>
+        <div><div className="text-amber-200/50">Personality</div><div className="text-stone-100 text-lg font-semibold">{calc.personality.final}{calc.personality.compound && <span className="text-amber-300/60 text-xs ml-1">/{calc.personality.compound}</span>}</div></div>
+        <div><div className="text-amber-200/50">Expression</div><div className="text-stone-100 text-lg font-semibold">{calc.expression.final}{calc.expression.compound && <span className="text-amber-300/60 text-xs ml-1">/{calc.expression.compound}</span>}</div></div>
+      </div>
+    </div>
+  );
+}
+
+function CoreNumbers({ profile }) {
+  const orishaName = num => {
+    const v = num === 11 ? 2 : num === 22 ? 4 : num === 33 ? 6 : num;
+    const ref = ORISHA_NUMBERS.find(o => o.num === v);
+    return ref ? ref.orisha.split('-')[0] : '';
+  };
+  const Item = ({ label, calc, sub }) => (
+    <div className="bg-black/40 border border-amber-700/30 rounded p-3">
+      <div className="text-amber-300/70 text-[10px] tracking-widest font-display">{label}</div>
+      <div className="text-stone-100 text-2xl font-serif mt-1">{calc.final}{calc.compound && <span className="text-amber-400/60 text-sm ml-1 font-serif">/{calc.compound}</span>}</div>
+      {sub && <div className="text-amber-200/60 text-xs italic font-serif">{sub}</div>}
+      {calc.master && <div className="text-amber-400 text-[10px] mt-1 font-display tracking-wider">⊹ MASTER</div>}
+      {calc.karmic && <div className="text-orange-400/80 text-[10px] mt-1 font-display tracking-wider">⊕ KARMIC</div>}
+    </div>
+  );
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <Item label="LIFE PATH" calc={profile.lifePath} sub={orishaName(profile.lifePath.final)} />
+      <Item label="BIRTHDAY" calc={profile.birthday} sub={orishaName(profile.birthday.final)} />
+      <Item label={`PERSONAL YEAR ${profile.personalYear.forYear}`} calc={profile.personalYear} sub={orishaName(profile.personalYear.final)} />
+    </div>
+  );
+}
+
+function PinnaclesPanel({ cycles }) {
+  return (
+    <div className="bg-black/40 border border-amber-700/30 rounded p-5">
+      <div className="text-amber-300/80 text-xs font-display tracking-widest mb-4">FOUR PINNACLES & CHALLENGES</div>
+      <div className="space-y-3">
+        {cycles.pinnacles.map((p, i) => (
+          <div key={i} className="flex items-center gap-3 text-sm font-serif">
+            <div className="w-8 h-8 rounded-full bg-amber-700/30 border border-amber-500/40 flex items-center justify-center text-amber-200 font-semibold">{p.final}</div>
+            <div className="flex-1"><div className="text-stone-200">{p.name}</div><div className="text-amber-200/50 text-xs italic">ages {p.ageStart}–{p.ageEnd}</div></div>
+            <div className="text-stone-400 text-xs">Challenge: <span className="text-amber-300">{cycles.challenges[i].value}</span></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function NumerologyForm({ onSubmit, prefill }) {
+  const [birthName, setBirthName] = useState(prefill?.full_name || '');
+  const [chosenName, setChosenName] = useState('');
+  const [sameName, setSameName] = useState(false);
+  const [date, setDate] = useState(prefill?.dob || '');
+
+  // Re-sync when prefill arrives async
+  useEffect(() => {
+    if (prefill?.full_name && !birthName) setBirthName(prefill.full_name);
+    if (prefill?.dob && !date) setDate(prefill.dob);
+  }, [prefill]);
+  const handleSubmit = () => {
+    if (!birthName.trim() || !date) return;
+    onSubmit({ birthName: birthName.trim(), chosenName: sameName ? '' : chosenName.trim(), birthDate: date });
+  };
+  return (
+    <div className="max-w-lg mx-auto px-6 py-12">
+      <div className="text-center mb-10">
+        <svg viewBox="-30 -40 60 80" className="w-12 h-16 mx-auto mb-4">
+          <g stroke="#d4af37" strokeWidth="2.2" fill="none" strokeLinecap="round">
+            <ellipse cx="0" cy="-15" rx="11" ry="13" /><line x1="-15" y1="3" x2="15" y2="3" /><line x1="0" y1="3" x2="0" y2="30" />
+          </g>
+        </svg>
+        <div className="text-amber-400 text-xs tracking-[0.5em] mb-3 font-display">NTAS98 · NUMEROLOGY</div>
+        <div className="h-px w-16 bg-amber-400 mx-auto opacity-60 mb-6"></div>
+        <h1 className="text-5xl font-serif text-stone-100 mb-3 tracking-wide italic">Astro-Odu</h1>
+        <p className="text-amber-200/70 italic font-serif text-lg">The sacred mathematics of your name</p>
+        <p className="text-amber-200/50 italic font-serif text-sm mt-1">Chaldean method · sister to Astro-Odu</p>
+      </div>
+      <div className="space-y-6">
+        <div>
+          <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">FULL BIRTH NAME</label>
+          <input value={birthName} onChange={e => setBirthName(e.target.value)} placeholder="As written on your birth certificate"
+            className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif" />
+          <p className="text-amber-200/40 text-xs mt-1 italic">First, middle, last as originally given</p>
+        </div>
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <label className="block text-amber-300/90 text-sm tracking-widest font-serif flex-1">CURRENT / CHOSEN NAME</label>
+            <label className="flex items-center gap-2 text-amber-300/70 text-xs cursor-pointer">
+              <input type="checkbox" checked={sameName} onChange={e => setSameName(e.target.checked)} className="accent-amber-500" />same as birth
+            </label>
+          </div>
+          <input value={chosenName} onChange={e => setChosenName(e.target.value)} disabled={sameName}
+            placeholder="What you go by now (married, sovereign, stage name...)"
+            className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif disabled:opacity-40" />
+          <p className="text-amber-200/40 text-xs mt-1 italic">The name currently active in the world</p>
+        </div>
+        <div>
+          <label className="block text-amber-300/90 text-sm tracking-widest mb-2 font-serif">BIRTH DATE</label>
+          <input type="date" value={date} onChange={e => setDate(e.target.value)}
+            className="w-full bg-black/60 border border-amber-700/40 rounded px-4 py-3 text-stone-100 text-lg focus:border-amber-400 focus:outline-none font-serif" />
+        </div>
+        <button onClick={handleSubmit} className="w-full mt-8 bg-gradient-to-r from-amber-700 via-amber-500 to-amber-700 text-black font-display tracking-[0.3em] py-4 rounded hover:from-amber-600 hover:to-amber-600 transition shadow-lg shadow-amber-900/40">CAST THE NUMBERS</button>
+      </div>
+    </div>
+  );
+}
+
+function LoadingRitual({ stage }) {
+  const messages = ['Counting the letters...', 'Listening for the Orisha...', 'Reading the Chaldean script...', 'Channeling the numbers...'];
+  const [msgIdx, setMsgIdx] = useState(0);
+  useEffect(() => { const t = setInterval(() => setMsgIdx(i => (i + 1) % messages.length), 1800); return () => clearInterval(t); }, []);
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[60vh] py-12">
+      <div className="relative w-32 h-32 mb-8">
+        <div className="absolute inset-0 rounded-full border-2 border-amber-700/30"></div>
+        <div className="absolute inset-0 rounded-full border-t-2 border-amber-400 animate-spin" style={{animationDuration: '3s'}}></div>
+        <div className="absolute inset-2 rounded-full border-b-2 border-amber-300/50 animate-spin" style={{animationDuration: '5s', animationDirection: 'reverse'}}></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg viewBox="-20 -28 40 56" className="w-10 h-14">
+            <g stroke="#d4af37" strokeWidth="2" fill="none" strokeLinecap="round">
+              <ellipse cx="0" cy="-10" rx="8" ry="10" /><line x1="-11" y1="2" x2="11" y2="2" /><line x1="0" y1="2" x2="0" y2="22" />
+            </g>
+          </svg>
+        </div>
+      </div>
+      <p className="text-amber-200/80 italic font-serif text-lg">{messages[msgIdx]}</p>
+      {stage && <p className="text-amber-300/50 text-xs tracking-widest mt-3 font-serif">{stage}</p>}
+    </div>
+  );
+}
+
+function Section({ number, title, children }) {
+  return (
+    <div className="mb-12">
+      <div className="flex items-center mb-5"><div className="text-amber-400 text-xs tracking-[0.4em] font-display mr-3">{number}</div><div className="h-px flex-1 bg-amber-700/40"></div></div>
+      <h2 className="text-3xl font-serif text-amber-300 mb-4 tracking-wide italic">{title}</h2>
+      <div className="text-stone-200 font-serif leading-relaxed text-base space-y-3">{children}</div>
+    </div>
+  );
+}
+
+function NumberCard({ value, calc, label, orisha }) {
+  return (
+    <div className="border-l-2 border-amber-700/40 pl-4 py-2 mb-4">
+      <div className="flex items-baseline gap-3 mb-2 flex-wrap">
+        <span className="text-3xl text-amber-400 font-serif">{value}</span>
+        {calc?.compound && (<span className="text-amber-300/60 text-sm font-serif italic">compound {calc.compound}</span>)}
+        <span className="font-serif text-amber-200 text-base">{label}</span>
+        <span className="text-stone-400 text-sm font-serif italic">{orisha}</span>
+        {calc?.master && <span className="text-amber-400 text-xs font-display tracking-wider">⊹ MASTER</span>}
+        {calc?.karmic && <span className="text-orange-400/80 text-xs font-display tracking-wider">⊕ KARMIC</span>}
+      </div>
+    </div>
+  );
+}
+
+function AstroOduNumerology() {
+  const [view, setView] = useState('form');
+  const [profile, setProfile] = useState(null);
+  const [r1, setR1] = useState(null), [r2, setR2] = useState(null), [r3, setR3] = useState(null), [r4, setR4] = useState(null);
+  const [error, setError] = useState(null);
+  const [stage, setStage] = useState('');
+  const [prefill, setPrefill] = useState(null);
+
+  // Pull prefill from cache + Supabase
+  useEffect(() => {
+    const u = (localStorage.getItem('ntas98_user') || '').toLowerCase();
+    if (!u) return;
+    try {
+      const raw = localStorage.getItem('ntas98_profile_' + u);
+      if (raw) {
+        const p = JSON.parse(raw);
+        setPrefill({ full_name: p.full_name, dob: p.dob });
+      } else {
+        const ud = localStorage.getItem('ntas98_userdata_' + u);
+        if (ud) {
+          const d = JSON.parse(ud);
+          if (d.full_name || d.name) setPrefill({ full_name: d.full_name || d.name });
+        }
+      }
+    } catch(e) {}
+    (async () => {
+      try {
+        const res = await fetch('/.netlify/functions/get-profile', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userEmail: u })
+        });
+        const data = await res.json();
+        if (data && data.success && data.profile) {
+          const p = data.profile;
+          setPrefill({ full_name: p.full_name || null, dob: p.dob || null });
+          try { localStorage.setItem('ntas98_profile_' + u, JSON.stringify(p)); } catch(e) {}
+        }
+      } catch(e) {}
+    })();
+  }, []);
+
+  const orishaName = num => {
+    const v = num === 11 ? 2 : num === 22 ? 4 : num === 33 ? 6 : num;
+    const o = ORISHA_NUMBERS.find(o => o.num === v);
+    return o ? o.orisha : '';
+  };
+
+  const handleSubmit = async ({ birthName, chosenName, birthDate }) => {
+    setError(null); setView('calculating'); setStage('Counting the sacred letters');
+    setR1(null); setR2(null); setR3(null); setR4(null);
+    try {
+      const calculatedProfile = calculateProfile(birthName, chosenName, birthDate);
+      setProfile(calculatedProfile);
+      await new Promise(r => setTimeout(r, 800));
+      setView('reading');
+      setStage('Channeling — I of IV: the Naming'); setR1(await callBackend(calculatedProfile, 1));
+      setStage('Channeling — II of IV: faculties & expression'); setR2(await callBackend(calculatedProfile, 2));
+      setStage('Channeling — III of IV: cycles & seasons'); setR3(await callBackend(calculatedProfile, 3));
+      setStage('Channeling — IV of IV: karmic seal'); setR4(await callBackend(calculatedProfile, 4));
+      setStage('');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'The channel has been disturbed. Try again.');
+      setStage('');
+    }
+  };
+
+  const reset = () => { setView('form'); setProfile(null); setR1(null); setR2(null); setR3(null); setR4(null); setError(null); };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-black via-stone-950 to-black text-stone-100">
+      {view === 'form' && <NumerologyForm onSubmit={handleSubmit} prefill={prefill} />}
+      {view === 'calculating' && <LoadingRitual stage={stage} />}
+      {view === 'reading' && profile && (
+        <div className="max-w-3xl mx-auto px-6 py-10">
+          <div className="text-center mb-10 fade-up">
+            <div className="text-amber-400 text-xs tracking-[0.5em] mb-3 font-display">NTAS98 · ASTRO-ODU NUMEROLOGY</div>
+            <div className="h-px w-24 bg-amber-400 mx-auto opacity-60 mb-6"></div>
+            <h1 className="text-4xl font-serif text-stone-100 italic">Your Sacred Mathematics</h1>
+          </div>
+          <div className="mb-10 fade-up"><NumerologicalSigil profile={profile} /></div>
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <NamePlate name={profile.birthName} calc={profile.birthCalc} label="BIRTH NAME · SOUL VIBRATION" />
+            {profile.chosenCalc ? (
+              <NamePlate name={profile.chosenName} calc={profile.chosenCalc} label="ACTIVE NAME · CURRENT EXPRESSION" />
+            ) : (
+              <div className="bg-black/40 border border-amber-700/30 rounded p-5 flex items-center justify-center text-center">
+                <div>
+                  <div className="text-amber-400 text-xs tracking-[0.3em] font-display mb-2">UNIFIED NAMING</div>
+                  <p className="text-stone-300 italic font-serif">The birth name is still the active vibration. Soul and expression speak as one.</p>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="mb-6"><CoreNumbers profile={profile} /></div>
+          <div className="mb-10"><PinnaclesPanel cycles={profile.cycles} /></div>
+          {stage && (
+            <div className="text-center py-6 mb-6">
+              <div className="inline-flex items-center gap-3">
+                <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                <span className="text-amber-300/80 italic font-serif text-sm tracking-widest">{stage}</span>
+              </div>
+            </div>
+          )}
+          {error && (
+            <div className="bg-red-900/20 border border-red-800/40 rounded p-4 text-red-300 mb-6">
+              {error}<button onClick={reset} className="block mt-3 text-amber-300 underline">Begin again</button>
+            </div>
+          )}
+          {r1 && (
+            <div className="fade-up">
+              <Section number="I" title="The Naming"><p>{r1.naming}</p></Section>
+              <Section number="II" title={`Life Path — ${profile.lifePath.final}`}>
+                <NumberCard value={profile.lifePath.final} calc={profile.lifePath} label="the soul's central path" orisha={orishaName(profile.lifePath.final)} />
+                <p>{r1.life_path}</p>
+              </Section>
+              <Section number="III" title="Soul Urge — Inner Vowels">
+                <NumberCard value={profile.birthCalc.soulUrge.final} calc={profile.birthCalc.soulUrge} label="birth name vowels · original soul desire" orisha={orishaName(profile.birthCalc.soulUrge.final)} />
+                <p>{r1.soul_urge_birth}</p>
+                {r1.soul_urge_active && profile.chosenCalc && (
+                  <>
+                    <NumberCard value={profile.chosenCalc.soulUrge.final} calc={profile.chosenCalc.soulUrge} label="active name vowels · what soul calls forward" orisha={orishaName(profile.chosenCalc.soulUrge.final)} />
+                    <p>{r1.soul_urge_active}</p>
+                  </>
+                )}
+              </Section>
+            </div>
+          )}
+          {r2 && (
+            <div className="fade-up">
+              <Section number="IV" title="Personality — Outer Consonants">
+                <NumberCard value={profile.birthCalc.personality.final} calc={profile.birthCalc.personality} label="birth consonants · original mask" orisha={orishaName(profile.birthCalc.personality.final)} />
+                <p>{r2.personality_birth}</p>
+                {r2.personality_active && profile.chosenCalc && (
+                  <>
+                    <NumberCard value={profile.chosenCalc.personality.final} calc={profile.chosenCalc.personality} label="active consonants · the mask now" orisha={orishaName(profile.chosenCalc.personality.final)} />
+                    <p>{r2.personality_active}</p>
+                  </>
+                )}
+              </Section>
+              <Section number="V" title="Expression — The Spoken Self">
+                <NumberCard value={profile.birthCalc.expression.final} calc={profile.birthCalc.expression} label="birth name destiny" orisha={orishaName(profile.birthCalc.expression.final)} />
+                <p>{r2.expression_birth}</p>
+                {r2.expression_active && profile.chosenCalc && (
+                  <>
+                    <NumberCard value={profile.chosenCalc.expression.final} calc={profile.chosenCalc.expression} label="active destiny vibration" orisha={orishaName(profile.chosenCalc.expression.final)} />
+                    <p>{r2.expression_active}</p>
+                  </>
+                )}
+              </Section>
+              <Section number="VI" title={`Birthday Number — ${profile.birthday.final}`}>
+                <NumberCard value={profile.birthday.final} calc={profile.birthday} label={`day ${profile.birthDate.day} · daily medicine`} orisha={orishaName(profile.birthday.final)} />
+                <p>{r2.birthday}</p>
+              </Section>
+            </div>
+          )}
+          {r3 && (
+            <div className="fade-up">
+              <Section number="VII" title="The Compound Layer">
+                <p>{r3.compound_layer}</p>
+                {profile.compounds.length > 0 && (
+                  <div className="grid md:grid-cols-2 gap-2 mt-5">
+                    {[...new Map(profile.compounds.map(c => [c.value, c])).values()].map((c, i) => (
+                      <div key={i} className="border border-amber-700/30 rounded px-3 py-2 bg-black/30 text-sm">
+                        <div className="flex items-baseline gap-2"><span className="text-amber-400 font-serif text-lg">{c.value}</span><span className="text-amber-200 font-serif">{COMPOUND_MEANINGS[c.value]?.name}</span></div>
+                        <div className="text-stone-300 text-xs italic font-serif">{COMPOUND_MEANINGS[c.value]?.meaning}</div>
+                        <div className="text-amber-300/40 text-[10px] mt-1 font-display tracking-widest">via {c.source}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Section>
+              <Section number="VIII" title={`Personal Year ${profile.personalYear.forYear} — ${profile.personalYear.final}`}>
+                <NumberCard value={profile.personalYear.final} calc={profile.personalYear} label="current year energy" orisha={orishaName(profile.personalYear.final)} />
+                <p>{r3.personal_year}</p>
+              </Section>
+              <Section number="IX" title="Pinnacles & Challenges — Life Seasons"><p>{r3.pinnacles_challenges}</p></Section>
+            </div>
+          )}
+          {r4 && (
+            <div className="fade-up">
+              <Section number="X" title="Karmic Work Orders">
+                <p>{r4.karmic_work_orders}</p>
+                {profile.karmics.length > 0 && (
+                  <div className="grid gap-3 mt-5">
+                    {profile.karmics.map((k, i) => (
+                      <div key={i} className="bg-orange-950/20 border border-orange-700/40 rounded p-4">
+                        <div className="flex items-baseline gap-3 mb-1">
+                          <span className="text-orange-300 font-serif text-2xl">{k.value}</span>
+                          <span className="text-orange-200 font-serif">{k.info?.name}</span>
+                          <span className="text-stone-400 text-xs font-serif italic">via {k.source}</span>
+                        </div>
+                        <div className="text-stone-300 font-serif text-sm">{k.info?.meaning}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Section>
+              {r4.master_channels && profile.masters.length > 0 && (
+                <Section number="XI" title="Master Channels">
+                  <p>{r4.master_channels}</p>
+                  <div className="grid gap-3 mt-5">
+                    {profile.masters.map((m, i) => (
+                      <div key={i} className="bg-gradient-to-br from-amber-950/30 via-stone-900/50 to-amber-950/30 border border-amber-500/40 rounded p-4">
+                        <div className="flex items-baseline gap-3 mb-1">
+                          <span className="text-amber-300 font-serif text-2xl">{m.value}</span>
+                          <span className="text-amber-200 font-serif">{m.info?.name}</span>
+                          <span className="text-amber-400/60 text-xs font-serif italic">{m.info?.orisha}</span>
+                        </div>
+                        <div className="text-amber-300/40 text-[10px] font-display tracking-widest mb-2">via {m.source}</div>
+                        <div className="text-stone-200 font-serif text-sm italic">{m.info?.meaning}</div>
+                      </div>
+                    ))}
+                  </div>
+                </Section>
+              )}
+              <Section number={r4.master_channels && profile.masters.length > 0 ? 'XII' : 'XI'} title="Sankofa — Reach Back">
+                <p>{r4.sankofa}</p>
+              </Section>
+              <div className="text-center mt-16 mb-8 no-print">
+                <div className="h-px w-24 bg-amber-400/60 mx-auto mb-6"></div>
+                <button onClick={() => window.print()} className="mr-4 bg-amber-700/30 border border-amber-500/60 text-amber-200 font-display tracking-widest px-6 py-3 rounded hover:bg-amber-700/50 transition">SAVE AS PDF</button>
+                <button onClick={reset} className="bg-transparent border border-amber-500/60 text-amber-200 font-display tracking-widest px-6 py-3 rounded hover:bg-amber-700/30 transition">CAST ANOTHER</button>
+              </div>
+              <div className="text-center text-amber-700/50 font-serif italic text-sm pb-12">⊹  NTAS98 · Nature · Trap · Soul · 1998  ⊹</div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AstroOduNumerology />);
+</script>
+</body>
+</html>
