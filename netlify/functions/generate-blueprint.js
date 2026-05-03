@@ -4,7 +4,7 @@
 // ============================================================
 
 const { createClient } = require('@supabase/supabase-js');
-const { ok, fail, handlePreflight, parseBody } = require('./_shared');
+const { ok, fail, handlePreflight, parseBody, HEADERS } = require('./_shared');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -134,6 +134,41 @@ exports.handler = async (event) => {
     return fail('Server missing ANTHROPIC_API_KEY', 500);
   }
 
+  const sb = (userEmail && SUPABASE_URL && SUPABASE_SERVICE_KEY)
+    ? createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+    : null;
+
+  // Persist birth data BEFORE the slow Claude call. The new dashboard
+  // cards (Core Identity, Daily Snippet, Weekly Deep Dive) only need
+  // dob/birth_time/birth_location to function — saving these first means
+  // a Claude timeout doesn't leave the user with no working dashboard.
+  let persistedBirthData = false;
+  if (sb) {
+    try {
+      await sb.from('profiles').upsert({
+        user_email: userEmail.toLowerCase(),
+        full_name: fullName || memberName,
+        preferred_name: memberName,
+        dob: memberDob,
+        birth_time: birthTime,
+        birth_location: memberLocation,
+        current_city: currentCity || null,
+        blood_type: bloodType || null,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_email' });
+      persistedBirthData = true;
+    } catch (sbErr) {
+      console.error('Supabase birth-data save error:', sbErr);
+      return fail('Could not save your birth data — please try again.', 500);
+    }
+  }
+
+  // Cap the Claude call well below Netlify's sync function timeout so
+  // we always return a clean error instead of being killed mid-write.
+  const CLAUDE_TIMEOUT_MS = 22000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), CLAUDE_TIMEOUT_MS);
+
   try {
     const sun = getSunSign(memberDob);
     const lifePath = getLifePath(memberDob);
@@ -141,6 +176,7 @@ exports.handler = async (event) => {
 
     const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
+      signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': ANTHROPIC_KEY,
@@ -160,36 +196,65 @@ exports.handler = async (event) => {
     if (!claudeRes.ok) {
       const errText = await claudeRes.text();
       console.error('Claude API error:', claudeRes.status, errText);
-      return fail('Generation service error', 502);
+      return {
+        statusCode: 502,
+        headers: HEADERS,
+        body: JSON.stringify({
+          error: 'Generation service error',
+          persistedBirthData,
+          persisted: false
+        })
+      };
     }
 
     const claudeData = await claudeRes.json();
     const text = claudeData.content.map(i => i.text || '').join('').replace(/```json|```/g, '').trim();
     const blueprint = JSON.parse(text);
 
-    if (userEmail && SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+    let persisted = false;
+    if (sb) {
       try {
-        const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
         await sb.from('profiles').upsert({
           user_email: userEmail.toLowerCase(),
-          full_name: fullName || memberName,
-          preferred_name: memberName,
-          dob: memberDob,
-          birth_time: birthTime,
-          birth_location: memberLocation,
-          current_city: currentCity || null,
-          blood_type: bloodType || null,
           generated_output: blueprint,
           updated_at: new Date().toISOString()
         }, { onConflict: 'user_email' });
+        persisted = true;
       } catch (sbErr) {
-        console.error('Supabase save error:', sbErr);
+        console.error('Supabase blueprint save error:', sbErr);
       }
     }
 
-    return ok(blueprint);
+    return ok({
+      success: true,
+      blueprint,
+      persisted,
+      persistedBirthData
+    });
   } catch (err) {
+    if (err.name === 'AbortError') {
+      console.warn('[generate-blueprint] Claude call aborted at timeout');
+      return {
+        statusCode: 504,
+        headers: HEADERS,
+        body: JSON.stringify({
+          error: 'The reading is taking longer than usual to channel. Your birth data is saved — refresh to see your trinity card populate, then try generating the full reading again in a moment.',
+          persistedBirthData,
+          persisted: false
+        })
+      };
+    }
     console.error('Blueprint error:', err);
-    return fail('Profile generation failed', 500);
+    return {
+      statusCode: 500,
+      headers: HEADERS,
+      body: JSON.stringify({
+        error: 'Profile generation failed',
+        persistedBirthData,
+        persisted: false
+      })
+    };
+  } finally {
+    clearTimeout(timeoutId);
   }
 };
