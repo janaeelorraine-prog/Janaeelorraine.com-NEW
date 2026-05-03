@@ -1143,6 +1143,13 @@ async function initPortal() {
       displayProfile(p.generated_output, cacheObj);
       // Re-paint Trinity card now that we may have a fresh Talking Odu
       paintTrinityCard(cacheObj);
+    } else if (data.success && !data.profile) {
+      // Server says no row exists. Any cached cosmic profile is a zombie
+      // from a prior session whose Supabase write didn't land — drop it
+      // and send the user back to the questionnaire so the dashboard
+      // matches the database.
+      localStorage.removeItem('ntas98_profile_' + userEmail);
+      showSection('questionnaire');
     }
   } catch (e) {
     console.warn('Could not fetch canonical profile (offline?)', e);
@@ -1493,22 +1500,43 @@ async function generateProfile() {
     });
 
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Generation failed');
 
-    // Save to localStorage so it loads instantly next time
-    const profileData = {
-      generated_output: data,
-      full_name: fullName,
-      preferred_name: preferred || fullName.split(' ')[0],
-      dob,
-      birth_time: birthTime,
-      birth_location: birthLocation,
-      current_city: currentCity,
-      blood_type: bloodType
-    };
-    localStorage.setItem('ntas98_profile_' + userEmail, JSON.stringify(profileData));
+    // Server returns { success, blueprint, persisted, persistedBirthData }
+    // on full success, or { error, persistedBirthData, persisted: false }
+    // on prose generation failure (timeout / Claude error). Birth data
+    // may have been saved even when the prose failed.
+    if (!res.ok || !data.success) {
+      if (data && data.persistedBirthData) {
+        // The new dashboard cards (Core Identity, Daily Snippet, Weekly
+        // Deep Dive) will work on refresh because birth data is in the
+        // DB. Don't cache anything — there's no prose to cache.
+        document.getElementById('gen-btn').disabled = false;
+        showSection('questionnaire');
+        const err = document.getElementById('form-err');
+        err.textContent = data.error || 'The reading is taking longer than usual to channel. Your birth data is saved — refresh the page to see your trinity card populate, then try generating the full reading again in a moment.';
+        err.classList.add('show');
+        return;
+      }
+      throw new Error((data && data.error) || 'Generation failed');
+    }
 
-    displayProfile(data, { dob, birth_location: birthLocation });
+    // Only cache when the server confirms the blueprint persisted to DB.
+    // Caching unpersisted prose is what created the zombie-profile bug.
+    if (data.persisted) {
+      const profileData = {
+        generated_output: data.blueprint,
+        full_name: fullName,
+        preferred_name: preferred || fullName.split(' ')[0],
+        dob,
+        birth_time: birthTime,
+        birth_location: birthLocation,
+        current_city: currentCity,
+        blood_type: bloodType
+      };
+      localStorage.setItem('ntas98_profile_' + userEmail, JSON.stringify(profileData));
+    }
+
+    displayProfile(data.blueprint, { dob, birth_location: birthLocation });
 
   } catch(e) {
     console.error(e);
