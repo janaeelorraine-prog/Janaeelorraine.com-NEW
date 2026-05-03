@@ -1539,11 +1539,14 @@ async function generateProfile() {
     displayProfile(data.blueprint, { dob, birth_location: birthLocation });
 
   } catch(e) {
-    console.error(e);
+    console.error('[generateProfile] error:', e);
     document.getElementById('gen-btn').disabled = false;
     showSection('questionnaire');
     const err = document.getElementById('form-err');
-    err.textContent = 'Something went wrong generating your profile. Please try again.';
+    // Surface the server's actual error message verbatim. Hiding it
+    // behind a generic string is what made the original silent-failure
+    // bug invisible for so long.
+    err.textContent = (e && e.message) || 'Something went wrong generating your profile. Please try again.';
     err.classList.add('show');
   }
 }
