@@ -142,25 +142,73 @@ exports.handler = async (event) => {
   // cards (Core Identity, Daily Snippet, Weekly Deep Dive) only need
   // dob/birth_time/birth_location to function — saving these first means
   // a Claude timeout doesn't leave the user with no working dashboard.
+  //
+  // supabase-js does NOT throw on RLS / FK / constraint violations — it
+  // returns { data, error } with the error in the response object. Check
+  // the error field explicitly; don't rely on try/catch alone.
   let persistedBirthData = false;
   if (sb) {
+    const lcEmail = userEmail.toLowerCase();
+
+    // Pre-check: profiles.user_email is a FK to users.email. If the
+    // users row is missing or stored with different casing than what
+    // we're querying with, the upsert will fail with FK violation.
+    const { data: userRow, error: userLookupErr } = await sb
+      .from('users')
+      .select('email')
+      .eq('email', lcEmail)
+      .maybeSingle();
+
+    if (userLookupErr) {
+      console.error('[generate-blueprint] users lookup error:', JSON.stringify(userLookupErr));
+      return fail('Could not verify your account — please try again.', 500);
+    }
+    if (!userRow) {
+      console.error('[generate-blueprint] no users row for', lcEmail);
+      return fail('Your account record is missing. Please contact Janaee — your member account needs to be relinked before your blueprint can save.', 409);
+    }
+
+    const upsertPayload = {
+      user_email: lcEmail,
+      full_name: fullName || memberName,
+      preferred_name: memberName,
+      dob: memberDob,
+      birth_time: birthTime,
+      birth_location: memberLocation,
+      current_city: currentCity || null,
+      blood_type: bloodType || null,
+      updated_at: new Date().toISOString()
+    };
+
+    let upsertResult;
     try {
-      await sb.from('profiles').upsert({
-        user_email: userEmail.toLowerCase(),
-        full_name: fullName || memberName,
-        preferred_name: memberName,
-        dob: memberDob,
-        birth_time: birthTime,
-        birth_location: memberLocation,
-        current_city: currentCity || null,
-        blood_type: bloodType || null,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_email' });
-      persistedBirthData = true;
+      upsertResult = await sb
+        .from('profiles')
+        .upsert(upsertPayload, { onConflict: 'user_email' })
+        .select()
+        .maybeSingle();
     } catch (sbErr) {
-      console.error('Supabase birth-data save error:', sbErr);
+      console.error('[generate-blueprint] early upsert threw:', sbErr);
       return fail('Could not save your birth data — please try again.', 500);
     }
+
+    console.log('[generate-blueprint] early upsert result:', JSON.stringify({
+      data: upsertResult.data,
+      error: upsertResult.error,
+      status: upsertResult.status,
+      statusText: upsertResult.statusText
+    }));
+
+    if (upsertResult.error) {
+      return fail(
+        `Could not save your birth data: ${upsertResult.error.message || 'database error'}`,
+        500
+      );
+    }
+    if (!upsertResult.data) {
+      return fail('Birth data save returned no row — write may have been blocked by RLS or a missing column. Check Netlify logs.', 500);
+    }
+    persistedBirthData = true;
   }
 
   // Cap the Claude call well below Netlify's sync function timeout so
@@ -213,15 +261,31 @@ exports.handler = async (event) => {
 
     let persisted = false;
     if (sb) {
+      let proseUpsert;
       try {
-        await sb.from('profiles').upsert({
-          user_email: userEmail.toLowerCase(),
-          generated_output: blueprint,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'user_email' });
-        persisted = true;
+        proseUpsert = await sb
+          .from('profiles')
+          .upsert({
+            user_email: userEmail.toLowerCase(),
+            generated_output: blueprint,
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'user_email' })
+          .select()
+          .maybeSingle();
       } catch (sbErr) {
-        console.error('Supabase blueprint save error:', sbErr);
+        console.error('[generate-blueprint] blueprint upsert threw:', sbErr);
+      }
+      if (proseUpsert) {
+        console.log('[generate-blueprint] blueprint upsert result:', JSON.stringify({
+          hasData: !!proseUpsert.data,
+          error: proseUpsert.error,
+          status: proseUpsert.status
+        }));
+        if (proseUpsert.error) {
+          console.error('[generate-blueprint] blueprint save error:', proseUpsert.error);
+        } else if (proseUpsert.data) {
+          persisted = true;
+        }
       }
     }
 
