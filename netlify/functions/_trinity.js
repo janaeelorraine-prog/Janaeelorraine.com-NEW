@@ -82,7 +82,9 @@ async function checkAccess(sb, userEmail, tool) {
 // Call Claude. Returns parsed JSON.
 async function callClaude(systemPrompt, userPrompt, maxTokens = 1500) {
   if (!ANTHROPIC_KEY) throw new Error('Server missing ANTHROPIC_API_KEY');
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const url = 'https://api.anthropic.com/v1/messages';
+  const model = 'claude-sonnet-4-6';
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -90,12 +92,13 @@ async function callClaude(systemPrompt, userPrompt, maxTokens = 1500) {
       'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model,
       max_tokens: maxTokens,
       system: systemPrompt,
       messages: [{ role: 'user', content: userPrompt }]
     })
   });
+  console.log('[callClaude] response:', JSON.stringify({ status: res.status, model, url }));
   if (!res.ok) {
     const txt = await res.text();
     console.error('Claude error:', res.status, txt);
@@ -195,7 +198,9 @@ async function checkBotUsage(sb, userEmail) {
 // (not JSON-parsed). Used by the guidance bot.
 async function callClaudeChat(systemPrompt, messages, maxTokens = 1024) {
   if (!ANTHROPIC_KEY) throw new Error('Server missing ANTHROPIC_API_KEY');
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const url = 'https://api.anthropic.com/v1/messages';
+  const model = 'claude-sonnet-4-6';
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -203,12 +208,13 @@ async function callClaudeChat(systemPrompt, messages, maxTokens = 1024) {
       'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model,
       max_tokens: maxTokens,
       system: systemPrompt,
       messages
     })
   });
+  console.log('[callClaudeChat] response:', JSON.stringify({ status: res.status, model, url }));
   if (!res.ok) {
     const txt = await res.text();
     console.error('Claude chat error:', res.status, txt);
