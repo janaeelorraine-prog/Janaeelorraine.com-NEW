@@ -123,6 +123,33 @@ nav ul li a.login-nav-link {
 }
 nav ul li a.login-nav-link:hover { background: rgba(216,166,71,0.12); }
 
+/* ─── MOBILE NAV TOGGLE (hidden on desktop) ─── */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+}
+.nav-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--gold);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.nav-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
 /* ─── HERO ─── (CSS candy-cosmos: clouds, mint planet, sparkles) */
 .hero {
   position: relative;
@@ -1085,7 +1112,53 @@ footer {
 
 /* ─── MOBILE ─── */
 @media (max-width: 640px) {
-  nav { padding: 14px 20px; } nav ul { display: none; }
+  nav { padding: 14px 20px; }
+  .nav-toggle { display: inline-flex; }
+
+  nav ul {
+    position: fixed;
+    inset: 0;
+    background: #0a0908;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 90px 28px 40px;
+    margin: 0;
+    z-index: 90;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    overflow-y: auto;
+  }
+  .nav-open nav ul { opacity: 1; visibility: visible; }
+
+  nav ul li {
+    border-bottom: 1px solid rgba(216,166,71,0.18);
+  }
+  nav ul li a {
+    display: block;
+    padding: 22px 4px;
+    font-size: 14px;
+    letter-spacing: 4px;
+    opacity: 0.9;
+  }
+  nav ul li.login-nav-item {
+    order: -1;
+    border-bottom: 1px solid rgba(216,166,71,0.18);
+    margin-bottom: 8px;
+  }
+  nav ul li.login-nav-item a.login-nav-link {
+    border: 1px solid var(--gold);
+    border-radius: 28px;
+    padding: 16px 24px;
+    margin: 4px 0 18px;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 4.5px;
+    background: rgba(216,166,71,0.06);
+  }
+
   .hero { padding: 130px 20px 60px; min-height: 80vh; }
   .hero { padding: 130px 20px 80px; }
   .hero-bg { background-position: center center; }
@@ -1103,15 +1176,39 @@ footer {
 
 <nav>
   <a href="index.html" class="logo">JL<span class="dot">·</span>NTAS98</a>
-  <ul>
+  <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="primary-nav">
     <li><a href="index.html" class="active">Home</a></li>
     <li><a href="shop.html">Divine Products</a></li>
     <li><a href="booking.html">Healing Corner</a></li>
     <li><a href="astroodu/index.html">AstroOdu</a></li>
     <li><a href="courses.html">Courses</a></li>
-    <li><a href="login.html" class="login-nav-link">Member Login</a></li>
+    <li class="login-nav-item"><a href="login.html" class="login-nav-link">Member Login</a></li>
   </ul>
 </nav>
+<script>
+(function () {
+  var toggle = document.querySelector('.nav-toggle');
+  var nav = toggle && toggle.closest('nav');
+  if (!toggle || !nav) return;
+  function setOpen(open) {
+    document.body.classList.toggle('nav-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  toggle.addEventListener('click', function () {
+    setOpen(!document.body.classList.contains('nav-open'));
+  });
+  nav.querySelectorAll('ul a').forEach(function (a) {
+    a.addEventListener('click', function () { setOpen(false); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.body.classList.contains('nav-open')) setOpen(false);
+  });
+})();
+</script>
 
 <!-- ═══════════════════════════════════════════ -->
 <!-- ═══════════ HERO ═══════════════════════════ -->
