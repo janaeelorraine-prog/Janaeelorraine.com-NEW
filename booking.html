@@ -74,6 +74,22 @@
         #cta-bottom{padding:80px 40px;text-align:center;background:linear-gradient(135deg,rgba(59,31,110,0.12),rgba(13,27,62,0.15));border-top:1px solid rgba(201,168,76,0.1);}
         .cta-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,3vw,1.7rem);color:var(--white);margin-bottom:14px;letter-spacing:3px;}
         .cta-desc{font-style:italic;font-size:clamp(0.9rem,2vw,1.1rem);color:rgba(240,238,232,0.45);line-height:2;max-width:480px;margin:0 auto 36px;}
+        .quiz-card{max-width:640px;margin:34px auto 22px;border:1px solid rgba(201,168,76,0.2);background:linear-gradient(160deg,rgba(59,31,110,0.14),rgba(6,8,13,0.92));padding:40px 34px;text-align:center;position:relative;}
+        .quiz-progress{font-size:0.55rem;letter-spacing:4px;text-transform:uppercase;color:var(--purple-mid);margin-bottom:18px;}
+        .quiz-q{font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,2.4vw,1.35rem);color:var(--white);letter-spacing:1px;line-height:1.4;margin-bottom:26px;}
+        .quiz-options{display:flex;flex-direction:column;gap:12px;}
+        .quiz-opt{display:block;width:100%;padding:16px 22px;border:1px solid rgba(201,168,76,0.3);background:rgba(6,8,13,0.5);color:var(--white);font-family:'Cormorant Garamond',serif;font-size:1rem;letter-spacing:0.5px;cursor:pointer;transition:all 0.3s;text-align:left;line-height:1.4;}
+        .quiz-opt:hover{border-color:var(--purple-mid);background:rgba(107,63,160,0.25);color:var(--gold-light);box-shadow:0 0 24px rgba(107,63,160,0.3);}
+        .quiz-result-tag{font-size:0.55rem;letter-spacing:5px;text-transform:uppercase;color:var(--purple-mid);margin-bottom:12px;}
+        .quiz-result-name{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,2.6vw,1.5rem);color:var(--gold);letter-spacing:2px;margin-bottom:6px;line-height:1.3;}
+        .quiz-result-meta{font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;color:rgba(240,238,232,0.4);margin-bottom:16px;}
+        .quiz-result-desc{font-style:italic;color:var(--white-dim);line-height:1.9;margin-bottom:26px;font-size:0.98rem;}
+        .quiz-book-btn{display:inline-block;padding:15px 44px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;letter-spacing:3px;text-transform:uppercase;font-size:0.7rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);transition:all 0.4s;}
+        .quiz-book-btn:hover{color:var(--white);border-color:var(--purple-mid);background:rgba(107,63,160,0.3);box-shadow:0 0 30px rgba(107,63,160,0.4);}
+        .quiz-restart{display:block;margin:20px auto 0;background:none;border:none;color:rgba(240,238,232,0.4);font-family:'Cormorant Garamond',serif;font-size:0.8rem;letter-spacing:2px;cursor:pointer;text-transform:uppercase;transition:color 0.3s;}
+        .quiz-restart:hover{color:var(--gold);}
+        .quiz-fade{animation:quizIn 0.4s ease;}
+        @keyframes quizIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
         .btn-outline{display:inline-block;padding:16px 50px;border:1px solid rgba(139,92,200,0.4);color:var(--purple-mid);text-decoration:none;letter-spacing:4px;text-transform:uppercase;font-size:0.72rem;font-family:'Cormorant Garamond',serif;background:rgba(6,8,13,0.55);backdrop-filter:blur(6px);transition:all 0.4s;margin:6px;}
         .btn-outline:hover{border-color:var(--purple-mid);background:rgba(107,63,160,0.2);color:var(--white);}
         footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.18);padding:50px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;}
@@ -108,7 +124,7 @@
     <p class="page-hero-sub">Every session is a sacred space.<br>Come as you are. Leave knowing more.</p>
 </section>
 <div class="intro-quote">
-    <blockquote>"Your answers already exist. The ancestors are already speaking.<br>I am simply the bridge."</blockquote>
+    <blockquote>"Your answers already exist. The ancestors are already speaking.<br>I am simply the vessel."</blockquote>
     <cite>— Janaee Lorraine</cite>
 </div>
 <section id="book-online" style="max-width:1100px;margin:0 auto;padding:50px 24px 10px;">
@@ -238,8 +254,9 @@
 <section id="cta-bottom">
     <div class="section-label">✦ &nbsp; Not Sure Where to Start? &nbsp; ✦</div>
     <div class="cta-title">Let's Find the Right Session</div>
-    <p class="cta-desc">Send a message and Janaee will help you find the best fit for where you are right now.</p>
-    <a href="mailto:contact@janaeelorraine.com" class="coaching-cta">Send a Message</a>
+    <p class="cta-desc">Answer a few quick questions and I'll point you to the reading that fits where you are right now.</p>
+    <div id="quiz" class="quiz-card"><div id="quiz-body"></div></div>
+    <p class="cta-desc" style="font-size:0.9rem;margin-top:4px;">Still unsure? <a href="mailto:contact@janaeelorraine.com" style="color:var(--purple-mid);text-decoration:none;">Send a message</a> and Janaee will help.</p>
     <a href="index.html" class="btn-outline">← Back to The Sanctuary</a>
 </section>
 <footer>
@@ -255,6 +272,53 @@
     const container = document.getElementById('particles');
     const colors = ['rgba(74,158,255,0.7)','rgba(107,63,160,0.6)','rgba(201,168,76,0.5)','rgba(139,92,200,0.6)','rgba(74,255,180,0.35)'];
     for(let i=0;i<45;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*4+1;p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 ${size*4}px ${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*12}s;`;container.appendChild(p);}
+</script>
+<script>
+    // "Find the Right Session" quiz
+    (function(){
+        const S = {
+            tarot30:{name:"30 Minute Tarot Session",meta:"30 Minutes · $55",desc:"A focused reading on whatever is weighing on your heart. Clarity, guidance, and truth — delivered through the cards.",url:"https://calendly.com/janaeelorraine/30min"},
+            tarot60:{name:"1 Hour Tarot Session",meta:"60 Minutes · $75",desc:"A full hour to explore any topic with depth and detail. Relationships, purpose, finances, spiritual path — nothing is off limits.",url:"https://calendly.com/janaeelorraine/30-minute-tarot-session-clone"},
+            mediumship:{name:"Mediumship Reading",meta:"60 Minutes · $125",desc:"Direct communication with your ancestors and loved ones who have crossed over — messages, validation, and healing from the spirit realm.",url:"https://calendly.com/janaeelorraine/mediumship-reading"},
+            lineageStd:{name:"Find Your Lineage – Standard",meta:"60 Minutes · $44",desc:"Trace the ancestral threads running through you — uncover your roots and the wisdom they hold.",url:"https://calendly.com/janaeelorraine/find-your-lineage"},
+            lineageExt:{name:"Find Your Lineage – Extended",meta:"60 Minutes · $111",desc:"A deeper lineage reading honoring the fuller research and healing that ancestry traced through slavery requires.",url:"https://calendly.com/janaeelorraine/find-your-lineage-extended"},
+            birthChart:{name:"AstroOdu Birth Chart Reading",meta:"60 Minutes · $88",desc:"Your birth chart read through the AstroOdu lens — planets as vowels, signs as consonants, and the Odu speaking your soul's blueprint.",url:"https://calendly.com/janaeelorraine/astroodu-birth-chart-reading"}
+        };
+        const tree = {
+            start:{step:"Question 1 of 2",q:"What are you seeking right now?",opts:[
+                {t:"Clarity on a situation — love, career, a decision",go:"tarotDepth"},
+                {t:"A message from a loved one who has crossed over",go:"mediumship"},
+                {t:"To know your ancestral roots and lineage",go:"lineage"},
+                {t:"To understand your soul's cosmic blueprint",go:"birthChart"}
+            ]},
+            tarotDepth:{step:"Question 2 of 2",q:"How deep do you want to go?",opts:[
+                {t:"A focused read on one thing — 30 min · $55",go:"tarot30"},
+                {t:"A full hour across several areas — 60 min · $75",go:"tarot60"}
+            ]},
+            lineage:{step:"Question 2 of 2",q:"Does your lineage trace back to slavery?",opts:[
+                {t:"No, or I'm not sure — Standard · $44",go:"lineageStd"},
+                {t:"Yes — the Extended journey · $111",go:"lineageExt"}
+            ]}
+        };
+        const body = document.getElementById('quiz-body');
+        if(!body) return;
+        function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+        function renderQ(id){
+            const n = tree[id];
+            let h = '<div class="quiz-fade"><div class="quiz-progress">'+n.step+'</div><div class="quiz-q">'+esc(n.q)+'</div><div class="quiz-options">';
+            n.opts.forEach(o=>{ h += '<button class="quiz-opt" data-go="'+o.go+'">'+esc(o.t)+'</button>'; });
+            h += '</div></div>';
+            body.innerHTML = h;
+            body.querySelectorAll('.quiz-opt').forEach(b=>b.addEventListener('click',()=>route(b.dataset.go)));
+        }
+        function renderResult(key){
+            const s = S[key];
+            body.innerHTML = '<div class="quiz-fade"><div class="quiz-result-tag">✦ Your Reading ✦</div><div class="quiz-result-name">'+esc(s.name)+'</div><div class="quiz-result-meta">'+esc(s.meta)+'</div><div class="quiz-result-desc">'+esc(s.desc)+'</div><a href="'+s.url+'" target="_blank" rel="noopener" class="quiz-book-btn">Book This Session</a><button class="quiz-restart">↺ Start Over</button></div>';
+            body.querySelector('.quiz-restart').addEventListener('click',()=>renderQ('start'));
+        }
+        function route(go){ tree[go] ? renderQ(go) : renderResult(go); }
+        renderQ('start');
+    })();
 </script>
 </body>
 </html>
