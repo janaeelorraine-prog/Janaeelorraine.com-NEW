@@ -18,6 +18,54 @@
   to = "/.netlify/functions/trinity-human-design"
   status = 200
 
+# ── Retire pre-canon standalone pages → home (content folds into the member area) ──
+# force=true so these override the still-present HTML files until the member house is rebuilt.
+[[redirects]]
+  from = "/astroodu/*"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/trinity/*"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/courses.html"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/courses-portal.html"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/astro-odu.html"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/astro-odu-numerology.html"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/astro-odu-human-design.html"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/initiation.html"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/certification.html"
+  to = "/"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]

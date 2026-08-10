@@ -95,12 +95,12 @@ Fed by the existing **Living Temple engine** (`astroodu.vercel.app`), which read
 ## Membership & payments 🔒
 - **One membership tier. No tiers.** Grants the full member house (birthchart + cosmology + full school).
 - Price: **$22.22 / month** or **$222 / year** (annual ≈ 2 months free).
-- Processor: **Stripe** (already connected). One product "AstroOdu Membership" with two recurring prices ($22.22/mo, $222/yr).
+- Processor: **PayPal.** One recurring subscription for membership with two plans ($22.22/mo, $222/yr).
 - The school (The Keeping of Eko) is **included** in membership — courses are never sold à la carte.
-- **Retired:** PayPal-per-course one-time buys with hand-emailed access codes; the old Root Portal tiers (Seed / Root / Elder, ~$5.55–$14.14).
+- **Retired:** PayPal-*per-course* one-time buys with hand-emailed access codes; the old Root Portal tiers (Seed / Root / Elder, ~$5.55–$14.14). (Payment still runs on PayPal — the retired part is the per-course model, replaced by one membership.)
 
 ## Practitioner track 🔒
-- One-time fee: **$399** (Stripe one-time charge).
+- One-time fee: **$399** (PayPal one-time charge).
 - Gating: application + approval. Sits above the school.
 - **Licensing rule — the license is held by the school.** To earn it: pass every course in the membership (The Keeping of Eko). To keep it: stay an active member with coursework completed. The license does not stand apart from the membership — if the membership lapses, the license does not hold.
 - Implementation: `practitioner === (active_membership === true && all_courses_passed === true && practitioner_fee_paid === true)`. Re-check on every membership state change.
@@ -116,7 +116,7 @@ Fed by the existing **Living Temple engine** (`astroodu.vercel.app`), which read
 - Static site deployed via **Netlify** (publish = `.`); GitHub for source control.
 - **Netlify Functions** in `/netlify/functions` — auth (Supabase + bcrypt), profile, blueprint, course-progress, bots, etc. All secrets are server-side env vars.
 - **Auth/data:** Supabase (`users` table). Being migrated off the old `portal_tier` / `courses[]` model to single-membership + practitioner state.
-- **Payments:** Stripe (membership + $399 practitioner). Booking uses **Calendly** (all session event types active on a paid plan).
+- **Payments:** PayPal (membership subscription + $399 practitioner one-time). Booking uses **Calendly** (all session event types active on a paid plan).
 - **Chart engine:** the Living Temple (`astroodu.vercel.app`) over Supabase `kzmfcjhmpdffxhfjnkbu` + Notion prose.
 - Anthropic API (via Netlify Functions) for channeled reading generation. No keys in client code.
 
